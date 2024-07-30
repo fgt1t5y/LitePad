@@ -14,7 +14,8 @@
     "width": 950,
     "min_height": 600,
     "min_width": 800,
-    "show": true
+    "show": true,
+    "icon": "public/appicon.png"
   },
   "scripts": {
     "dev": "concurrently \"vite\" \"npm run dev:nw\"",
