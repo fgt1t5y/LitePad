@@ -1,60 +1,59 @@
 <template>
   <div id="OOBEView">
-    <Stepper value="1">
-      <StepList>
-        <Step value="1">欢迎</Step>
-        <Step value="2">设置笔记本</Step>
-        <Step value="3">设置密码</Step>
-        <Step value="4">配置完成</Step>
-      </StepList>
+    <Stepper value="welcome">
       <StepPanels>
-        <StepPanel v-slot="{ activateCallback }" value="1">
+        <StepPanel v-slot="{ activateCallback }" value="welcome">
           <div class="Step">
-            <h2>欢迎使用 Litepad</h2>
+            <h2>欢迎使用 LitePad</h2>
             <h4>这是一款纯本地存储的笔记软件。</h4>
+            <h4>这是你的第一次使用，你需要进行一些设置（比如创建笔记本）。</h4>
             <Button
               icon="pi pi-arrow-right"
+              icon-pos="right"
               label="继续"
-              @click="activateCallback('2')"
+              @click="activateCallback('notebook')"
             ></Button>
           </div>
         </StepPanel>
-        <StepPanel v-slot="{ activateCallback }" value="2">
+        <StepPanel v-slot="{ activateCallback }" value="notebook">
           <div class="Step">
-            <h2>设置笔记本</h2>
-            <h4>设置你的笔记本。此设置可以后续在软件的设置界面中更改。</h4>
+            <h2>创建笔记本</h2>
+            <h4>创建你的笔记本。这些设置可以后续在软件的设置界面中更改。</h4>
             <InputText
               v-model="notebookName"
               size="large"
               placeholder="笔记本名称"
+            />
+            <Textarea
+              v-model="notebookDescription"
+              placeholder="笔记本描述（可选）"
+              auto-resize
+              rows="5"
+              cols="30"
             />
             <div id="Buttons">
               <Button
                 icon="pi pi-arrow-left"
                 label="后退"
                 severity="secondary"
-                @click="activateCallback('1')"
+                @click="activateCallback('welcome')"
               ></Button>
               <Button
                 icon="pi pi-arrow-right"
+                icon-pos="right"
                 label="继续"
-                @click="checkNotebookName(activateCallback)"
+                :disabled="notebookName === ''"
+                @click="activateCallback('password')"
               ></Button>
             </div>
-            <Button
-              label="不设置笔记本"
-              severity="secondary"
-              text
-              @click="activateCallback('3')"
-            />
           </div>
         </StepPanel>
-        <StepPanel v-slot="{ activateCallback }" value="3">
+        <StepPanel v-slot="{ activateCallback }" value="password">
           <div class="Step">
             <h2>设置密码</h2>
             <h4>
-              Litepad
-              建议为你的笔记本设置一个密码，用于在启动时验证访问者身份。此设置可以后续在软件的设置界面中更改。
+              LitePad
+              建议为你的笔记本设置一个密码，用于在启动或切换笔记本时验证访问者身份。此设置可以后续在软件的设置界面中更改。
             </h4>
             <Password
               :input-props="{ autocomplete: 'new-password' }"
@@ -62,6 +61,8 @@
               input-id="Password"
               placeholder="密码"
               promptLabel="检查密码复杂度"
+              autofocus
+              fluid
             />
             <Password
               :input-props="{ autocomplete: 'new-password' }"
@@ -69,96 +70,195 @@
               input-id="RepeatPassword"
               placeholder="重复密码"
               promptLabel="检查密码复杂度"
+              fluid
             />
             <div id="Buttons">
               <Button
                 icon="pi pi-arrow-left"
                 label="后退"
                 severity="secondary"
-                @click="activateCallback('2')"
+                @click="activateCallback('notebook')"
               ></Button>
               <Button
                 icon="pi pi-arrow-right"
-                label="继续"
+                icon-pos="right"
+                :label="password ? '继续' : '跳过'"
                 @click="checkPassword(activateCallback)"
               ></Button>
             </div>
-            <Button
-              label="不设置密码"
-              severity="secondary"
-              text
-              @click="activateCallback('4')"
-            />
           </div>
         </StepPanel>
-        <StepPanel v-slot="{ activateCallback }" value="4">
+        <StepPanel v-slot="{ activateCallback }" value="theme">
           <div class="Step">
-            <h2>配置完成</h2>
-            <h4>Litepad 的初始配置已完成！你可以开始使用 Litepad 了！</h4>
+            <h2>设置主题</h2>
+            <h4>设置你喜欢的主题模式。</h4>
+            <SelectButton
+              :options="themeModeList"
+              option-label="name"
+              option-value="value"
+              :model-value="theme"
+              @change="switchTo"
+            />
+            <div id="Buttons">
+              <Button
+                icon="pi pi-arrow-left"
+                label="后退"
+                severity="secondary"
+                @click="activateCallback('password')"
+              ></Button>
+              <Button
+                icon="pi pi-arrow-right"
+                icon-pos="right"
+                :label="password ? '继续' : '跳过'"
+                @click="prepare(activateCallback)"
+              ></Button>
+            </div>
+          </div>
+        </StepPanel>
+        <StepPanel v-slot="{ activateCallback }" value="done">
+          <div class="Step">
+            <h2>配置完毕</h2>
+            <h4>你现在可以开始使用 LitePad</h4>
             <Button
               icon="pi pi-arrow-right"
-              label="开始"
-              @click="checkPassword(activateCallback)"
+              icon-pos="right"
+              label="开始使用"
+              @click="$router.replace('/')"
             ></Button>
           </div>
         </StepPanel>
       </StepPanels>
     </Stepper>
+    <Dialog
+      :visible="isPreparing"
+      :modal="true"
+      :closable="false"
+      header="准备中"
+    >
+      <ProgressSpinner id="Spinner" strokeWidth="2" aria-label="正在准备" />
+    </Dialog>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
 import { encryptPassword } from "@/utils/password";
+import { useTheme } from "@/services/theme";
+import { createNotebook } from "@/services/notebook";
+import { createNote } from "@/services/note";
+import { db } from "@/db";
+import { set } from "@/utils/helpers";
 
+const { theme, switchTo } = useTheme();
+
+const isPreparing = ref<boolean>(false);
 const notebookName = ref<string>("");
+const notebookDescription = ref<string>("");
 const password = ref<string>("");
 const repeatPassword = ref<string>("");
-
-const checkNotebookName = (activateCallback: Function) => {
-  if (!notebookName.value.trim()) {
-    alert("请命名笔记本。");
-    return;
-  }
-
-  activateCallback("3");
-};
+const themeModeList = ref([
+  {
+    name: "跟随系统",
+    value: "auto",
+  },
+  {
+    name: "浅色",
+    value: "light",
+  },
+  {
+    name: "深色",
+    value: "dark",
+  },
+]);
 
 const checkPassword = (activateCallback: Function) => {
-  if (!password.value || !repeatPassword.value) {
-    alert("请设置密码或点击“不设置密码”");
-    return;
-  }
-
   if (!(password.value === repeatPassword.value)) {
     alert("两次密码不一致。");
     return;
   }
 
-  activateCallback("4");
+  activateCallback("theme");
+};
+
+const prepare = (activateCallback: Function) => {
+  isPreparing.value = true;
+  const { salt, encrypted } = encryptPassword(password.value);
+
+  db.transaction("rw", db.notebooks, db.notes, async () => {
+    const notebook_id = await createNotebook({
+      name: notebookName.value,
+      description: notebookDescription.value,
+      password: encrypted,
+      password_salt: salt,
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
+
+    await createNote({
+      notebook_id: notebook_id,
+      folder_id: undefined,
+      note_type: "note",
+      title: "Welcome to LitePad!",
+      content_type: "richtext",
+      content: "<p>Welcome!</p>",
+      preview: "Welcome",
+      labels: [],
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
+  })
+    .then(() => {
+      activateCallback("done");
+      set("LP_OOBE_PASSED", "1");
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {
+      isPreparing.value = false;
+    });
 };
 </script>
 
 <style>
 #OOBEView {
-  margin: auto 30px;
+  height: 100vh;
+  background-color: var(--p-primary-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  user-select: none;
 }
 
 #OOBEView #Buttons {
   display: flex;
+  justify-content: end;
   gap: 18px;
+}
+
+#OOBEView #Spinner {
+  height: 50px;
+  width: 50px;
 }
 
 #OOBEView .Step {
   display: flex;
-  gap: 18px;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  gap: 18px;
+  padding: 18px;
 }
 
-#OOBEView h2,
+#OOBEView .p-steppanels {
+  max-width: 600px;
+  margin: 0px auto;
+}
+
+#OOBEView h2 {
+  margin: 0px;
+}
+
 #OOBEView h4 {
   margin: 0px;
+  color: var(--p-surface-500);
 }
 </style>

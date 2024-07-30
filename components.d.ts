@@ -8,17 +8,20 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('primevue/button')['default']
+    Dialog: typeof import('primevue/dialog')['default']
     FloatLabel: typeof import('primevue/floatlabel')['default']
     InputText: typeof import('primevue/inputtext')['default']
     Password: typeof import('primevue/password')['default']
     ProgressSpinner: typeof import('primevue/progressspinner')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SelectButton: typeof import('primevue/selectbutton')['default']
     Step: typeof import('primevue/step')['default']
     StepList: typeof import('primevue/steplist')['default']
     StepPanel: typeof import('primevue/steppanel')['default']
     StepPanels: typeof import('primevue/steppanels')['default']
     Stepper: typeof import('primevue/stepper')['default']
+    Textarea: typeof import('primevue/textarea')['default']
     Tree: typeof import('./src/components/Tree.vue')['default']
   }
 }
