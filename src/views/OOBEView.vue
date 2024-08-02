@@ -144,8 +144,6 @@
 import { ref } from "vue";
 import { encryptPassword } from "@/utils/password";
 import { useTheme } from "@/services/theme";
-import { createNotebook } from "@/services/notebook";
-import { createNote } from "@/services/note";
 import { db } from "@/db";
 import { set } from "@/utils/helpers";
 
@@ -185,7 +183,7 @@ const prepare = (activateCallback: Function) => {
   const { salt, encrypted } = encryptPassword(password.value);
 
   db.transaction("rw", db.notebooks, db.notes, async () => {
-    const notebook_id = await createNotebook({
+    const notebook_id = await db.notebooks.add({
       name: notebookName.value,
       description: notebookDescription.value,
       password: encrypted,
@@ -194,8 +192,10 @@ const prepare = (activateCallback: Function) => {
       updated_at: new Date(),
     });
 
-    await createNote({
-      notebook_id: notebook_id,
+    await db.notes.add({
+      // 笔记id从10001开始计数，文件夹id从1开始计数
+      id: 10001,
+      notebook_id: notebook_id || 1,
       folder_id: undefined,
       note_type: "note",
       title: "Welcome to LitePad!",
@@ -210,6 +210,7 @@ const prepare = (activateCallback: Function) => {
     .then(() => {
       activateCallback("done");
       set("LP_OOBE_PASSED", "1");
+      set("LP_NOTEBOOK", notebookName.value);
     })
     .catch((error) => {
       console.log(error);
@@ -233,7 +234,7 @@ const prepare = (activateCallback: Function) => {
 #OOBEView #Buttons {
   display: flex;
   justify-content: end;
-  gap: 18px;
+  gap: 16px;
 }
 
 #OOBEView #Spinner {
@@ -244,8 +245,8 @@ const prepare = (activateCallback: Function) => {
 #OOBEView .Step {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  padding: 18px;
+  gap: 16px;
+  padding: 16px;
 }
 
 #OOBEView .p-steppanels {

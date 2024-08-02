@@ -1,0 +1,50 @@
+#Menubar {
+  border: unset;
+  border-bottom: 1px solid var(--p-menubar-border-color);
+  border-radius: unset;
+  padding: 3px;
+  font-size: 14px;
+}
+
+#RootPanel {
+  display: flex;
+  height: calc(100vh - 39px);
+
+  .p-splitter-gutter:hover {
+    background-color: var(--p-primary-color);
+  }
+}
+
+#LeftPanel {
+  min-width: 300px;
+  border-right: 1px solid var(--p-content-border-color);
+}
+
+.Panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.Padding {
+  padding: 8px;
+}
+
+.p-tree {
+  font-size: 14px;
+  padding: unset !important;
+  background: unset !important;
+
+  .p-tree-node-content {
+    border-radius: unset !important;
+  }
+}
+
+.p-dialog {
+  min-width: 500px;
+
+  .p-dialog-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+}

@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import SplashView from "@/views/SplashView.vue";
+import MainView from "@/views/MainView.vue";
 import OOBEView from "@/views/OOBEView.vue";
 import { has } from "@/utils/helpers";
 
@@ -8,8 +8,8 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "splash",
-      component: SplashView,
+      name: "main",
+      component: MainView,
     },
     {
       path: "/_oobe",
@@ -20,7 +20,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from) => {
-  console.log(to, from);
   if (!has("LP_OOBE_PASSED") && to.name !== "oobe") {
     return { name: "oobe" };
   }

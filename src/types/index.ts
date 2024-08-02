@@ -12,8 +12,15 @@ export interface Notebook extends Model {
   password_salt?: string;
 }
 
+export interface Folder extends Model {
+  notebook_id: number;
+  folder_id?: number;
+  name: string;
+  content_type: string
+}
+
 export interface Note extends Model {
-  notebook_id?: number;
+  notebook_id: number;
   folder_id?: number;
   note_type: string;
   title: string;

@@ -6,6 +6,7 @@ import PrimeVue from "primevue/config";
 import Aura from "@primevue/themes/aura";
 import { definePreset } from "@primevue/themes";
 import "primeicons/primeicons.css";
+import ToastService from "primevue/toastservice";
 
 import App from "./App.vue";
 import router from "./router";
@@ -40,6 +41,7 @@ app.use(PrimeVue, {
     },
   },
 });
+app.use(ToastService);
 
 app.config.globalProperties.isDesktop = window.nw !== undefined;
 app.config.globalProperties.nw = window.nw;
