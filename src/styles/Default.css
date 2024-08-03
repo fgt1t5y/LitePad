@@ -37,6 +37,10 @@
   .p-tree-node-content {
     border-radius: unset !important;
   }
+
+  .p-tree-node-label {
+    width: 100%;
+  }
 }
 
 .p-dialog {

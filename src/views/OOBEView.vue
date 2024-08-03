@@ -182,7 +182,7 @@ const prepare = (activateCallback: Function) => {
   isPreparing.value = true;
   const { salt, encrypted } = encryptPassword(password.value);
 
-  db.transaction("rw", db.notebooks, db.notes, async () => {
+  db.transaction("rw", db.notebooks, db.folders, db.notes, async () => {
     const notebook_id = await db.notebooks.add({
       name: notebookName.value,
       description: notebookDescription.value,
@@ -192,14 +192,22 @@ const prepare = (activateCallback: Function) => {
       updated_at: new Date(),
     });
 
+    await db.folders.add({
+      notebook_id: notebook_id || 1,
+      folder_id: undefined,
+      name: "示例文件夹",
+      type: "folder",
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
+
     await db.notes.add({
       // 笔记id从10001开始计数，文件夹id从1开始计数
       id: 10001,
       notebook_id: notebook_id || 1,
       folder_id: undefined,
-      note_type: "note",
       title: "Welcome to LitePad!",
-      content_type: "richtext",
+      type: "note",
       content: "<p>Welcome!</p>",
       preview: "Welcome",
       labels: [],

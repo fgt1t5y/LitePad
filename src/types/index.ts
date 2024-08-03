@@ -2,7 +2,6 @@ interface Model {
   id?: number;
   created_at: Date;
   updated_at: Date;
-  meta?: string;
 }
 
 export interface Notebook extends Model {
@@ -16,15 +15,14 @@ export interface Folder extends Model {
   notebook_id: number;
   folder_id?: number;
   name: string;
-  content_type: string
+  type: string
 }
 
 export interface Note extends Model {
   notebook_id: number;
   folder_id?: number;
-  note_type: string;
   title: string;
-  content_type: string;
+  type: string;
   content: string;
   preview: string;
   labels: string[];

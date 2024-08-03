@@ -7,11 +7,10 @@ export const db = new Dexie("LitePad_db") as Dexie & {
   notes: EntityTable<Note, "id">;
 };
 
-db.version(3).stores({
+db.version(4).stores({
   notebooks:
-    "++id, name, description, password, password_salt, created_at, updated_at, meta",
-  folders:
-    "++id, notebook_id, folder_id, name, content_type, created_at, updated_at, meta",
+    "++id, name, description, password, password_salt, created_at, updated_at",
+  folders: "++id, notebook_id, folder_id, name, type, created_at, updated_at",
   notes:
-    "++id, notebook_id, folder_id, note_type, title, content_type, content, preview, labels, created_at, updated_at, meta",
+    "++id, notebook_id, folder_id, title, type, content, preview, labels, created_at, updated_at",
 });

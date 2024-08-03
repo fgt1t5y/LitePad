@@ -17,7 +17,7 @@
       <Tree
         id="FileTree"
         selectionMode="single"
-        :value="nodes"
+        :value="fileTree"
         v-model:selectionKeys="selectionKeys"
         v-model:expandedKeys="expandedKeys"
         @node-select="selectNode"
@@ -27,13 +27,17 @@
         <template #default="{ node }">
           <div @mouseup="(e) => nodeClick(node, e)">{{ node.label }}</div>
         </template>
+        <template #nodeicon="{ node }">
+          <i v-if="node.type === 'folder'" class="pi pi-folder"></i>
+          <i v-else class="pi pi-file"></i>
+        </template>
       </Tree>
     </div>
     <div id="RightPanel"></div>
   </div>
   <CreateNotebookModal
     v-model="showCreateNotebookModel"
-    @success="loadNotebooks"
+    @success="loadNotebookList"
   />
   <Toast />
 </template>
@@ -49,6 +53,7 @@ import { db } from "@/db";
 import type { Notebook } from "@/types";
 import { get } from "@/utils/helpers";
 import { useToast } from "primevue/usetoast";
+import { arrayToTree } from "performant-array-to-tree";
 import CreateNotebookModal from "@/components/modal/CreateNoteModal.vue";
 
 const { switchTo } = useTheme();
@@ -61,17 +66,35 @@ const expandedKeys = ref<TreeExpandedKeys>({});
 const selectedTreeNode = ref<TreeNode>();
 const notebookList = ref<Notebook[]>();
 const currentNotebook = ref<string | null>(get("LP_NOTEBOOK"));
+const fileTree = ref();
 
 const showCreateNotebookModel = ref<boolean>(false);
 
-const loadNotebooks = async () => {
+const loadNotebookList = async () => {
   const notebooks = await db.notebooks.orderBy("id").toArray();
   notebookList.value = notebooks;
 };
 
-loadNotebooks();
+loadNotebookList();
 
-const onCreateNotebookClick = () => {};
+const loadNotebook = async (name: string | null) => {
+  if (!name) return;
+  const folders = await db.folders.toArray();
+  const notes = await db.notes.toArray();
+  const merged = [...folders, ...notes];
+
+  merged.forEach((item: any) => {
+    item.label = item.title || item.name;
+    item.key = item.id;
+  });
+
+  fileTree.value = arrayToTree(merged, {
+    parentId: "folder_id",
+    dataField: null,
+  });
+};
+
+loadNotebook(currentNotebook.value);
 
 const selectNode = (node: TreeNode) => {
   if (expandedKeys.value[node.key]) {
