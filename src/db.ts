@@ -14,3 +14,20 @@ db.version(4).stores({
   notes:
     "++id, notebook_id, folder_id, title, type, content, preview, labels, created_at, updated_at",
 });
+
+class FolderDB {
+  constructor(data: Folder) {
+    data.name = "1";
+  }
+}
+
+class NoteDB {
+  label: string;
+
+  constructor(data: Note) {
+    this.label = data.title;
+  }
+}
+
+db.folders.mapToClass(FolderDB);
+db.notes.mapToClass(NoteDB);

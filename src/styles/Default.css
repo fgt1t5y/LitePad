@@ -1,14 +1,8 @@
-#Menubar {
-  border: unset;
-  border-bottom: 1px solid var(--p-menubar-border-color);
-  border-radius: unset;
-  padding: 3px;
-  font-size: 14px;
-}
-
+/* Layout */
 #RootPanel {
   display: flex;
   height: calc(100vh - 39px);
+  width: 100vw;
 
   .p-splitter-gutter:hover {
     background-color: var(--p-primary-color);
@@ -20,6 +14,11 @@
   border-right: 1px solid var(--p-content-border-color);
 }
 
+#RightPanel {
+  width: 100%;
+}
+
+/* Atom class */
 .Panel {
   display: flex;
   flex-direction: column;
@@ -29,8 +28,46 @@
   padding: 8px;
 }
 
+.VGap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Custom components style */
+.Tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--p-menubar-border-color);
+  padding: 4px;
+
+  .Tab {
+    display: flex;
+    gap: 4px;
+    border-radius: 6px;
+
+    &:hover {
+      background-color: var(--p-primary-100);
+      color: var(--p-primary-700);
+    }
+
+    &.TabActive {
+      background-color: var(--p-primary-100);
+      color: var(--p-primary-700);
+    }
+
+    i {
+      font-size: 12px;
+    }
+
+    .TabButton {
+      display: inline-block;
+    }
+  }
+}
+
+/* PrimeVue override style */
 .p-tree {
-  font-size: 14px;
   padding: unset !important;
   background: unset !important;
 

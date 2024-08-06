@@ -1,8 +1,7 @@
 <template>
-  <Menubar id="Menubar" :model="menubarItems" />
   <div id="RootPanel">
     <div id="LeftPanel" class="Panel">
-      <ContextMenu ref="menuRef" :model="fileTreeContextMenu" />
+      <ContextMenu ref="contextMenuRef" :model="fileTreeContextMenu" />
       <div class="Padding">
         <Select
           :model-value="currentNotebook"
@@ -14,59 +13,77 @@
           fluid
         />
       </div>
-      <Tree
-        id="FileTree"
-        selectionMode="single"
-        :value="fileTree"
-        v-model:selectionKeys="selectionKeys"
-        v-model:expandedKeys="expandedKeys"
-        @node-select="selectNode"
-        @node-unselect="selectNode"
-        @contextmenu="$event.preventDefault()"
-      >
-        <template #default="{ node }">
-          <div @mouseup="(e) => nodeClick(node, e)">{{ node.label }}</div>
-        </template>
-        <template #nodeicon="{ node }">
-          <i v-if="node.type === 'folder'" class="pi pi-folder"></i>
-          <i v-else class="pi pi-file"></i>
-        </template>
-      </Tree>
+      <div>
+        <Tree
+          v-if="fileTreeNodes.length"
+          id="FileTree"
+          selectionMode="single"
+          :value="fileTreeNodes"
+          v-model:selectionKeys="selectionKeys"
+          v-model:expandedKeys="expandedKeys"
+          @node-select="nodeSelect"
+          @node-unselect="nodeSelect"
+          @contextmenu="$event.preventDefault()"
+        >
+          <template #default="{ node }">
+            <div @mouseup="(e) => nodeClick(node, e)">
+              {{ node.label }}
+            </div>
+          </template>
+          <template #nodeicon="{ node }">
+            <i v-if="node.type === 'folder'" class="pi pi-folder"></i>
+            <i v-else class="pi pi-file"></i>
+          </template>
+        </Tree>
+        <div v-else class="Padding VGap">
+          <Skeleton width="100%" height="36px"></Skeleton>
+          <Skeleton width="100%" height="36px"></Skeleton>
+          <Skeleton width="100%" height="36px"></Skeleton>
+        </div>
+      </div>
     </div>
-    <div id="RightPanel"></div>
+    <div id="RightPanel">
+      <Tabs v-if="tabs" v-model:tabs="tabs"></Tabs>
+      <RouterView #default="{ Component }">
+        <KeepAlive>
+          <component :is="Component" />
+        </KeepAlive>
+      </RouterView>
+    </div>
   </div>
   <CreateNotebookModal
     v-model="showCreateNotebookModel"
     @success="loadNotebookList"
   />
-  <Toast />
 </template>
 
 <script setup lang="ts">
 import "@/styles/Default.css";
-import { useTheme } from "@/services/theme";
 import type { MenuItem } from "primevue/menuitem";
 import type { TreeNode } from "primevue/treenode";
 import type { TreeSelectionKeys, TreeExpandedKeys } from "primevue/tree";
-import { ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { db } from "@/db";
-import type { Notebook } from "@/types";
+import type { Folder, Notebook, Note, TabsItem } from "@/types";
 import { get } from "@/utils/helpers";
 import { useToast } from "primevue/usetoast";
 import { arrayToTree } from "performant-array-to-tree";
 import CreateNotebookModal from "@/components/modal/CreateNoteModal.vue";
+import Tabs from "@/components/Tabs.vue";
+import { RouterView } from "vue-router";
 
-const { switchTo } = useTheme();
 const toast = useToast();
 
-const menuRef = ref();
+const contextMenuRef = ref();
 
 const selectionKeys = ref<TreeSelectionKeys>();
 const expandedKeys = ref<TreeExpandedKeys>({});
 const selectedTreeNode = ref<TreeNode>();
 const notebookList = ref<Notebook[]>();
+const folderList = ref<Folder[]>();
+const noteList = ref<Note[]>();
 const currentNotebook = ref<string | null>(get("LP_NOTEBOOK"));
-const fileTree = ref();
+const tabs = ref<TabsItem[]>([]);
 
 const showCreateNotebookModel = ref<boolean>(false);
 
@@ -75,28 +92,15 @@ const loadNotebookList = async () => {
   notebookList.value = notebooks;
 };
 
-loadNotebookList();
-
 const loadNotebook = async (name: string | null) => {
   if (!name) return;
-  const folders = await db.folders.toArray();
-  const notes = await db.notes.toArray();
-  const merged = [...folders, ...notes];
 
-  merged.forEach((item: any) => {
-    item.label = item.title || item.name;
-    item.key = item.id;
-  });
-
-  fileTree.value = arrayToTree(merged, {
-    parentId: "folder_id",
-    dataField: null,
-  });
+  folderList.value = await db.folders.toArray();
+  noteList.value = await db.notes.toArray();
 };
 
-loadNotebook(currentNotebook.value);
-
-const selectNode = (node: TreeNode) => {
+const nodeSelect = (node: TreeNode) => {
+  selectedTreeNode.value = node;
   if (expandedKeys.value[node.key]) {
     expandedKeys.value![node.key] = false;
     return;
@@ -106,88 +110,59 @@ const selectNode = (node: TreeNode) => {
 
 const nodeClick = (node: TreeNode, e: MouseEvent) => {
   selectedTreeNode.value = node;
-  if (e.button === 2) menuRef.value.show(e);
+  if (e.button === 2) contextMenuRef.value.show(e);
 };
 
-const menubarItems = ref<MenuItem[]>([
-  {
-    label: "新建",
-    icon: "pi pi-plus",
-    items: [
-      {
-        label: "笔记",
-      },
-      {
-        label: "文件夹",
-      },
-      {
-        label: "笔记本",
-        command: () => {
-          showCreateNotebookModel.value = true;
-        },
-      },
-    ],
-  },
-  {
-    label: "快速调试",
-    items: [
-      {
-        label: "浅色主题",
-        command: () => switchTo("light"),
-      },
-      {
-        label: "暗色主题",
-        command: () => switchTo("dark"),
-      },
-    ],
-  },
-]);
+const fileTreeNodes = computed(() => {
+  if (!(folderList.value && noteList.value)) {
+    return [];
+  }
 
-const fileTreeContextMenu = ref([
-  {
-    label: "View",
-  },
-  {
-    label: () => "Delete",
-  },
-]);
+  const items = [...folderList.value, ...noteList.value];
 
-const nodes = ref([
-  {
-    key: "0",
-    label: "Documents",
-    icon: "pi pi-fw pi-inbox",
-    children: [
+  items.forEach((item: any) => {
+    item.label = item.title || item.name;
+    item.key = item.id;
+  });
+
+  return arrayToTree(items, {
+    parentId: "folder_id",
+    dataField: null,
+  }) as TreeNode[];
+});
+
+const fileTreeContextMenu = computed<MenuItem[]>(() => {
+  if (selectedTreeNode.value?.type === "note") {
+    return [
       {
-        key: "0-0",
-        label: "Work",
-        icon: "pi pi-fw pi-cog",
-        children: [
+        label: "打开",
+      },
+      {
+        label: "删除",
+      },
+    ];
+  } else {
+    return [
+      {
+        label: "新建",
+        items: [
           {
-            key: "0-0-0",
-            label: "Expenses.doc",
-            icon: "pi pi-fw pi-file",
+            label: "笔记",
           },
           {
-            key: "0-0-1",
-            label: "Resume.doc",
-            icon: "pi pi-fw pi-file",
+            label: "文件夹",
           },
         ],
       },
       {
-        key: "0-1",
-        label: "Home",
-        icon: "pi pi-fw pi-home",
-        children: [
-          {
-            key: "0-1-0",
-            label: "Invoices.txt",
-            icon: "pi pi-fw pi-file",
-          },
-        ],
+        label: "删除",
       },
-    ],
-  },
-]);
+    ];
+  }
+});
+
+onMounted(() => {
+  loadNotebookList();
+  loadNotebook(currentNotebook.value);
+});
 </script>

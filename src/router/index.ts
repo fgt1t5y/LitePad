@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import MainView from "@/views/MainView.vue";
 import OOBEView from "@/views/OOBEView.vue";
+import NoteView from "@/views/NoteView.vue";
 import { has } from "@/utils/helpers";
 
 const router = createRouter({
@@ -10,6 +11,13 @@ const router = createRouter({
       path: "/",
       name: "main",
       component: MainView,
+      children: [
+        {
+          path: "/note/:id",
+          name: "note",
+          component: NoteView,
+        },
+      ],
     },
     {
       path: "/_oobe",

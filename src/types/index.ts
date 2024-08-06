@@ -15,7 +15,7 @@ export interface Folder extends Model {
   notebook_id: number;
   folder_id?: number;
   name: string;
-  type: string
+  type: string;
 }
 
 export interface Note extends Model {
@@ -26,4 +26,9 @@ export interface Note extends Model {
   content: string;
   preview: string;
   labels: string[];
+}
+
+export interface TabsItem {
+  key: number;
+  label: string;
 }
