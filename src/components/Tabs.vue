@@ -1,6 +1,11 @@
 <template>
   <div class="Tabs">
-    <button v-for="tab in tabs" class="Tab" :data-key="tab.key">
+    <button
+      v-for="tab in tabs"
+      class="Tab"
+      draggable="true"
+      :data-key="tab.key"
+    >
       <span>
         <i class="pi pi-file"></i>
       </span>

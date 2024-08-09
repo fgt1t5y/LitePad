@@ -1,7 +1,7 @@
 /* Layout */
 #RootPanel {
   display: flex;
-  height: calc(100vh - 39px);
+  height: 100vh;
   width: 100vw;
 
   .p-splitter-gutter:hover {
@@ -35,10 +35,45 @@
 }
 
 /* Custom components style */
+.Tree {
+  user-select: none;
+
+  .TreeRoot {
+    padding: 0px;
+  }
+
+  .TreeChildren {
+    padding: 0px 0px 0px 1rem;
+  }
+
+  .TreeLeaf {
+    .pi:first-child {
+      visibility: hidden;
+    }
+  }
+
+  ul,
+  li {
+    margin: 0px;
+    padding: 0.5rem 1rem;
+  }
+
+  li {
+    cursor: pointer;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    &:hover {
+      background-color: var(--p-content-hover-background);
+    }
+  }
+}
+
 .Tabs {
   display: flex;
   gap: 8px;
-  border-bottom: 1px solid var(--p-menubar-border-color);
+  border-bottom: 1px solid var(--p-content-border-color);
   padding: 4px;
 
   .Tab {
@@ -46,11 +81,7 @@
     gap: 4px;
     border-radius: 6px;
 
-    &:hover {
-      background-color: var(--p-primary-100);
-      color: var(--p-primary-700);
-    }
-
+    &:hover,
     &.TabActive {
       background-color: var(--p-primary-100);
       color: var(--p-primary-700);
@@ -68,13 +99,6 @@
 
 /* PrimeVue override style */
 .p-tree {
-  padding: unset !important;
-  background: unset !important;
-
-  .p-tree-node-content {
-    border-radius: unset !important;
-  }
-
   .p-tree-node-label {
     width: 100%;
   }

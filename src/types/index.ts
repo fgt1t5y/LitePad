@@ -28,7 +28,23 @@ export interface Note extends Model {
   labels: string[];
 }
 
+export interface TreeItem {
+  id: number;
+  label: string;
+  type?: string;
+  icon?: string;
+  children?: TreeItem[];
+}
+
 export interface TabsItem {
   key: number;
   label: string;
+}
+
+export interface IDs {
+  [id: number]: any;
+}
+
+export interface IconMap {
+  [type: string]: string;
 }

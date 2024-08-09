@@ -11,36 +11,15 @@
           placeholder="选择笔记本"
           variant="filled"
           fluid
-        />
+        ></Select>
       </div>
-      <div>
-        <Tree
-          v-if="fileTreeNodes.length"
-          id="FileTree"
-          selectionMode="single"
-          :value="fileTreeNodes"
-          v-model:selectionKeys="selectionKeys"
-          v-model:expandedKeys="expandedKeys"
-          @node-select="nodeSelect"
-          @node-unselect="nodeSelect"
-          @contextmenu="$event.preventDefault()"
-        >
-          <template #default="{ node }">
-            <div @mouseup="(e) => nodeClick(node, e)">
-              {{ node.label }}
-            </div>
-          </template>
-          <template #nodeicon="{ node }">
-            <i v-if="node.type === 'folder'" class="pi pi-folder"></i>
-            <i v-else class="pi pi-file"></i>
-          </template>
-        </Tree>
-        <div v-else class="Padding VGap">
-          <Skeleton width="100%" height="36px"></Skeleton>
-          <Skeleton width="100%" height="36px"></Skeleton>
-          <Skeleton width="100%" height="36px"></Skeleton>
-        </div>
-      </div>
+      <TreePro
+        :items="fileTreeNodes"
+        :icon-map="fileTreeIconMap"
+        v-model:expanded-items="expandedItems"
+        v-model:selected-items="selectedItems"
+        @node-click="nodeSelect"
+      />
     </div>
     <div id="RightPanel">
       <Tabs v-if="tabs" v-model:tabs="tabs"></Tabs>
@@ -60,25 +39,24 @@
 <script setup lang="ts">
 import "@/styles/Default.css";
 import type { MenuItem } from "primevue/menuitem";
-import type { TreeNode } from "primevue/treenode";
-import type { TreeSelectionKeys, TreeExpandedKeys } from "primevue/tree";
 import { computed, onMounted, ref } from "vue";
 import { db } from "@/db";
-import type { Folder, Notebook, Note, TabsItem } from "@/types";
+import type { Folder, Notebook, Note, TabsItem, TreeItem, IDs } from "@/types";
 import { get } from "@/utils/helpers";
 import { useToast } from "primevue/usetoast";
 import { arrayToTree } from "performant-array-to-tree";
 import CreateNotebookModal from "@/components/modal/CreateNoteModal.vue";
 import Tabs from "@/components/Tabs.vue";
 import { RouterView } from "vue-router";
+import TreePro from "@/components/TreePro.vue";
 
 const toast = useToast();
 
 const contextMenuRef = ref();
 
-const selectionKeys = ref<TreeSelectionKeys>();
-const expandedKeys = ref<TreeExpandedKeys>({});
-const selectedTreeNode = ref<TreeNode>();
+const expandedItems = ref<IDs>({});
+const selectedItems = ref<IDs>({});
+const selectedTreeNode = ref<TreeItem>();
 const notebookList = ref<Notebook[]>();
 const folderList = ref<Folder[]>();
 const noteList = ref<Note[]>();
@@ -86,6 +64,11 @@ const currentNotebook = ref<string | null>(get("LP_NOTEBOOK"));
 const tabs = ref<TabsItem[]>([]);
 
 const showCreateNotebookModel = ref<boolean>(false);
+
+const fileTreeIconMap = {
+  folder: "pi pi-folder",
+  note: "pi pi-file",
+};
 
 const loadNotebookList = async () => {
   const notebooks = await db.notebooks.orderBy("id").toArray();
@@ -99,16 +82,17 @@ const loadNotebook = async (name: string | null) => {
   noteList.value = await db.notes.toArray();
 };
 
-const nodeSelect = (node: TreeNode) => {
+const nodeSelect = (node: TreeItem) => {
   selectedTreeNode.value = node;
-  if (expandedKeys.value[node.key]) {
-    expandedKeys.value![node.key] = false;
+  selectedItems.value = { [node.id]: true };
+  if (expandedItems.value[node.id]) {
+    expandedItems.value![node.id] = false;
     return;
   }
-  expandedKeys.value![node.key] = true;
+  expandedItems.value![node.id] = true;
 };
 
-const nodeClick = (node: TreeNode, e: MouseEvent) => {
+const nodeClick = (node: TreeItem, e: MouseEvent) => {
   selectedTreeNode.value = node;
   if (e.button === 2) contextMenuRef.value.show(e);
 };
@@ -122,13 +106,12 @@ const fileTreeNodes = computed(() => {
 
   items.forEach((item: any) => {
     item.label = item.title || item.name;
-    item.key = item.id;
   });
 
   return arrayToTree(items, {
     parentId: "folder_id",
     dataField: null,
-  }) as TreeNode[];
+  }) as TreeItem[];
 });
 
 const fileTreeContextMenu = computed<MenuItem[]>(() => {
