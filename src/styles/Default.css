@@ -1,3 +1,29 @@
+body {
+  font-family: var(--FontSansSerif);
+  font-size: 14px;
+  background-color: var(--p-surface-0);
+}
+
+.DarkMode body {
+  background-color: var(--p-surface-950);
+}
+
+/* Native element override style */
+a {
+  display: block;
+  color: unset;
+  text-decoration: none;
+}
+
+button {
+  padding: 0.5rem 0.75rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+}
+
 /* Layout */
 #RootPanel {
   display: flex;
@@ -11,6 +37,7 @@
 
 #LeftPanel {
   min-width: 300px;
+  background-color: var(--p-content-background);
   border-right: 1px solid var(--p-content-border-color);
 }
 
@@ -98,12 +125,6 @@
 }
 
 /* PrimeVue override style */
-.p-tree {
-  .p-tree-node-label {
-    width: 100%;
-  }
-}
-
 .p-dialog {
   min-width: 500px;
 

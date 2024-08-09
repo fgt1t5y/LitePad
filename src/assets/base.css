@@ -6,24 +6,8 @@
     "Courier New", monospace;
 }
 
+/* Body style */
 body {
   margin: 0px;
-  font-family: var(--FontSansSerif);
-  font-size: 14px;
   overflow: hidden;
-}
-
-a {
-  display: block;
-  color: unset;
-  text-decoration: none;
-}
-
-button {
-  padding: 7px 10px;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: inherit;
 }

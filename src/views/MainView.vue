@@ -1,17 +1,8 @@
 <template>
   <div id="RootPanel">
     <div id="LeftPanel" class="Panel">
-      <ContextMenu ref="contextMenuRef" :model="fileTreeContextMenu" />
       <div class="Padding">
-        <Select
-          :model-value="currentNotebook"
-          :options="notebookList"
-          option-label="name"
-          option-value="name"
-          placeholder="选择笔记本"
-          variant="filled"
-          fluid
-        ></Select>
+        <Button icon="pi pi-file" label="新笔记" size="large" raised></Button>
       </div>
       <TreePro
         :items="fileTreeNodes"
@@ -34,6 +25,7 @@
     v-model="showCreateNotebookModel"
     @success="loadNotebookList"
   />
+  <ContextMenu ref="contextMenuRef" :model="fileTreeContextMenu" />
 </template>
 
 <script setup lang="ts">
@@ -43,14 +35,11 @@ import { computed, onMounted, ref } from "vue";
 import { db } from "@/db";
 import type { Folder, Notebook, Note, TabsItem, TreeItem, IDs } from "@/types";
 import { get } from "@/utils/helpers";
-import { useToast } from "primevue/usetoast";
 import { arrayToTree } from "performant-array-to-tree";
 import CreateNotebookModal from "@/components/modal/CreateNoteModal.vue";
 import Tabs from "@/components/Tabs.vue";
 import { RouterView } from "vue-router";
 import TreePro from "@/components/TreePro.vue";
-
-const toast = useToast();
 
 const contextMenuRef = ref();
 

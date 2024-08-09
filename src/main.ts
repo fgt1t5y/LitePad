@@ -26,17 +26,15 @@ const DefaultPreset = definePreset(Aura, {
       900: "{cyan.900}",
       950: "{cyan.950}",
     },
-  },
-  components: {
-    tree: {
-      colorScheme: {
-        light: {
-          root: {
-            padding: "0px",
-          },
-          node: {
-            borderRadius: "0px",
-          },
+    colorScheme: {
+      light: {
+        content: {
+          background: "{surface.50}",
+        },
+      },
+      dark: {
+        content: {
+          background: "{surface.900}",
         },
       },
     },
