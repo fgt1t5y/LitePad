@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import MainView from "@/views/MainView.vue";
 import OOBEView from "@/views/OOBEView.vue";
 import NoteView from "@/views/NoteView.vue";
+import WelcomeView from "@/views/WelcomeView.vue";
 import { has } from "@/utils/helpers";
 
 const router = createRouter({
@@ -16,6 +17,11 @@ const router = createRouter({
           path: "/note/:id",
           name: "note",
           component: NoteView,
+        },
+        {
+          path: "/",
+          name: "welcome",
+          component: WelcomeView,
         },
       ],
     },

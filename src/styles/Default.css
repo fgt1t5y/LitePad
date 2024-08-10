@@ -29,10 +29,6 @@ button {
   display: flex;
   height: 100vh;
   width: 100vw;
-
-  .p-splitter-gutter:hover {
-    background-color: var(--p-primary-color);
-  }
 }
 
 #LeftPanel {
@@ -100,21 +96,25 @@ button {
 .Tabs {
   display: flex;
   gap: 8px;
+  height: 36px;
   background-color: var(--p-content-background);
   border-bottom: 1px solid var(--p-content-border-color);
-  padding: 4px;
 
   .Tab {
     display: flex;
     gap: 4px;
-    border-radius: 6px;
 
     &:hover {
       background-color: var(--p-content-hover-background);
     }
 
     &.TabActive {
-      background-color: var(--p-content-hover-background);
+      background-color: var(--p-primary-400);
+      color: var(--p-primary-contrast-color);
+    }
+
+    &.TabDragging {
+      outline: 2px dashed var(--p-primary-color);
     }
 
     i {
@@ -123,6 +123,42 @@ button {
 
     .TabButton {
       display: inline-block;
+    }
+  }
+}
+
+.Panel {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--p-content-border-color);
+
+  .PanelHeader {
+    display: flex;
+    justify-content: space-between;
+    height: 36px;
+    padding: 8px;
+    user-select: none;
+    cursor: pointer;
+  }
+}
+
+.ListSelect {
+  .ListSelectItem {
+    cursor: pointer;
+    padding: 4px 8px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    &:hover,
+    &:focus-within {
+      outline: none;
+      background-color: var(--p-content-hover-background);
+    }
+
+    &.ListSelectActive {
+      background-color: var(--p-primary-400);
+      color: var(--p-primary-contrast-color);
     }
   }
 }

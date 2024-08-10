@@ -39,6 +39,12 @@ export interface TreeItem {
 export interface TabsItem {
   key: number;
   label: string;
+  path: string;
+}
+
+export interface ListSelectItem {
+  id: string | number;
+  name: string;
 }
 
 export interface IDs {

@@ -1,6 +1,9 @@
 <template>
   <div id="RootPanel">
     <div id="LeftPanel" class="Panel">
+      <PanelPro title="笔记本列表">
+        <ListSelect v-model:items="notebookList" :active="currentNotebook!" />
+      </PanelPro>
       <div class="Padding">
         <Button icon="pi pi-plus" label="新笔记" raised></Button>
       </div>
@@ -37,9 +40,12 @@ import type { Folder, Notebook, Note, TabsItem, TreeItem, IDs } from "@/types";
 import { get } from "@/utils/helpers";
 import { arrayToTree } from "performant-array-to-tree";
 import CreateNotebookModal from "@/components/modal/CreateNoteModal.vue";
-import PageTabs from "@/components/PageTabs.vue";
 import { RouterView } from "vue-router";
+
+import PageTabs from "@/components/PageTabs.vue";
 import TreePro from "@/components/TreePro.vue";
+import PanelPro from "@/components/PanelPro.vue";
+import ListSelect from "@/components/ListSelect.vue";
 
 const contextMenuRef = ref();
 
@@ -49,11 +55,12 @@ const selectedTreeNode = ref<TreeItem>();
 const notebookList = ref<Notebook[]>();
 const folderList = ref<Folder[]>();
 const noteList = ref<Note[]>();
-const currentNotebook = ref<string | null>(get("LP_NOTEBOOK"));
+const currentNotebook = ref<number>();
 const tabs = ref<TabsItem[]>([
   {
     key: 1,
     label: "欢迎",
+    path: "/",
   },
 ]);
 
@@ -69,11 +76,17 @@ const loadNotebookList = async () => {
   notebookList.value = notebooks;
 };
 
-const loadNotebook = async (name: string | null) => {
-  if (!name) return;
+const loadNotebook = async (notebook_id: number | null) => {
+  if (!notebook_id || !Number.isInteger(notebook_id)) return;
 
-  folderList.value = await db.folders.toArray();
-  noteList.value = await db.notes.toArray();
+  folderList.value = await db.folders
+    .where("notebook_id")
+    .equals(notebook_id)
+    .toArray();
+  noteList.value = await db.notes
+    .where("notebook_id")
+    .equals(notebook_id)
+    .toArray();
 };
 
 const nodeSelect = (node: TreeItem) => {
@@ -84,11 +97,6 @@ const nodeSelect = (node: TreeItem) => {
     return;
   }
   expandedItems.value![node.id] = true;
-};
-
-const nodeClick = (node: TreeItem, e: MouseEvent) => {
-  selectedTreeNode.value = node;
-  if (e.button === 2) contextMenuRef.value.show(e);
 };
 
 const fileTreeNodes = computed(() => {
@@ -139,6 +147,9 @@ const fileTreeContextMenu = computed<MenuItem[]>(() => {
 });
 
 onMounted(() => {
+  const lastNotebook = Number(get("LP_LAST_NOTEBOOK"));
+  console.log(lastNotebook);
+  currentNotebook.value = Number.isInteger(lastNotebook) ? lastNotebook : 1;
   loadNotebookList();
   loadNotebook(currentNotebook.value);
 });
