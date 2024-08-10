@@ -181,6 +181,7 @@ const checkPassword = (activateCallback: Function) => {
 const prepare = (activateCallback: Function) => {
   isPreparing.value = true;
   const { salt, encrypted } = encryptPassword(password.value);
+  let notebook: number;
 
   db.transaction("rw", db.notebooks, db.folders, db.notes, async () => {
     const notebook_id = await db.notebooks.add({
@@ -191,6 +192,7 @@ const prepare = (activateCallback: Function) => {
       created_at: new Date(),
       updated_at: new Date(),
     });
+    notebook = notebook_id || 1;
 
     await db.folders.add({
       notebook_id: notebook_id || 1,
@@ -218,7 +220,7 @@ const prepare = (activateCallback: Function) => {
     .then(() => {
       activateCallback("done");
       set("LP_OOBE_PASSED", "1");
-      set("LP_NOTEBOOK", notebookName.value);
+      set("LP_LAST_NOTEBOOK", String(notebook));
     })
     .catch((error) => {
       console.log(error);
