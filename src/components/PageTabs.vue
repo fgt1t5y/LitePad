@@ -21,7 +21,7 @@
 import type { TabsItem } from "@/types";
 
 defineOptions({
-  name: "Tabs",
+  name: "PageTabs",
 });
 
 const tabs = defineModel<TabsItem[]>("tabs");

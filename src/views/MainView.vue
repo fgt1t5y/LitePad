@@ -2,7 +2,7 @@
   <div id="RootPanel">
     <div id="LeftPanel" class="Panel">
       <div class="Padding">
-        <Button icon="pi pi-file" label="新笔记" size="large" raised></Button>
+        <Button icon="pi pi-plus" label="新笔记" raised></Button>
       </div>
       <TreePro
         :items="fileTreeNodes"
@@ -13,7 +13,7 @@
       />
     </div>
     <div id="RightPanel">
-      <Tabs v-if="tabs" v-model:tabs="tabs"></Tabs>
+      <PageTabs v-if="tabs" v-model:tabs="tabs"></PageTabs>
       <RouterView #default="{ Component }">
         <KeepAlive>
           <component :is="Component" />
@@ -37,7 +37,7 @@ import type { Folder, Notebook, Note, TabsItem, TreeItem, IDs } from "@/types";
 import { get } from "@/utils/helpers";
 import { arrayToTree } from "performant-array-to-tree";
 import CreateNotebookModal from "@/components/modal/CreateNoteModal.vue";
-import Tabs from "@/components/Tabs.vue";
+import PageTabs from "@/components/PageTabs.vue";
 import { RouterView } from "vue-router";
 import TreePro from "@/components/TreePro.vue";
 
@@ -50,7 +50,12 @@ const notebookList = ref<Notebook[]>();
 const folderList = ref<Folder[]>();
 const noteList = ref<Note[]>();
 const currentNotebook = ref<string | null>(get("LP_NOTEBOOK"));
-const tabs = ref<TabsItem[]>([]);
+const tabs = ref<TabsItem[]>([
+  {
+    key: 1,
+    label: "欢迎",
+  },
+]);
 
 const showCreateNotebookModel = ref<boolean>(false);
 
