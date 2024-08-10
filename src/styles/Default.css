@@ -157,8 +157,7 @@ button {
     }
 
     &.ListSelectActive {
-      background-color: var(--p-primary-400);
-      color: var(--p-primary-contrast-color);
+      background-color: var(--p-highlight-focus-background);
     }
   }
 }
