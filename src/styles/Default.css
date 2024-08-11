@@ -35,7 +35,6 @@ button {
   display: flex;
   flex-direction: column;
   min-width: 300px;
-  /* background-color: var(--p-content-background); */
   border-right: 1px solid var(--p-content-border-color);
 }
 
@@ -45,7 +44,7 @@ button {
 
 /* Atom class */
 .Padding {
-  padding: 8px;
+  padding: var(--p-form-field-padding-y) var(--p-form-field-padding-x);
 }
 
 .VGap {
@@ -75,7 +74,7 @@ button {
   ul,
   li {
     margin: 0px;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.75rem;
   }
 
   li {
@@ -134,7 +133,7 @@ button {
     display: flex;
     justify-content: space-between;
     height: 36px;
-    padding: 8px;
+    padding: 0.5rem 0.75rem;
     user-select: none;
     cursor: pointer;
 
@@ -147,7 +146,7 @@ button {
 .ListSelect {
   .ListSelectItem {
     cursor: pointer;
-    padding: 4px 8px;
+    padding: 0.5rem 0.75rem;
     display: flex;
     gap: 8px;
     align-items: center;

@@ -1,13 +1,13 @@
 <template>
   <div id="RootPanel">
     <div id="LeftPanel">
-      <PanelPro title="笔记本列表">
+      <Panel title="笔记本列表">
         <ListSelect v-model:items="notebookList" :active="currentNotebook!" />
-      </PanelPro>
+      </Panel>
       <div class="Padding">
-        <Button icon="pi pi-plus" label="新笔记" raised></Button>
+        <Button icon="pi pi-plus" size="small" label="新笔记" raised></Button>
       </div>
-      <TreePro
+      <Tree
         :items="fileTreeNodes"
         :icon-map="fileTreeIconMap"
         v-model:expanded-items="expandedItems"
@@ -43,8 +43,8 @@ import CreateNotebookModal from "@/components/modal/CreateNoteModal.vue";
 import { RouterView } from "vue-router";
 
 import PageTabs from "@/components/PageTabs.vue";
-import TreePro from "@/components/TreePro.vue";
-import PanelPro from "@/components/PanelPro.vue";
+import Tree from "@/components/Tree.vue";
+import Panel from "@/components/Panel.vue";
 import ListSelect from "@/components/ListSelect.vue";
 
 const contextMenuRef = ref();
