@@ -27,10 +27,4 @@ const [open] = defineModel("open", { type: Boolean, default: false });
 const toggle = () => {
   open.value = !open.value;
 };
-
-const toggleByKeyboard = (ev: KeyboardEvent) => {
-  if (ev.key === " " || ev.key === "Enter") {
-    toggle();
-  }
-};
 </script>

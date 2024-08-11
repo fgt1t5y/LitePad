@@ -1,5 +1,10 @@
 <template>
-  <Dialog v-model:visible="modelValue" header="创建笔记本" modal>
+  <Dialog
+    v-model:visible="modelValue"
+    header="创建笔记本"
+    dismissable-mask
+    modal
+  >
     <InputText
       v-model="name"
       placeholder="笔记本名称"

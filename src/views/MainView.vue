@@ -1,19 +1,25 @@
 <template>
   <div id="RootPanel">
     <div id="LeftPanel">
-      <Panel title="笔记本列表">
+      <Panel v-model:open="expandNotebookList" title="笔记本列表">
+        <Button
+          label="新建笔记本"
+          size="small"
+          icon="pi pi-book"
+          text
+          @click="showCreateNotebookModel = true"
+        ></Button>
         <ListSelect v-model:items="notebookList" :active="currentNotebook!" />
       </Panel>
-      <div class="Padding">
-        <Button icon="pi pi-plus" size="small" label="新笔记" raised></Button>
-      </div>
-      <Tree
-        :items="fileTreeNodes"
-        :icon-map="fileTreeIconMap"
-        v-model:expanded-items="expandedItems"
-        v-model:selected-items="selectedItems"
-        @node-click="nodeSelect"
-      />
+      <Panel v-model:open="expandFileTree" title="笔记">
+        <Tree
+          :items="fileTreeNodes"
+          :icon-map="fileTreeIconMap"
+          v-model:expanded-items="expandedItems"
+          v-model:selected-items="selectedItems"
+          @node-click="nodeSelect"
+        />
+      </Panel>
     </div>
     <div id="RightPanel">
       <PageTabs v-if="tabs" v-model:tabs="tabs"></PageTabs>
@@ -33,10 +39,13 @@
 
 <script setup lang="ts">
 import "@/styles/Default.css";
+
 import type { MenuItem } from "primevue/menuitem";
+import type { Folder, Notebook, Note, TabsItem, TreeItem, IDs } from "@/types";
+import type { ContextMenuMethods } from "primevue/contextmenu";
+
 import { computed, onMounted, ref } from "vue";
 import { db } from "@/db";
-import type { Folder, Notebook, Note, TabsItem, TreeItem, IDs } from "@/types";
 import { get } from "@/utils/helpers";
 import { arrayToTree } from "performant-array-to-tree";
 import CreateNotebookModal from "@/components/modal/CreateNoteModal.vue";
@@ -47,8 +56,7 @@ import Tree from "@/components/Tree.vue";
 import Panel from "@/components/Panel.vue";
 import ListSelect from "@/components/ListSelect.vue";
 
-const contextMenuRef = ref();
-
+const contextMenuRef = ref<ContextMenuMethods>();
 const expandedItems = ref<IDs>({});
 const selectedItems = ref<IDs>({});
 const selectedTreeNode = ref<TreeItem>();
@@ -65,6 +73,8 @@ const tabs = ref<TabsItem[]>([
 ]);
 
 const showCreateNotebookModel = ref<boolean>(false);
+const expandNotebookList = ref<boolean>(true);
+const expandFileTree = ref<boolean>(true);
 
 const fileTreeIconMap = {
   folder: "pi pi-folder",
@@ -89,8 +99,14 @@ const loadNotebook = async (notebook_id: number | null) => {
     .toArray();
 };
 
-const nodeSelect = (node: TreeItem) => {
+const nodeSelect = (node: TreeItem, event: MouseEvent) => {
   selectedTreeNode.value = node;
+
+  if (event.button === 2) {
+    contextMenuRef.value!.show(event);
+    return;
+  }
+
   selectedItems.value = { [node.id]: true };
   if (expandedItems.value[node.id]) {
     expandedItems.value![node.id] = false;

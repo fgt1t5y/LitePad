@@ -1,5 +1,5 @@
 <template>
-  <div class="Tree">
+  <div class="Tree" @contextmenu="$event.preventDefault()">
     <ul class="TreeRoot" data-root="true">
       <TreeNode
         v-for="item of items"
@@ -8,7 +8,7 @@
         :icon-map="iconMap"
         :expanded-items="expandedItems || {}"
         :selected-items="selectedItems || {}"
-        @node-click="(node) => emits('node-click', node)"
+        @node-click="onNodeClick"
       />
     </ul>
   </div>
@@ -28,9 +28,14 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits<{
-  (e: "node-click", node: TreeItem): void;
+  (e: "node-click", node: TreeItem, event: MouseEvent): void;
 }>();
 
 const expandedItems = defineModel<IDs>("expandedItems");
 const selectedItems = defineModel<IDs>("selectedItems");
+
+const onNodeClick = (node: TreeItem, event: MouseEvent) => {
+  event.preventDefault();
+  emits("node-click", node, event);
+};
 </script>

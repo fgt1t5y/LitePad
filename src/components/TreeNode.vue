@@ -1,5 +1,8 @@
 <template>
-  <li @click="emits('node-click', items)" :class="{ TreeLeaf: !hasChildren }">
+  <li
+    @mouseup="emits('node-click', items, $event)"
+    :class="{ TreeLeaf: !hasChildren }"
+  >
     <i v-if="expanded" class="pi pi-angle-down"></i>
     <i v-else class="pi pi-angle-right"></i>
     <i :class="iconMap[items.type!]"></i>
@@ -13,7 +16,7 @@
       :icon-map="iconMap"
       :expanded-items="expandedItems || {}"
       :selected-items="selectedItems || {}"
-      @node-click="(node) => emits('node-click', node)"
+      @node-click="onNodeClick"
     />
   </ul>
 </template>
@@ -35,7 +38,7 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits<{
-  (e: "node-click", node: TreeItem): void;
+  (e: "node-click", node: TreeItem, event: MouseEvent): void;
 }>();
 
 const getLabel = () => {
@@ -51,4 +54,9 @@ const expanded = computed(() => {
 const hasChildren = computed(() => {
   return props?.items && props?.items?.children?.length! > 0;
 });
+
+const onNodeClick = (node: TreeItem, event: MouseEvent) => {
+  event.preventDefault();
+  emits("node-click", node, event);
+};
 </script>
