@@ -16,7 +16,7 @@ defineOptions({
 });
 
 const props = defineProps<{
-  active: number | string;
+  active?: number | string;
 }>();
 
 const [items] = defineModel<any[] | undefined>("items");

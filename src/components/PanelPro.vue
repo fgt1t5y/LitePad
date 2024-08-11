@@ -1,17 +1,11 @@
 <template>
   <div class="Panel">
-    <div
-      class="PanelHeader"
-      role="button"
-      tabindex="0"
-      @click="toggle"
-      @keydown="toggleByKeyboard"
-    >
+    <div class="PanelHeader" role="button" tabindex="0" @click="toggle">
       <span>{{ title }}</span>
-      <span>
+      <button>
         <i v-if="open" class="pi pi-angle-up"></i>
         <i v-else class="pi pi-angle-down"></i>
-      </span>
+      </button>
     </div>
     <div v-show="open" class="PanelBody">
       <slot></slot>

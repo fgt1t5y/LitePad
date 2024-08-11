@@ -32,8 +32,10 @@ button {
 }
 
 #LeftPanel {
+  display: flex;
+  flex-direction: column;
   min-width: 300px;
-  background-color: var(--p-content-background);
+  /* background-color: var(--p-content-background); */
   border-right: 1px solid var(--p-content-border-color);
 }
 
@@ -42,11 +44,6 @@ button {
 }
 
 /* Atom class */
-.Panel {
-  display: flex;
-  flex-direction: column;
-}
-
 .Padding {
   padding: 8px;
 }
@@ -130,6 +127,7 @@ button {
 .Panel {
   display: flex;
   flex-direction: column;
+  background-color: var(--p-content-background);
   border-bottom: 1px solid var(--p-content-border-color);
 
   .PanelHeader {
@@ -139,6 +137,10 @@ button {
     padding: 8px;
     user-select: none;
     cursor: pointer;
+
+    button {
+      padding: unset;
+    }
   }
 }
 

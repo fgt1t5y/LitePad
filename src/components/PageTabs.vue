@@ -1,5 +1,10 @@
 <template>
-  <draggable v-model="tabs" class="Tabs" ghost-class="TabDragging">
+  <draggable
+    v-model="tabs"
+    class="Tabs"
+    item-key="id"
+    ghost-class="TabDragging"
+  >
     <template #item="{ element }">
       <button :class="{ Tab: true, TabActive: element.path === $route.path }">
         <span>

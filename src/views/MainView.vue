@@ -1,6 +1,6 @@
 <template>
   <div id="RootPanel">
-    <div id="LeftPanel" class="Panel">
+    <div id="LeftPanel">
       <PanelPro title="笔记本列表">
         <ListSelect v-model:items="notebookList" :active="currentNotebook!" />
       </PanelPro>
@@ -148,7 +148,6 @@ const fileTreeContextMenu = computed<MenuItem[]>(() => {
 
 onMounted(() => {
   const lastNotebook = Number(get("LP_LAST_NOTEBOOK"));
-  console.log(lastNotebook);
   currentNotebook.value = Number.isInteger(lastNotebook) ? lastNotebook : 1;
   loadNotebookList();
   loadNotebook(currentNotebook.value);
