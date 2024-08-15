@@ -3,6 +3,7 @@
     <ul class="TreeRoot" data-root="true">
       <TreeNode
         v-for="item of items"
+        :key="item.id"
         :items="item"
         :level="0"
         :icon-map="iconMap"

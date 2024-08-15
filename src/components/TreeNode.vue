@@ -2,6 +2,7 @@
   <li
     @mouseup="emits('node-click', items, $event)"
     :class="{ TreeLeaf: !hasChildren }"
+    :title="items.label"
   >
     <i v-if="expanded" class="pi pi-angle-down"></i>
     <i v-else class="pi pi-angle-right"></i>
@@ -11,6 +12,7 @@
   <ul v-if="expanded && hasChildren" class="TreeChildren">
     <TreeNode
       v-for="item of items.children"
+      :key="item.id"
       :items="item"
       :level="level + 1"
       :icon-map="iconMap"

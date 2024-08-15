@@ -75,7 +75,18 @@ const notebookList = ref<Notebook[]>();
 const folderList = ref<Folder[]>();
 const noteList = ref<Note[]>();
 const currentNotebook = ref<number>();
-const tabs = ref<TabsItem[]>([]);
+const tabs = ref<TabsItem[]>([
+  {
+    key: 2,
+    label: "笔记1",
+    path: "/",
+  },
+  {
+    key: 3,
+    label: "笔记2好贵好贵复合肥共和国很反感合法化",
+    path: "/note/10002",
+  },
+]);
 
 const showCreateNotebookModel = ref<boolean>(false);
 const expandNotebookList = ref<boolean>(true);

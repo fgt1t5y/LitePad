@@ -10,7 +10,9 @@
         <span>
           <i class="pi pi-file"></i>
         </span>
-        <span>{{ element.label }}</span>
+        <div>
+          <span>{{ element.label }}</span>
+        </div>
         <span class="TabButton" tabindex="0" role="button" title="关闭标签页">
           <i class="pi pi-times"></i>
         </span>
@@ -21,6 +23,7 @@
 
 <script setup lang="ts">
 import type { TabsItem } from "@/types";
+import { watch } from "vue";
 import draggable from "vuedraggable";
 
 defineOptions({
@@ -28,4 +31,11 @@ defineOptions({
 });
 
 const tabs = defineModel<TabsItem[]>("tabs");
+
+watch(
+  () => tabs.value,
+  (va) => {
+    console.log(va);
+  }
+);
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div :class="{ Panel: true, PanelFlexGrow: open && flexGrow }">
-    <div class="PanelHeader" role="button" tabindex="0" @click="toggle">
+    <div :title="title" class="PanelHeader" @click="toggle">
       <span class="PanelTitle">
         <button>
           <i v-if="open" class="pi pi-angle-up"></i>

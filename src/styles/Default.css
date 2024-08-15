@@ -27,7 +27,7 @@ a {
 }
 
 button {
-  padding: 0.5rem 0.75rem;
+  padding: unset;
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -56,6 +56,19 @@ button {
 #PageWrapper {
   height: calc(100vh - 36px);
   position: relative;
+}
+
+#WelcomeView {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+
+  .Wrapper {
+    min-width: 250px;
+    text-align: center;
+  }
 }
 
 /* Atom class */
@@ -119,14 +132,17 @@ button {
 
 .Tabs {
   display: flex;
-  gap: 8px;
   height: 36px;
   background-color: var(--p-content-background);
   border-bottom: 1px solid var(--p-content-border-color);
 
   .Tab {
     display: flex;
-    gap: 4px;
+    gap: 8px;
+    align-items: center;
+    padding: 0px .75rem;
+    line-height: 35px;
+    border-right: 1px solid var(--p-content-border-color);;
 
     &:hover {
       background-color: var(--p-content-hover-background);
@@ -187,10 +203,6 @@ button {
       button:hover {
         color: var(--p-primary-color);
       }
-    }
-
-    button {
-      padding: unset;
     }
   }
 }

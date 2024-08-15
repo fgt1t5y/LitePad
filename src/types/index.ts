@@ -54,3 +54,7 @@ export interface IDs {
 export interface IconMap {
   [type: string]: string;
 }
+
+export interface AppStat {
+  last_notebook: number;
+}
