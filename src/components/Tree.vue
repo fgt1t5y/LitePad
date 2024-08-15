@@ -19,7 +19,7 @@ import type { TreeItem, IDs, IconMap } from "@/types";
 import TreeNode from "./TreeNode.vue";
 
 defineOptions({
-  name: "TreePro",
+  name: "Tree",
 });
 
 const props = defineProps<{

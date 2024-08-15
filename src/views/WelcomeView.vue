@@ -1,5 +1,7 @@
 <template>
-  <h1>Welcome</h1>
+  <div class="Flex CenterV CenterH">
+    <h1>sf</h1>
+  </div>
 </template>
 
 <script setup lang="ts"></script>

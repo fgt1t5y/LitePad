@@ -1,11 +1,16 @@
 <template>
-  <div class="Panel">
+  <div :class="{ Panel: true, PanelFlexGrow: open && flexGrow }">
     <div class="PanelHeader" role="button" tabindex="0" @click="toggle">
-      <span>{{ title }}</span>
-      <button>
-        <i v-if="open" class="pi pi-angle-up"></i>
-        <i v-else class="pi pi-angle-down"></i>
-      </button>
+      <span class="PanelTitle">
+        <button>
+          <i v-if="open" class="pi pi-angle-up"></i>
+          <i v-else class="pi pi-angle-right"></i>
+        </button>
+        <span>{{ title }}</span>
+      </span>
+      <span class="PanelExtra">
+        <slot name="extra"></slot>
+      </span>
     </div>
     <div v-show="open" class="PanelBody">
       <slot></slot>
@@ -15,11 +20,12 @@
 
 <script setup lang="ts">
 defineOptions({
-  name: "PanelPro",
+  name: "Panel",
 });
 
 const props = defineProps<{
   title: string;
+  flexGrow?: boolean;
 }>();
 
 const [open] = defineModel("open", { type: Boolean, default: false });

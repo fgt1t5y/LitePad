@@ -2,16 +2,17 @@
   <div id="RootPanel">
     <div id="LeftPanel">
       <Panel v-model:open="expandNotebookList" title="笔记本列表">
-        <Button
-          label="新建笔记本"
-          size="small"
-          icon="pi pi-book"
-          text
-          @click="showCreateNotebookModel = true"
-        ></Button>
         <ListSelect v-model:items="notebookList" :active="currentNotebook!" />
+        <template #extra>
+          <button
+            title="新建笔记本"
+            @click.stop="showCreateNotebookModel = true"
+          >
+            <i class="pi pi-plus"></i>
+          </button>
+        </template>
       </Panel>
-      <Panel v-model:open="expandFileTree" title="笔记">
+      <Panel v-model:open="expandFileTree" title="笔记" flex-grow>
         <Tree
           :items="fileTreeNodes"
           :icon-map="fileTreeIconMap"
@@ -19,15 +20,25 @@
           v-model:selected-items="selectedItems"
           @node-click="nodeSelect"
         />
+        <template #extra>
+          <button title="新建文件夹">
+            <i class="pi pi-folder-plus"></i>
+          </button>
+          <button title="新建笔记">
+            <i class="pi pi-file-plus"></i>
+          </button>
+        </template>
       </Panel>
     </div>
     <div id="RightPanel">
       <PageTabs v-if="tabs" v-model:tabs="tabs"></PageTabs>
-      <RouterView #default="{ Component }">
-        <KeepAlive>
-          <component :is="Component" />
-        </KeepAlive>
-      </RouterView>
+      <div id="PageWrapper">
+        <RouterView #default="{ Component }">
+          <KeepAlive>
+            <component :is="Component" />
+          </KeepAlive>
+        </RouterView>
+      </div>
     </div>
   </div>
   <CreateNotebookModal
@@ -64,13 +75,7 @@ const notebookList = ref<Notebook[]>();
 const folderList = ref<Folder[]>();
 const noteList = ref<Note[]>();
 const currentNotebook = ref<number>();
-const tabs = ref<TabsItem[]>([
-  {
-    key: 1,
-    label: "欢迎",
-    path: "/",
-  },
-]);
+const tabs = ref<TabsItem[]>([]);
 
 const showCreateNotebookModel = ref<boolean>(false);
 const expandNotebookList = ref<boolean>(true);
@@ -145,15 +150,10 @@ const fileTreeContextMenu = computed<MenuItem[]>(() => {
   } else {
     return [
       {
-        label: "新建",
-        items: [
-          {
-            label: "笔记",
-          },
-          {
-            label: "文件夹",
-          },
-        ],
+        label: "新笔记",
+      },
+      {
+        label: "新文件夹",
       },
       {
         label: "删除",

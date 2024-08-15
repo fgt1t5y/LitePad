@@ -1,4 +1,15 @@
+:root {
+  --FontSansSerif: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+    "PingFang SC", "Microsoft YaHei", "Source Han Sans SC", "Noto Sans CJK SC",
+    "WenQuanYi Micro Hei", sans-serif;
+  --FontMonospace: Menlo, Monaco, Consolas, "Andale Mono", "lucida console",
+    "Courier New", monospace;
+}
+
+/* Body style */
 body {
+  margin: 0px;
+  overflow: hidden;
   font-family: var(--FontSansSerif);
   font-size: 14px;
   background-color: var(--p-surface-0);
@@ -34,13 +45,17 @@ button {
 #LeftPanel {
   display: flex;
   flex-direction: column;
-  gap: .5rem;
   min-width: 300px;
   border-right: 1px solid var(--p-content-border-color);
 }
 
 #RightPanel {
   width: 100%;
+}
+
+#PageWrapper {
+  height: calc(100vh - 36px);
+  position: relative;
 }
 
 /* Atom class */
@@ -52,6 +67,18 @@ button {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.Flex {
+  display: flex;
+}
+
+.CenterV {
+  align-items: center;
+}
+
+.CenterH {
+  justify-content: center;
 }
 
 /* Custom components style */
@@ -130,13 +157,37 @@ button {
   background-color: var(--p-content-background);
   border-bottom: 1px solid var(--p-content-border-color);
 
+  &.PanelFlexGrow {
+    flex-grow: 1;
+  }
+
   .PanelHeader {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     height: 36px;
     padding: 0.5rem 0.75rem;
     user-select: none;
     cursor: pointer;
+
+    .PanelTitle {
+      display: flex;
+      gap: 8px;
+
+      span {
+        font-weight: bolder;
+      }
+    }
+
+    .PanelExtra {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      button:hover {
+        color: var(--p-primary-color);
+      }
+    }
 
     button {
       padding: unset;
