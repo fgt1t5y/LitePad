@@ -1,13 +1,11 @@
 <template>
-  <li
-    @mouseup="emits('node-click', items, $event)"
-    :class="{ TreeLeaf: !hasChildren }"
-    :title="items.label"
-  >
-    <i v-if="expanded" class="pi pi-angle-down"></i>
-    <i v-else class="pi pi-angle-right"></i>
-    <i :class="iconMap[items.type!]"></i>
-    <span>{{ getLabel() }}</span>
+  <li :class="{ TreeLeaf: !hasChildren }" :title="items.label">
+    <button @mouseup="emits('node-click', items, $event)">
+      <i v-if="expanded" class="pi pi-angle-down"></i>
+      <i v-else class="pi pi-angle-right"></i>
+      <i :class="iconMap[items.type!]"></i>
+      <span>{{ getLabel() }}</span>
+    </button>
   </li>
   <ul v-if="expanded && hasChildren" class="TreeChildren">
     <TreeNode

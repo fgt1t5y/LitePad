@@ -114,15 +114,18 @@ button {
 
   ul,
   li {
+    list-style: none;
     margin: 0px;
-    padding: 0.5rem 0.75rem;
   }
 
   li {
-    cursor: pointer;
-    display: flex;
-    gap: 8px;
-    align-items: center;
+    button {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+    }
 
     &:hover {
       background-color: var(--p-content-hover-background);
@@ -140,9 +143,9 @@ button {
     display: flex;
     gap: 8px;
     align-items: center;
-    padding: 0px .75rem;
+    padding: 0px 0.75rem;
     line-height: 35px;
-    border-right: 1px solid var(--p-content-border-color);;
+    border-right: 1px solid var(--p-content-border-color);
 
     &:hover {
       background-color: var(--p-content-hover-background);
@@ -208,6 +211,9 @@ button {
 }
 
 .ListSelect {
+  display: flex;
+  flex-direction: column;
+
   .ListSelectItem {
     cursor: pointer;
     padding: 0.5rem 0.75rem;

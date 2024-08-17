@@ -1,12 +1,13 @@
 <template>
   <div class="ListSelect">
-    <div
+    <button
       :class="{ ListSelectItem: true, ListSelectActive: item.id === active }"
+      :title="item.name"
       v-for="item in items"
     >
       <i class="pi pi-book"></i>
       <span>{{ item.name }}</span>
-    </div>
+    </button>
   </div>
 </template>
 
