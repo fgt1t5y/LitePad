@@ -22,20 +22,12 @@
 </template>
 
 <script setup lang="ts">
-import type { TabsItem } from "@/types";
-import { watch } from "vue";
+import type { PageTabsItem } from "@/types";
 import draggable from "vuedraggable";
 
 defineOptions({
   name: "PageTabs",
 });
 
-const tabs = defineModel<TabsItem[]>("tabs");
-
-watch(
-  () => tabs.value,
-  (va) => {
-    console.log(va);
-  }
-);
+const tabs = defineModel<PageTabsItem[]>("tabs");
 </script>

@@ -36,7 +36,7 @@ export interface TreeItem {
   children?: TreeItem[];
 }
 
-export interface TabsItem {
+export interface PageTabsItem {
   key: number;
   label: string;
   path: string;

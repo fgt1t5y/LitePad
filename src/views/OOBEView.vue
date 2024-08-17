@@ -109,13 +109,14 @@
               <Button
                 icon="pi pi-arrow-right"
                 icon-pos="right"
-                :label="password ? '继续' : '跳过'"
+                label="继续"
+                :disabled="isPreparing"
                 @click="prepare(activateCallback)"
               ></Button>
             </div>
           </div>
         </StepPanel>
-        <StepPanel v-slot="{ activateCallback }" value="done">
+        <StepPanel value="done">
           <div class="Step">
             <h2>配置完毕</h2>
             <h4>你现在可以开始使用 LitePad</h4>
@@ -129,14 +130,6 @@
         </StepPanel>
       </StepPanels>
     </Stepper>
-    <Dialog
-      :visible="isPreparing"
-      :modal="true"
-      :closable="false"
-      header="准备中"
-    >
-      <ProgressSpinner id="Spinner" strokeWidth="2" aria-label="正在准备" />
-    </Dialog>
   </div>
 </template>
 
