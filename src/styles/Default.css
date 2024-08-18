@@ -36,7 +36,7 @@ button {
 }
 
 /* Layout */
-#RootPanel {
+#Root {
   display: flex;
   height: 100vh;
   width: 100vw;
@@ -45,8 +45,22 @@ button {
 #LeftPanel {
   display: flex;
   flex-direction: column;
-  min-width: 300px;
+  flex-shrink: 0;
+  width: 300px;
   border-right: 1px solid var(--p-content-border-color);
+  position: relative;
+
+  .ResizeHandle {
+    position: absolute;
+    height: 100%;
+    width: 2px;
+    right: 0px;
+    cursor: col-resize;
+
+    &:hover {
+      background-color: var(--p-primary-color);
+    }
+  }
 }
 
 #RightPanel {

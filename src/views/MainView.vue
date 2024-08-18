@@ -1,6 +1,6 @@
 <template>
-  <div id="RootPanel">
-    <div id="LeftPanel">
+  <div id="Root">
+    <aside ref="leftPanelRef" id="LeftPanel">
       <Panel v-model:open="expandNotebookList" title="笔记本列表">
         <ListSelect v-model:items="notebookList" :active="currentNotebook!" />
         <template #extra>
@@ -29,9 +29,14 @@
           </button>
         </template>
       </Panel>
-    </div>
-    <div id="RightPanel">
-      <PageTabs v-if="tabs" v-model:tabs="tabs"></PageTabs>
+      <div
+        class="ResizeHandle"
+        ref="resizeHandleRef"
+        title="按住左键以调整边栏宽度"
+      ></div>
+    </aside>
+    <main id="RightPanel">
+      <PageTabs v-if="tabs" v-model:tabs="tabs" ref="pageTabsRef"></PageTabs>
       <div id="PageWrapper">
         <RouterView #default="{ Component }">
           <KeepAlive>
@@ -39,7 +44,7 @@
           </KeepAlive>
         </RouterView>
       </div>
-    </div>
+    </main>
   </div>
   <CreateNotebookModal
     v-model="showCreateNotebookModel"
@@ -52,12 +57,20 @@
 import "@/styles/Default.css";
 
 import type { MenuItem } from "primevue/menuitem";
-import type { Folder, Notebook, Note, PageTabsItem, TreeItem, IDs } from "@/types";
+import type {
+  Folder,
+  Notebook,
+  Note,
+  PageTabsItem,
+  TreeItem,
+  IDs,
+} from "@/types";
 import type { ContextMenuMethods } from "primevue/contextmenu";
 
 import { computed, onMounted, ref } from "vue";
 import { db } from "@/db";
 import { get } from "@/utils/helpers";
+import { useElementResize } from "@/utils/useElementResize";
 import { arrayToTree } from "performant-array-to-tree";
 import CreateNotebookModal from "@/components/modal/CreateNoteModal.vue";
 import { RouterView } from "vue-router";
@@ -68,6 +81,10 @@ import Panel from "@/components/Panel.vue";
 import ListSelect from "@/components/ListSelect.vue";
 
 const contextMenuRef = ref<ContextMenuMethods>();
+const pageTabsRef = ref<InstanceType<typeof PageTabs>>();
+const leftPanelRef = ref<HTMLElement>();
+const resizeHandleRef = ref<HTMLDivElement>();
+
 const expandedItems = ref<IDs>({});
 const selectedItems = ref<IDs>({});
 const selectedTreeNode = ref<TreeItem>();
@@ -167,5 +184,13 @@ onMounted(() => {
   currentNotebook.value = Number.isInteger(lastNotebook) ? lastNotebook : 1;
   loadNotebookList();
   loadNotebook(currentNotebook.value);
+
+  useElementResize(resizeHandleRef.value!, leftPanelRef.value!);
+
+  pageTabsRef.value!.pushTab({
+    key: 1,
+    label: "欢迎",
+    path: "/",
+  });
 });
 </script>
