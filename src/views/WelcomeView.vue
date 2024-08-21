@@ -6,7 +6,6 @@
       <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd>
       <Button text fluid>新建笔记</Button>
       <kbd>Ctrl</kbd>+<kbd>N</kbd>
-      <RouterLink to="/note/10001">g</RouterLink>
     </div>
   </div>
 </template>

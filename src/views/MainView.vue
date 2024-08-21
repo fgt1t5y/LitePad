@@ -204,11 +204,5 @@ onMounted(() => {
   loadNotebook(currentNotebook.value);
 
   useElementResize(resizeHandleRef.value!, leftPanelRef.value!);
-
-  tabs.push({
-    key: 1,
-    label: "欢迎",
-    path: "/",
-  });
 });
 </script>
