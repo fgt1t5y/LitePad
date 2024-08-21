@@ -45,7 +45,6 @@ button {
 #LeftPanel {
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
   width: 300px;
   border-right: 1px solid var(--p-content-border-color);
   position: relative;
@@ -64,7 +63,7 @@ button {
 }
 
 #RightPanel {
-  width: 100%;
+  flex-grow: 1;
 }
 
 #PageWrapper {
@@ -152,6 +151,7 @@ button {
   height: 36px;
   background-color: var(--p-content-background);
   border-bottom: 1px solid var(--p-content-border-color);
+  user-select: none;
 
   .Tab {
     display: flex;

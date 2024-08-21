@@ -38,9 +38,9 @@
     <main id="RightPanel">
       <PageTabs v-if="tabs" v-model:tabs="tabs" ref="pageTabsRef"></PageTabs>
       <div id="PageWrapper">
-        <RouterView #default="{ Component }">
+        <RouterView #default="{ Component, route }">
           <KeepAlive>
-            <component :is="Component" />
+            <component :key="route.fullPath" :is="Component" />
           </KeepAlive>
         </RouterView>
       </div>
@@ -136,6 +136,10 @@ const nodeSelect = (node: TreeItem, event: MouseEvent) => {
   }
   expandedItems.value![node.id] = true;
 };
+
+const addTabs = () => {
+  
+}
 
 const fileTreeNodes = computed(() => {
   if (!(folderList.value && noteList.value)) {

@@ -5,7 +5,7 @@ interface UseElementResizeOptions {
 
 const defaultOption: UseElementResizeOptions = {
   min: 250,
-  max: Infinity,
+  max: 700,
 };
 
 export const useElementResize = (
