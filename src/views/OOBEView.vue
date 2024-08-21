@@ -136,7 +136,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { encryptPassword } from "@/utils/password";
-import { useTheme } from "@/utils/theme";
+import { useTheme } from "@/utils/useTheme";
 import { db } from "@/db";
 import { set } from "@/utils/helpers";
 
