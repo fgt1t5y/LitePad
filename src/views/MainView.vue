@@ -18,7 +18,7 @@
           :icon-map="fileTreeIconMap"
           v-model:expanded-items="expandedItems"
           v-model:selected-items="selectedItems"
-          @node-click="nodeSelect"
+          @node-click="nodeClick"
         />
         <template #extra>
           <button title="新建文件夹">
@@ -36,7 +36,12 @@
       ></div>
     </aside>
     <main id="RightPanel">
-      <PageTabs v-if="tabs" v-model:tabs="tabs" ref="pageTabsRef"></PageTabs>
+      <PageTabs
+        v-if="tabs"
+        v-model:tabs="tabs.tabs"
+        ref="pageTabsRef"
+        @tab-click="(t) => $router.push(t.path)"
+      ></PageTabs>
       <div id="PageWrapper">
         <RouterView #default="{ Component, route }">
           <KeepAlive>
@@ -70,6 +75,7 @@ import type { ContextMenuMethods } from "primevue/contextmenu";
 import { computed, onMounted, ref } from "vue";
 import { db } from "@/db";
 import { get } from "@/utils/helpers";
+import { usePageTabs } from "@/utils/usePageTabs";
 import { useElementResize } from "@/utils/useElementResize";
 import { arrayToTree } from "performant-array-to-tree";
 import CreateNotebookModal from "@/components/modal/CreateNoteModal.vue";
@@ -81,7 +87,6 @@ import Panel from "@/components/Panel.vue";
 import ListSelect from "@/components/ListSelect.vue";
 
 const contextMenuRef = ref<ContextMenuMethods>();
-const pageTabsRef = ref<InstanceType<typeof PageTabs>>();
 const leftPanelRef = ref<HTMLElement>();
 const resizeHandleRef = ref<HTMLDivElement>();
 
@@ -92,7 +97,6 @@ const notebookList = ref<Notebook[]>([]);
 const folderList = ref<Folder[]>([]);
 const noteList = ref<Note[]>([]);
 const currentNotebook = ref<number>();
-const tabs = ref<PageTabsItem[]>([]);
 
 const showCreateNotebookModel = ref<boolean>(false);
 const expandNotebookList = ref<boolean>(true);
@@ -102,6 +106,8 @@ const fileTreeIconMap = {
   folder: "pi pi-folder",
   note: "pi pi-file",
 };
+
+const tabs = usePageTabs();
 
 const loadNotebookList = async () => {
   const notebooks = await db.notebooks.orderBy("id").toArray();
@@ -121,25 +127,33 @@ const loadNotebook = async (notebook_id: number | null) => {
     .toArray();
 };
 
-const nodeSelect = (node: TreeItem, event: MouseEvent) => {
+const nodeClick = (node: TreeItem, event: MouseEvent) => {
   selectedTreeNode.value = node;
+  selectedItems.value = { [node.id]: true };
 
   if (event.button === 2) {
     contextMenuRef.value!.show(event);
     return;
   }
 
-  selectedItems.value = { [node.id]: true };
-  if (expandedItems.value[node.id]) {
-    expandedItems.value![node.id] = false;
+  if (node.type === "folder") {
+    if (expandedItems.value[node.id]) {
+      expandedItems.value![node.id] = false;
+      return;
+    }
+    expandedItems.value![node.id] = true;
     return;
   }
-  expandedItems.value![node.id] = true;
-};
 
-const addTabs = () => {
-  
-}
+  if (node.type === "note") {
+    tabs.push({
+      key: node.id,
+      label: node.title,
+      path: `/note/${node.id}`,
+    });
+    return;
+  }
+};
 
 const fileTreeNodes = computed(() => {
   if (!(folderList.value && noteList.value)) {
@@ -191,7 +205,7 @@ onMounted(() => {
 
   useElementResize(resizeHandleRef.value!, leftPanelRef.value!);
 
-  pageTabsRef.value!.pushTab({
+  tabs.push({
     key: 1,
     label: "欢迎",
     path: "/",

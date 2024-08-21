@@ -34,6 +34,7 @@ export interface TreeItem {
   type?: string;
   icon?: string;
   children?: TreeItem[];
+  [key: string]: any;
 }
 
 export interface PageTabsItem {

@@ -9,6 +9,7 @@
       <button
         :class="{ Tab: true, TabActive: element.path === $route.path }"
         :title="element.label"
+        @click="emits('tab-click', element)"
       >
         <span>
           <i class="pi pi-file"></i>
@@ -16,7 +17,13 @@
         <div>
           <span>{{ element.label }}</span>
         </div>
-        <span class="TabButton" tabindex="0" role="button" title="关闭标签页">
+        <span
+          class="TabButton"
+          tabindex="0"
+          role="button"
+          title="关闭标签页"
+          @click.stop="pageTabs.close(element.key)"
+        >
           <i class="pi pi-times"></i>
         </span>
       </button>
@@ -31,6 +38,7 @@
 
 <script setup lang="ts">
 import type { PageTabsItem } from "@/types";
+import { usePageTabs } from "@/utils/usePageTabs";
 import draggable from "vuedraggable";
 
 defineOptions({
@@ -38,26 +46,10 @@ defineOptions({
 });
 
 const emits = defineEmits<{
-  (e: "change", tab: PageTabsItem): void;
+  (e: "tab-click", tab: PageTabsItem): void;
 }>();
 
 const [tabs] = defineModel<PageTabsItem[]>("tabs");
 
-const pushTab = (tab: PageTabsItem) => {
-  if (!tab || typeof tab !== "object") return;
-
-  tabs.value!.push(tab);
-};
-
-const setTabTitle = (target: number, title: string) => {
-  if (!title) return;
-
-  const tabIndex = tabs.value?.findIndex((tab) => tab.key === target);
-
-  if (tabIndex === -1) return;
-
-  tabs.value![tabIndex!].label = title;
-};
-
-defineExpose({ pushTab, setTabTitle });
+const pageTabs = usePageTabs();
 </script>
