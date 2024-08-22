@@ -18,7 +18,7 @@
   "scripts": {
     "dev": "concurrently \"npm run dev:app\" \"npm run dev:nw\"",
     "dev:app": "vite",
-    "dev:nw": "node ./run.js",
+    "dev:nw": "nwbuild --mode=run --glob=false",
     "build": "concurrently \"npm run build:app\" \"npm run build:nw\"",
     "build:app": "run-p type-check \"build-only {@}\" --",
     "build:nw": "node ./build.js",
