@@ -158,7 +158,7 @@ const treeNodeClick = (node: TreeItem, event: MouseEvent) => {
       path: path,
     });
     currentPageID.value = node.id;
-    router.push(path);
+    router.replace(path);
 
     return;
   }
