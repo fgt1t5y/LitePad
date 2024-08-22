@@ -38,7 +38,7 @@ export interface TreeItem {
 }
 
 export interface PageTabsItem {
-  key: number;
+  id: number;
   label: string;
   path: string;
 }

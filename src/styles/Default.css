@@ -123,6 +123,10 @@ button {
     .pi:first-child {
       visibility: hidden;
     }
+
+    &.TreeNodeActive {
+      background-color: var(--p-highlight-focus-background);
+    }
   }
 
   ul,

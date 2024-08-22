@@ -9,6 +9,7 @@
         :icon-map="iconMap"
         :expanded-items="expandedItems || {}"
         :selected-items="selectedItems || {}"
+        :highlighted-item="highlightedItem || -1"
         @node-click="onNodeClick"
       />
     </ul>
@@ -34,6 +35,7 @@ const emits = defineEmits<{
 
 const expandedItems = defineModel<IDs>("expandedItems");
 const selectedItems = defineModel<IDs>("selectedItems");
+const highlightedItem = defineModel<number | null>("highlightedItem");
 
 const onNodeClick = (node: TreeItem, event: MouseEvent) => {
   event.preventDefault();

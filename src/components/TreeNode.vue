@@ -1,5 +1,8 @@
 <template>
-  <li :class="{ TreeLeaf: !hasChildren }" :title="items.label">
+  <li
+    :class="{ TreeLeaf: !hasChildren, TreeNodeActive: items.id === highlightedItem }"
+    :title="items.label"
+  >
     <button @mouseup="emits('node-click', items, $event)">
       <i v-if="expanded" class="pi pi-angle-down"></i>
       <i v-else class="pi pi-angle-right"></i>
@@ -16,6 +19,7 @@
       :icon-map="iconMap"
       :expanded-items="expandedItems || {}"
       :selected-items="selectedItems || {}"
+      :highlighted-item="highlightedItem"
       @node-click="onNodeClick"
     />
   </ul>
@@ -34,6 +38,7 @@ const props = defineProps<{
   level: number;
   expandedItems: IDs;
   selectedItems: IDs;
+  highlightedItem: number | null;
   iconMap: IconMap;
 }>();
 

@@ -13,19 +13,20 @@ export const usePageTabs = defineStore("pageTabs", () => {
 
   // 追加标签页到列表末尾
   const push = (tab: PageTabsItem) => {
-    if (has(tab.key)) return;
+    if (has(tab.id)) return;
 
-    _tabsID.add(tab.key);
+    _tabsID.add(tab.id);
     tabs.value!.push(tab);
   };
 
   // 删除标签页
-  const close = (tab_key: number) => {
-    const tabIndex = tabs.value.findIndex((tab) => tab.key === tab_key);
+  const close = (tab_id: number) => {
+    console.log(tab_id);
+    const tabIndex = tabs.value.findIndex((tab) => tab.id === tab_id);
 
     if (tabIndex === -1) return;
 
-    _tabsID.delete(tab_key);
+    _tabsID.delete(tab_id);
     tabs.value.splice(tabIndex, 1);
   };
 

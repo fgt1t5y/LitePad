@@ -18,13 +18,14 @@
           :icon-map="fileTreeIconMap"
           v-model:expanded-items="expandedItems"
           v-model:selected-items="selectedItems"
-          @node-click="nodeClick"
+          v-model:highlighted-item="currentPageID"
+          @node-click="treeNodeClick"
         />
         <template #extra>
           <button title="新建文件夹">
             <i class="pi pi-folder-plus"></i>
           </button>
-          <button title="新建笔记">
+          <button title="新建笔记" @click.stop="createNewNote">
             <i class="pi pi-file-plus"></i>
           </button>
         </template>
@@ -39,8 +40,9 @@
       <PageTabs
         v-if="tabs"
         v-model:tabs="tabs.tabs"
+        v-model:current-tab="currentPageID"
         ref="pageTabsRef"
-        @tab-click="(t) => $router.push(t.path)"
+        @tab-click="tabClick"
       ></PageTabs>
       <div id="PageWrapper">
         <RouterView #default="{ Component, route }">
@@ -79,7 +81,7 @@ import { usePageTabs } from "@/utils/usePageTabs";
 import { useElementResize } from "@/utils/useElementResize";
 import { arrayToTree } from "performant-array-to-tree";
 import CreateNotebookModal from "@/components/modal/CreateNoteModal.vue";
-import { RouterView } from "vue-router";
+import { RouterView, useRouter } from "vue-router";
 
 import PageTabs from "@/components/PageTabs.vue";
 import Tree from "@/components/Tree.vue";
@@ -97,6 +99,7 @@ const notebookList = ref<Notebook[]>([]);
 const folderList = ref<Folder[]>([]);
 const noteList = ref<Note[]>([]);
 const currentNotebook = ref<number>();
+const currentPageID = ref<number | null>(null);
 
 const showCreateNotebookModel = ref<boolean>(false);
 const expandNotebookList = ref<boolean>(true);
@@ -107,6 +110,7 @@ const fileTreeIconMap = {
   note: "pi pi-file",
 };
 
+const router = useRouter();
 const tabs = usePageTabs();
 
 const loadNotebookList = async () => {
@@ -127,7 +131,7 @@ const loadNotebook = async (notebook_id: number | null) => {
     .toArray();
 };
 
-const nodeClick = (node: TreeItem, event: MouseEvent) => {
+const treeNodeClick = (node: TreeItem, event: MouseEvent) => {
   selectedTreeNode.value = node;
   selectedItems.value = { [node.id]: true };
 
@@ -146,13 +150,41 @@ const nodeClick = (node: TreeItem, event: MouseEvent) => {
   }
 
   if (node.type === "note") {
+    const path = `/note/${node.id}`;
+
     tabs.push({
-      key: node.id,
+      id: node.id,
       label: node.title,
-      path: `/note/${node.id}`,
+      path: path,
     });
+    currentPageID.value = node.id;
+    router.push(path);
+
     return;
   }
+};
+
+const tabClick = (tab: PageTabsItem) => {
+  currentPageID.value = tab.id;
+  router.push(tab.path);
+};
+
+const createNewNote = () => {
+  const note: Note = {
+    notebook_id: currentNotebook.value || 1,
+    folder_id: undefined,
+    title: "新笔记",
+    type: "note",
+    content: "<p></p>",
+    preview: "",
+    labels: [],
+    created_at: new Date(),
+    updated_at: new Date(),
+  };
+
+  db.notes.add(note).then(() => {
+    noteList.value.push(note);
+  });
 };
 
 const fileTreeNodes = computed(() => {

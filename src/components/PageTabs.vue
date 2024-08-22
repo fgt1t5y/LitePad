@@ -7,9 +7,9 @@
   >
     <template #item="{ element }">
       <button
-        :class="{ Tab: true, TabActive: element.path === $route.path }"
+        :class="{ Tab: true, TabActive: element.id === currentTab }"
         :title="element.label"
-        @click="emits('tab-click', element)"
+        @click="tabClick(element)"
       >
         <span>
           <i class="pi pi-file"></i>
@@ -22,7 +22,7 @@
           tabindex="0"
           role="button"
           title="关闭标签页"
-          @click.stop="pageTabs.close(element.key)"
+          @click.stop="pageTabs.close(element.id)"
         >
           <i class="pi pi-times"></i>
         </span>
@@ -50,6 +50,11 @@ const emits = defineEmits<{
 }>();
 
 const [tabs] = defineModel<PageTabsItem[]>("tabs");
+const [currentTab] = defineModel<number | null>("currentTab");
 
 const pageTabs = usePageTabs();
+
+const tabClick = (tab: PageTabsItem) => {
+  emits("tab-click", tab);
+};
 </script>
