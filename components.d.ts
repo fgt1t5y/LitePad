@@ -16,7 +16,6 @@ declare module 'vue' {
     PageTabs: typeof import('./src/components/PageTabs.vue')['default']
     Panel: typeof import('./src/components/Panel.vue')['default']
     Password: typeof import('primevue/password')['default']
-    ProgressSpinner: typeof import('primevue/progressspinner')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SelectButton: typeof import('primevue/selectbutton')['default']
