@@ -15,6 +15,7 @@ const DefaultPreset = definePreset(Aura, {
       light: {
         content: {
           background: "{surface.100}",
+          hoverBackground: "{surface.200}"
         },
         highlight: {
           focusBackground: "{primary.300}",
@@ -49,4 +50,4 @@ app.use(ToastService);
 app.config.globalProperties.isDesktop = window.nw !== undefined;
 app.config.globalProperties.nw = window.nw;
 
-app.mount("#app");
+app.mount(document.body);

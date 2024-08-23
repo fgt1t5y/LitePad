@@ -193,6 +193,7 @@ button {
 .Panel {
   display: flex;
   flex-direction: column;
+  background-color: var(--p-content-background);
 
   &.PanelFlexGrow {
     flex-grow: 1;
@@ -206,7 +207,7 @@ button {
     padding: 0.5rem 0.75rem;
     user-select: none;
     cursor: pointer;
-    background-color: var(--p-content-background);
+    background-color: var(--p-content-hover-background);
 
     .PanelTitle {
       display: flex;
