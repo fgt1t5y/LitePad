@@ -14,10 +14,10 @@ const DefaultPreset = definePreset(Aura, {
     colorScheme: {
       light: {
         content: {
-          background: "{surface.50}",
+          background: "{surface.100}",
         },
         highlight: {
-          focusBackground: "{primary.200}",
+          focusBackground: "{primary.300}",
         },
       },
       dark: {
@@ -25,7 +25,7 @@ const DefaultPreset = definePreset(Aura, {
           background: "{surface.900}",
         },
         highlight: {
-          focusBackground: "{primary.800}",
+          focusBackground: "{primary.700}",
         },
       },
     },
