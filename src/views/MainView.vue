@@ -166,7 +166,7 @@ const treeNodeClick = (node: TreeItem, event: MouseEvent) => {
 
 const tabClick = (tab: PageTabsItem) => {
   currentPageID.value = tab.id;
-  router.push(tab.path);
+  router.replace(tab.path);
 };
 
 const createNewNote = () => {

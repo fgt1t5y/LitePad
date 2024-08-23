@@ -3,7 +3,7 @@
     :class="{ TreeLeaf: !hasChildren, TreeNodeActive: items.id === highlightedItem }"
     :title="items.label"
   >
-    <button @mouseup="emits('node-click', items, $event)">
+    <button class="TreeNode" @mouseup="emits('node-click', items, $event)">
       <i v-if="expanded" class="pi pi-angle-down"></i>
       <i v-else class="pi pi-angle-right"></i>
       <i :class="iconMap[items.type!]"></i>

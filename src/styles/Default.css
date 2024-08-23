@@ -129,6 +129,14 @@ button {
     }
   }
 
+  .TreeNode {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+  }
+
   ul,
   li {
     list-style: none;
@@ -136,15 +144,8 @@ button {
   }
 
   li {
-    button {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      width: 100%;
-      padding: 0.5rem 0.75rem;
-    }
-
-    &:hover {
+    &:hover,
+    &:focus-within {
       background-color: var(--p-content-hover-background);
     }
   }
@@ -165,13 +166,14 @@ button {
     line-height: 35px;
     border-right: 1px solid var(--p-content-border-color);
 
-    &:hover {
+    &:hover,
+    &:focus-within {
       background-color: var(--p-content-hover-background);
     }
 
     &.TabActive {
-      background-color: var(--p-primary-400);
-      color: var(--p-primary-contrast-color);
+      background-color: var(--p-highlight-focus-background);
+      /* color: var(--p-primary-contrast-color); */
     }
 
     &.TabDragging {
@@ -191,8 +193,6 @@ button {
 .Panel {
   display: flex;
   flex-direction: column;
-  background-color: var(--p-content-background);
-  border-bottom: 1px solid var(--p-content-border-color);
 
   &.PanelFlexGrow {
     flex-grow: 1;
@@ -206,6 +206,7 @@ button {
     padding: 0.5rem 0.75rem;
     user-select: none;
     cursor: pointer;
+    background-color: var(--p-content-background);
 
     .PanelTitle {
       display: flex;
@@ -225,6 +226,10 @@ button {
         color: var(--p-primary-color);
       }
     }
+  }
+
+  .PanelBody {
+    overflow: scroll;
   }
 }
 
@@ -246,7 +251,7 @@ button {
       background-color: var(--p-content-hover-background);
     }
 
-    &.ListSelectActive {
+    &.ListItemActive {
       background-color: var(--p-highlight-focus-background);
     }
   }
