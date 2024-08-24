@@ -1,10 +1,22 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import type { PageTabsItem } from "@/types";
+import router from "@/router";
+
+const defaultTab: PageTabsItem = {
+  id: 1,
+  label: '首页',
+  path: '/'
+}
 
 export const usePageTabs = defineStore("pageTabs", () => {
-  const _tabsID = new Set();
+  const _tabsID = new Set<number>();
   const tabs = ref<PageTabsItem[]>([]);
+  const current = ref<number>()
+
+  const _go = (path: string) => {
+    router.replace(path)
+  }
 
   // 标签页是否存在
   const has = (tab_key: number) => {
@@ -19,6 +31,11 @@ export const usePageTabs = defineStore("pageTabs", () => {
     tabs.value!.push(tab);
   };
 
+  // 切换到另一个标签页，并更新状态
+  const to = (path: string) => {
+    _go(path)
+  }
+
   // 删除标签页
   const close = (tab_id: number) => {
     console.log(tab_id);
@@ -28,7 +45,16 @@ export const usePageTabs = defineStore("pageTabs", () => {
 
     _tabsID.delete(tab_id);
     tabs.value.splice(tabIndex, 1);
+
+    if (tabs.value.length === 0) {
+      current.value = defaultTab.id
+      _go(defaultTab.path);
+    }
   };
 
-  return { tabs, push, close };
+  const init = () => {
+    current.value = defaultTab.id
+  }
+
+  return { tabs, current, push, to, close, init };
 });

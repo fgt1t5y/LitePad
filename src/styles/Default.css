@@ -165,6 +165,7 @@ button {
     padding: 0px 0.75rem;
     line-height: 35px;
     border-right: 1px solid var(--p-content-border-color);
+    position: relative;
 
     &:hover,
     &:focus-within {
@@ -172,8 +173,17 @@ button {
     }
 
     &.TabActive {
-      background-color: var(--p-highlight-focus-background);
-      /* color: var(--p-primary-contrast-color); */
+      background-color: var(--p-content-hover-background);
+    }
+
+    &.TabActive::after {
+      content: "";
+      position: absolute;
+      bottom: 0px;
+      left: 0px;
+      height: 2px;
+      width: 100%;
+      background-color: var(--p-primary-color);
     }
 
     &.TabDragging {

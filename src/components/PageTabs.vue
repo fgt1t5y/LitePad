@@ -7,7 +7,7 @@
   >
     <template #item="{ element }">
       <button
-        :class="{ Tab: true, TabActive: element.id === currentTab }"
+        :class="{ Tab: true, TabActive: element.id === pageTabs.current }"
         :title="element.label"
         @click="tabClick(element)"
       >
@@ -50,11 +50,12 @@ const emits = defineEmits<{
 }>();
 
 const [tabs] = defineModel<PageTabsItem[]>("tabs");
-const [currentTab] = defineModel<number | null>("currentTab");
 
 const pageTabs = usePageTabs();
 
 const tabClick = (tab: PageTabsItem) => {
+  pageTabs.current = tab.id;
+  pageTabs.to(tab.path);
   emits("tab-click", tab);
 };
 </script>

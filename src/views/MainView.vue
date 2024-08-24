@@ -18,7 +18,7 @@
           :icon-map="fileTreeIconMap"
           v-model:expanded-items="expandedItems"
           v-model:selected-items="selectedItems"
-          v-model:highlighted-item="currentPageID"
+          v-model:highlighted-item="tabs.current"
           @node-click="treeNodeClick"
         />
         <template #extra>
@@ -40,14 +40,12 @@
       <PageTabs
         v-if="tabs"
         v-model:tabs="tabs.tabs"
-        v-model:current-tab="currentPageID"
         ref="pageTabsRef"
-        @tab-click="tabClick"
       ></PageTabs>
       <div id="PageWrapper">
         <RouterView #default="{ Component, route }">
           <KeepAlive>
-            <component :key="route.fullPath" :is="Component" />
+            <component :key="route.fullPath" :is="renameComponent(Component)" />
           </KeepAlive>
         </RouterView>
       </div>
@@ -146,6 +144,7 @@ const treeNodeClick = (node: TreeItem, event: MouseEvent) => {
       return;
     }
     expandedItems.value![node.id] = true;
+
     return;
   }
 
@@ -157,16 +156,11 @@ const treeNodeClick = (node: TreeItem, event: MouseEvent) => {
       label: node.title,
       path: path,
     });
-    currentPageID.value = node.id;
-    router.replace(path);
+    tabs.current = node.id;
+    tabs.to(path);
 
     return;
   }
-};
-
-const tabClick = (tab: PageTabsItem) => {
-  currentPageID.value = tab.id;
-  router.replace(tab.path);
 };
 
 const createNewNote = () => {
@@ -185,6 +179,10 @@ const createNewNote = () => {
   db.notes.add(note).then(() => {
     noteList.value.push(note);
   });
+};
+
+const renameComponent = (component: any) => {
+  return component;
 };
 
 const fileTreeNodes = computed(() => {
