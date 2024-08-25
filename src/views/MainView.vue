@@ -45,7 +45,7 @@
       <div id="PageWrapper">
         <RouterView #default="{ Component, route }">
           <KeepAlive>
-            <component :key="route.fullPath" :is="renameComponent(Component)" />
+            <component :key="route.fullPath" :is="Component" />
           </KeepAlive>
         </RouterView>
       </div>
@@ -66,7 +66,6 @@ import type {
   Folder,
   Notebook,
   Note,
-  PageTabsItem,
   TreeItem,
   IDs,
 } from "@/types";
@@ -97,7 +96,6 @@ const notebookList = ref<Notebook[]>([]);
 const folderList = ref<Folder[]>([]);
 const noteList = ref<Note[]>([]);
 const currentNotebook = ref<number>();
-const currentPageID = ref<number | null>(null);
 
 const showCreateNotebookModel = ref<boolean>(false);
 const expandNotebookList = ref<boolean>(true);
@@ -108,8 +106,8 @@ const fileTreeIconMap = {
   note: "pi pi-file",
 };
 
-const router = useRouter();
 const tabs = usePageTabs();
+tabs.init()
 
 const loadNotebookList = async () => {
   const notebooks = await db.notebooks.orderBy("id").toArray();
@@ -150,14 +148,14 @@ const treeNodeClick = (node: TreeItem, event: MouseEvent) => {
 
   if (node.type === "note") {
     const path = `/note/${node.id}`;
-
-    tabs.push({
+    const newTab = {
       id: node.id,
       label: node.title,
       path: path,
-    });
-    tabs.current = node.id;
-    tabs.to(path);
+    }
+
+    tabs.push(newTab);
+    tabs.to(newTab);
 
     return;
   }
@@ -179,10 +177,6 @@ const createNewNote = () => {
   db.notes.add(note).then(() => {
     noteList.value.push(note);
   });
-};
-
-const renameComponent = (component: any) => {
-  return component;
 };
 
 const fileTreeNodes = computed(() => {

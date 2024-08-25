@@ -1,0 +1,23 @@
+diff --git a/dist/runtime-core.esm-bundler.js b/dist/runtime-core.esm-bundler.js
+index 5bb81bb065a7130acc550d559b6411185058ae32..480615d5c20a71de3f752fcc33407edf462c186e 100644
+--- a/dist/runtime-core.esm-bundler.js
++++ b/dist/runtime-core.esm-bundler.js
+@@ -1349,11 +1349,16 @@ const KeepAliveImpl = {
+       resetShapeFlag(vnode);
+       _unmount(vnode, instance, parentSuspense, true);
+     }
++    console.log("Patched!")
++
+     function pruneCache(filter) {
+       cache.forEach((vnode, key) => {
+         const name = getComponentName(vnode.type);
+-        if (name && (!filter || !filter(name))) {
+-          pruneCacheEntry(key);
++        // if (name && (!filter || !filter(name))) {
++        //   pruneCacheEntry(key);
++        // }
++        if (!filter || (name && !filter(name)) || !filter(key.toString())) {
++          pruneCacheEntry(key)
+         }
+       });
+     }

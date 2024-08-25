@@ -22,7 +22,7 @@
           tabindex="0"
           role="button"
           title="关闭标签页"
-          @click.stop="pageTabs.close(element.id)"
+          @click.stop="pageTabs.close(element)"
         >
           <i class="pi pi-times"></i>
         </span>
@@ -54,8 +54,7 @@ const [tabs] = defineModel<PageTabsItem[]>("tabs");
 const pageTabs = usePageTabs();
 
 const tabClick = (tab: PageTabsItem) => {
-  pageTabs.current = tab.id;
-  pageTabs.to(tab.path);
+  pageTabs.to(tab);
   emits("tab-click", tab);
 };
 </script>

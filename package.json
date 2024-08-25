@@ -36,7 +36,7 @@
     "pinia": "^2.1.7",
     "primeicons": "^7.0.0",
     "primevue": "^4.0.1",
-    "vue": "^3.4.29",
+    "vue": "3.4.33",
     "vue-router": "^4.3.3",
     "vuedraggable": "^4.1.0"
   },
@@ -64,5 +64,10 @@
     "vitest": "^1.6.0",
     "vue-tsc": "^2.0.21",
     "wait-on": "^7.2.0"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@vue/runtime-core@3.4.33": "patches/@vue__runtime-core@3.4.33.patch"
+    }
   }
 }

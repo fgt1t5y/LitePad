@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@vue/runtime-core@3.4.33':
+    hash: ypkftejws4622x365o2vb42k6a
+    path: patches/@vue__runtime-core@3.4.33.patch
+
 importers:
 
   .:
@@ -33,7 +38,7 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1(vue@3.4.33(typescript@5.4.5))
       vue:
-        specifier: ^3.4.29
+        specifier: 3.4.33
         version: 3.4.33(typescript@5.4.5)
       vue-router:
         specifier: ^4.3.3
@@ -2572,7 +2577,7 @@ snapshots:
     dependencies:
       '@vue/shared': 3.4.33
 
-  '@vue/runtime-core@3.4.33':
+  '@vue/runtime-core@3.4.33(patch_hash=ypkftejws4622x365o2vb42k6a)':
     dependencies:
       '@vue/reactivity': 3.4.33
       '@vue/shared': 3.4.33
@@ -2580,7 +2585,7 @@ snapshots:
   '@vue/runtime-dom@3.4.33':
     dependencies:
       '@vue/reactivity': 3.4.33
-      '@vue/runtime-core': 3.4.33
+      '@vue/runtime-core': 3.4.33(patch_hash=ypkftejws4622x365o2vb42k6a)
       '@vue/shared': 3.4.33
       csstype: 3.1.3
 
