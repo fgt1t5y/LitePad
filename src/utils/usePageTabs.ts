@@ -41,6 +41,8 @@ export const usePageTabs = defineStore("pageTabs", () => {
 
   // 删除标签页
   const close = (tab: PageTabsItem) => {
+    if (!has(tab.id)) return;
+
     // 若关闭的标签页不是当前标签页，直接关闭即可
     if (tab.id !== current.value) {
       _close(tab);
@@ -66,7 +68,7 @@ export const usePageTabs = defineStore("pageTabs", () => {
       _close(tab);
       to(before);
     } else {
-      _close(tab)
+      _close(tab);
     }
 
     if (tabs.value.length === 0) {

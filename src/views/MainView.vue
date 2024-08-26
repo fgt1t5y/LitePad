@@ -2,7 +2,11 @@
   <div id="Root">
     <aside ref="leftPanelRef" id="LeftPanel">
       <Panel v-model:open="expandNotebookList" title="笔记本列表">
-        <ListSelect id="NotebookList"v-model:items="notebookList" :active="currentNotebook!" />
+        <ListSelect
+          id="NotebookList"
+          v-model:items="notebookList"
+          :active="currentNotebook!"
+        />
         <template #extra>
           <button
             title="新建笔记本"
@@ -68,6 +72,7 @@ import type {
   Note,
   TreeItem,
   IDs,
+  PageTabsItem,
 } from "@/types";
 import type { ContextMenuMethods } from "primevue/contextmenu";
 
@@ -107,7 +112,7 @@ const fileTreeIconMap = {
 };
 
 const tabs = usePageTabs();
-tabs.init()
+tabs.init();
 
 const loadNotebookList = async () => {
   const notebooks = await db.notebooks.orderBy("id").toArray();
@@ -152,7 +157,7 @@ const treeNodeClick = (node: TreeItem, event: MouseEvent) => {
       id: node.id,
       label: node.title,
       path: path,
-    }
+    };
 
     tabs.push(newTab);
     tabs.to(newTab);
@@ -174,8 +179,17 @@ const createNewNote = () => {
     updated_at: new Date(),
   };
 
-  db.notes.add(note).then(() => {
+  db.notes.add(note).then((note_id) => {
     noteList.value.push(note);
+
+    const newTab: PageTabsItem = {
+      id: note_id!,
+      label: note.title,
+      path: `/note/${note_id}`,
+    };
+
+    tabs.push(newTab);
+    tabs.to(newTab);
   });
 };
 
