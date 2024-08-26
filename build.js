@@ -4,6 +4,7 @@ nwbuild({
   mode: "build",
   srcDir: "./dist",
   glob: false,
+  flavor: 'normal',
   managedManifest: {
     name: "litepad",
     main: "index.html",

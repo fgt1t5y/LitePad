@@ -2,7 +2,7 @@
   <div id="Root">
     <aside ref="leftPanelRef" id="LeftPanel">
       <Panel v-model:open="expandNotebookList" title="笔记本列表">
-        <ListSelect v-model:items="notebookList" :active="currentNotebook!" />
+        <ListSelect id="NotebookList"v-model:items="notebookList" :active="currentNotebook!" />
         <template #extra>
           <button
             title="新建笔记本"
@@ -78,7 +78,7 @@ import { usePageTabs } from "@/utils/usePageTabs";
 import { useElementResize } from "@/utils/useElementResize";
 import { arrayToTree } from "performant-array-to-tree";
 import CreateNotebookModal from "@/components/modal/CreateNoteModal.vue";
-import { RouterView, useRouter } from "vue-router";
+import { RouterView } from "vue-router";
 
 import PageTabs from "@/components/PageTabs.vue";
 import Tree from "@/components/Tree.vue";

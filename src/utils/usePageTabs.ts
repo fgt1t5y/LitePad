@@ -4,7 +4,7 @@ import type { PageTabsItem } from "@/types";
 import router from "@/router";
 
 const defaultTab: PageTabsItem = {
-  id: 1,
+  id: -1,
   label: "首页",
   path: "/",
 };

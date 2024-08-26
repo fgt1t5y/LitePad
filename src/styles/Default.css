@@ -19,6 +19,16 @@ body {
   background-color: var(--p-surface-950);
 }
 
+::-webkit-scrollbar {
+  width: 5px !important;
+  height: 5px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--p-primary-color) !important;
+  border-radius: calc(0px) !important;
+}
+
 /* Native element override style */
 a {
   display: block;
@@ -60,6 +70,11 @@ button {
       background-color: var(--p-primary-color);
     }
   }
+}
+
+#NotebookList {
+  max-height: 200px;
+  overflow-y: scroll;
 }
 
 #RightPanel {
@@ -237,10 +252,6 @@ button {
         color: var(--p-primary-color);
       }
     }
-  }
-
-  .PanelBody {
-    overflow: scroll;
   }
 }
 
