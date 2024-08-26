@@ -19,7 +19,7 @@
     "dev": "concurrently \"npm run dev:app\" \"npm run dev:nw\"",
     "dev:app": "vite",
     "dev:nw": "nwbuild --mode=run --glob=false --flavor=sdk",
-    "build": "concurrently \"npm run build:app\" \"npm run build:nw\"",
+    "build": "npm run build:app && npm run build:nw",
     "build:app": "run-p type-check \"build-only {@}\" --",
     "build:nw": "node ./build.js",
     "preview": "vite preview",
