@@ -26,7 +26,7 @@ const DefaultPreset = definePreset(Aura, {
           background: "{surface.900}",
         },
         highlight: {
-          focusBackground: "{primary.700}",
+          focusBackground: "{primary.500}",
         },
       },
     },

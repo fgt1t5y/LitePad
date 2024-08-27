@@ -58,6 +58,7 @@ button {
   width: 300px;
   border-right: 1px solid var(--p-content-border-color);
   position: relative;
+  background-color: var(--p-content-background);
 
   .ResizeHandle {
     position: absolute;
@@ -70,11 +71,6 @@ button {
       background-color: var(--p-primary-color);
     }
   }
-}
-
-#NotebookList {
-  max-height: 200px;
-  overflow-y: scroll;
 }
 
 #RightPanel {
@@ -187,10 +183,6 @@ button {
       background-color: var(--p-content-hover-background);
     }
 
-    &.TabActive {
-      background-color: var(--p-content-hover-background);
-    }
-
     &.TabActive::after {
       content: "";
       position: absolute;
@@ -198,7 +190,7 @@ button {
       left: 0px;
       height: 2px;
       width: 100%;
-      background-color: var(--p-primary-color);
+      background-color: var(--p-highlight-focus-background);
     }
 
     &.TabDragging {
@@ -218,11 +210,7 @@ button {
 .Panel {
   display: flex;
   flex-direction: column;
-  background-color: var(--p-content-background);
-
-  &.PanelFlexGrow {
-    flex-grow: 1;
-  }
+  border-bottom: 1px solid var(--p-content-border-color);
 
   .PanelHeader {
     display: flex;
@@ -231,8 +219,6 @@ button {
     height: 36px;
     padding: 0.5rem 0.75rem;
     user-select: none;
-    cursor: pointer;
-    background-color: var(--p-content-hover-background);
 
     .PanelTitle {
       display: flex;
