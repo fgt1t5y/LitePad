@@ -1,5 +1,5 @@
 import nwbuild from "nw-builder";
-import { copyFile } from "fs";
+import { copyFile, existsSync } from "fs";
 
 const build = () => {
   nwbuild({
@@ -23,6 +23,10 @@ const build = () => {
     },
   });
 };
+
+if (!existsSync('dist/')) {
+  throw new Error('Please build app first.')
+}
 
 copyFile("package.json", "dist/package.json", (err) => {
   if (err) throw err;
