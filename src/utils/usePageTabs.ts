@@ -11,6 +11,7 @@ const defaultTab: PageTabsItem = {
 
 export const usePageTabs = defineStore("pageTabs", () => {
   const _tabsID = new Set<number>();
+  const _tabCloseCallbacks = ref<Function[]>([])
   const tabs = ref<PageTabsItem[]>([]);
   const current = ref<number>();
 
@@ -19,6 +20,16 @@ export const usePageTabs = defineStore("pageTabs", () => {
     _tabsID.delete(tab.id);
     tabs.value.splice(tabIndex, 1);
   };
+
+  const _fireOnTabClose = (tab: PageTabsItem) => {
+    if (tab.id === defaultTab.id) return
+
+    if (_tabCloseCallbacks.value.length) {
+      _tabCloseCallbacks.value.forEach((callback) => {
+        callback(tab)
+      })
+    }
+  }
 
   // 标签页是否存在
   const has = (tab_key: number) => {
@@ -46,6 +57,7 @@ export const usePageTabs = defineStore("pageTabs", () => {
     // 若关闭的标签页不是当前标签页，直接关闭即可
     if (tab.id !== current.value) {
       _close(tab);
+      _fireOnTabClose(tab)
       return;
     }
 
@@ -71,6 +83,9 @@ export const usePageTabs = defineStore("pageTabs", () => {
       _close(tab);
     }
 
+    // 触发钩子
+    _fireOnTabClose(tab)
+
     if (tabs.value.length === 0) {
       current.value = defaultTab.id;
       to(defaultTab);
@@ -82,5 +97,10 @@ export const usePageTabs = defineStore("pageTabs", () => {
     to(defaultTab);
   };
 
-  return { tabs, current, push, to, close, init };
+  // hooks
+  const onTabClose = (calback: Function) => {
+    _tabCloseCallbacks.value.push(calback)
+  }
+
+  return { tabs, current, push, to, close, init, onTabClose };
 });

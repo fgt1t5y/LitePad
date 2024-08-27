@@ -59,3 +59,7 @@ export interface IconMap {
 export interface AppStat {
   last_notebook: number;
 }
+
+export interface PatchedKeepAlive {
+  pruneCacheEntry: (key: any) => void;
+}

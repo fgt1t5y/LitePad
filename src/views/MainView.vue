@@ -44,7 +44,7 @@
       ></PageTabs>
       <div id="PageWrapper">
         <RouterView #default="{ Component, route }">
-          <KeepAlive>
+          <KeepAlive ref="keepAliveRef" :max="32">
             <component :key="route.fullPath" :is="Component" />
           </KeepAlive>
         </RouterView>
@@ -69,6 +69,7 @@ import type {
   TreeItem,
   IDs,
   PageTabsItem,
+  PatchedKeepAlive,
 } from "@/types";
 import type { ContextMenuMethods } from "primevue/contextmenu";
 
@@ -89,6 +90,7 @@ import ListSelect from "@/components/ListSelect.vue";
 const contextMenuRef = ref<ContextMenuMethods>();
 const leftPanelRef = ref<HTMLElement>();
 const resizeHandleRef = ref<HTMLDivElement>();
+const keepAliveRef = ref<PatchedKeepAlive>();
 
 const expandedItems = ref<IDs>({});
 const selectedItems = ref<IDs>({});
@@ -109,6 +111,9 @@ const fileTreeIconMap = {
 
 const tabs = usePageTabs();
 tabs.init();
+tabs.onTabClose((tab: PageTabsItem) => {
+  keepAliveRef.value?.pruneCacheEntry(tab.path);
+});
 
 const loadNotebookList = async () => {
   const notebooks = await db.notebooks.orderBy("id").toArray();

@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   '@vue/runtime-core@3.4.33':
-    hash: ypkftejws4622x365o2vb42k6a
+    hash: 45ejggt5iyvonfj7p5gthce4wa
     path: patches/@vue__runtime-core@3.4.33.patch
 
 importers:
@@ -2577,7 +2577,7 @@ snapshots:
     dependencies:
       '@vue/shared': 3.4.33
 
-  '@vue/runtime-core@3.4.33(patch_hash=ypkftejws4622x365o2vb42k6a)':
+  '@vue/runtime-core@3.4.33(patch_hash=45ejggt5iyvonfj7p5gthce4wa)':
     dependencies:
       '@vue/reactivity': 3.4.33
       '@vue/shared': 3.4.33
@@ -2585,7 +2585,7 @@ snapshots:
   '@vue/runtime-dom@3.4.33':
     dependencies:
       '@vue/reactivity': 3.4.33
-      '@vue/runtime-core': 3.4.33(patch_hash=ypkftejws4622x365o2vb42k6a)
+      '@vue/runtime-core': 3.4.33(patch_hash=45ejggt5iyvonfj7p5gthce4wa)
       '@vue/shared': 3.4.33
       csstype: 3.1.3
 
