@@ -7,8 +7,6 @@ interface Model {
 export interface Notebook extends Model {
   name: string;
   description?: string;
-  password?: string;
-  password_salt?: string;
 }
 
 export interface Folder extends Model {

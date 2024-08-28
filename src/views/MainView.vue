@@ -1,18 +1,15 @@
 <template>
   <div id="Root">
     <aside ref="leftPanelRef" id="LeftPanel">
-      <Panel v-model:open="expandNotebookList" title="笔记本列表">
+      <Panel title="笔记本列表">
         <ListSelect v-model:items="notebookList" :active="currentNotebook!" />
         <template #extra>
-          <button
-            title="新建笔记本"
-            @click.stop="showCreateNotebookModel = true"
-          >
+          <button title="新建笔记本" @click="showCreateNotebookModel = true">
             <i class="pi pi-plus"></i>
           </button>
         </template>
       </Panel>
-      <Panel v-model:open="expandFileTree" title="笔记" flex-grow>
+      <Panel title="笔记" flex-grow>
         <Tree
           :items="fileTreeNodes"
           :icon-map="fileTreeIconMap"
@@ -25,7 +22,7 @@
           <button title="新建文件夹">
             <i class="pi pi-folder-plus"></i>
           </button>
-          <button title="新建笔记" @click.stop="createNewNote">
+          <button title="新建笔记" @click="createNewNote">
             <i class="pi pi-file-plus"></i>
           </button>
         </template>

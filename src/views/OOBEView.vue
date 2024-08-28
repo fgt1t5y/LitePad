@@ -43,47 +43,7 @@
                 icon-pos="right"
                 label="继续"
                 :disabled="notebookName === ''"
-                @click="activateCallback('password')"
-              ></Button>
-            </div>
-          </div>
-        </StepPanel>
-        <StepPanel v-slot="{ activateCallback }" value="password">
-          <div class="Step">
-            <h2>设置密码</h2>
-            <h4>
-              LitePad
-              建议为你的笔记本设置一个密码，用于在启动或切换笔记本时验证访问者身份。此设置可以后续在软件的设置界面中更改。
-            </h4>
-            <Password
-              :input-props="{ autocomplete: 'new-password' }"
-              v-model="password"
-              input-id="Password"
-              placeholder="密码"
-              promptLabel="检查密码复杂度"
-              autofocus
-              fluid
-            />
-            <Password
-              :input-props="{ autocomplete: 'new-password' }"
-              v-model="repeatPassword"
-              input-id="RepeatPassword"
-              placeholder="重复密码"
-              promptLabel="检查密码复杂度"
-              fluid
-            />
-            <div id="Buttons">
-              <Button
-                icon="pi pi-arrow-left"
-                label="后退"
-                severity="secondary"
-                @click="activateCallback('notebook')"
-              ></Button>
-              <Button
-                icon="pi pi-arrow-right"
-                icon-pos="right"
-                :label="password ? '继续' : '跳过'"
-                @click="checkPassword(activateCallback)"
+                @click="activateCallback('theme')"
               ></Button>
             </div>
           </div>
@@ -104,7 +64,7 @@
                 icon="pi pi-arrow-left"
                 label="后退"
                 severity="secondary"
-                @click="activateCallback('password')"
+                @click="activateCallback('notebook')"
               ></Button>
               <Button
                 icon="pi pi-arrow-right"
@@ -135,7 +95,6 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { encryptPassword } from "@/utils/password";
 import { useTheme } from "@/utils/useTheme";
 import { db } from "@/db";
 import { set } from "@/utils/helpers";
@@ -145,8 +104,6 @@ const { theme, switchTo } = useTheme();
 const isPreparing = ref<boolean>(false);
 const notebookName = ref<string>("");
 const notebookDescription = ref<string>("");
-const password = ref<string>("");
-const repeatPassword = ref<string>("");
 const themeModeList = ref([
   {
     name: "跟随系统",
@@ -162,26 +119,15 @@ const themeModeList = ref([
   },
 ]);
 
-const checkPassword = (activateCallback: Function) => {
-  if (!(password.value === repeatPassword.value)) {
-    alert("两次密码不一致。");
-    return;
-  }
-
-  activateCallback("theme");
-};
 
 const prepare = (activateCallback: Function) => {
   isPreparing.value = true;
-  const { salt, encrypted } = encryptPassword(password.value);
   let notebook: number;
 
   db.transaction("rw", db.notebooks, db.folders, db.notes, async () => {
     const notebook_id = await db.notebooks.add({
       name: notebookName.value,
       description: notebookDescription.value,
-      password: encrypted,
-      password_salt: salt,
       created_at: new Date(),
       updated_at: new Date(),
     });
