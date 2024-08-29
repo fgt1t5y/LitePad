@@ -118,13 +118,17 @@ button {
   justify-content: center;
 }
 
+.Dragging {
+  outline: 2px dashed var(--p-primary-color);
+}
+
+.Dropping {
+  outline: 1px solid var(--p-primary-color);
+}
+
 /* Custom components style */
 .Tree {
   user-select: none;
-
-  .TreeRoot {
-    padding: 0px;
-  }
 
   .TreeChildren {
     padding: 0px 0px 0px 1rem;
@@ -135,12 +139,12 @@ button {
       visibility: hidden;
     }
 
-    &.TreeNodeActive {
+    &.Active {
       background-color: var(--p-highlight-focus-background);
     }
   }
 
-  .TreeNode {
+  .TreeToggle {
     display: flex;
     gap: 8px;
     align-items: center;
@@ -148,15 +152,15 @@ button {
     padding: 0.5rem 0.75rem;
   }
 
-  ul,
-  li {
+  ul {
     list-style: none;
     margin: 0px;
+    padding: 0px;
   }
 
   li {
     &:hover,
-    &:focus-within {
+    &:focus {
       background-color: var(--p-content-hover-background);
     }
   }
@@ -168,7 +172,6 @@ button {
   background-color: var(--p-content-background);
   border-bottom: 1px solid var(--p-content-border-color);
   user-select: none;
-  overflow-x: scroll;
 
   .Tab {
     display: flex;
@@ -181,7 +184,7 @@ button {
     position: relative;
 
     &:hover,
-    &:focus-within {
+    &:focus {
       background-color: var(--p-content-hover-background);
     }
 
@@ -193,10 +196,6 @@ button {
       height: 2px;
       width: 100%;
       background-color: var(--p-highlight-focus-background);
-    }
-
-    &.TabDragging {
-      outline: 2px dashed var(--p-primary-color);
     }
 
     i {
@@ -256,7 +255,7 @@ button {
     user-select: none;
 
     &:hover,
-    &:focus-within {
+    &:focus {
       outline: none;
       background-color: var(--p-content-hover-background);
     }

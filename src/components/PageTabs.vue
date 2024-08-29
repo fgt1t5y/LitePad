@@ -3,7 +3,7 @@
     v-model="tabs"
     class="Tabs"
     item-key="id"
-    ghost-class="TabDragging"
+    ghost-class="Dragging"
   >
     <template #item="{ element }">
       <button

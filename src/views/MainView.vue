@@ -16,7 +16,9 @@
           v-model:expanded-items="expandedItems"
           v-model:selected-items="selectedItems"
           v-model:highlighted-item="tabs.current"
+          group-type="folder"
           @node-click="treeNodeClick"
+          @node-contextmenu="treeNodeClick"
         />
         <template #extra>
           <button title="新建文件夹">
@@ -34,11 +36,7 @@
       ></div>
     </aside>
     <main id="RightPanel">
-      <PageTabs
-        v-if="tabs"
-        v-model:tabs="tabs.tabs"
-        ref="pageTabsRef"
-      ></PageTabs>
+      <PageTabs v-model:tabs="tabs.tabs" ref="pageTabsRef"></PageTabs>
       <div id="PageWrapper">
         <RouterView #default="{ Component, route }">
           <KeepAlive ref="keepAliveRef" :max="32">
@@ -83,6 +81,7 @@ import PageTabs from "@/components/PageTabs.vue";
 import Tree from "@/components/Tree.vue";
 import Panel from "@/components/Panel.vue";
 import ListSelect from "@/components/ListSelect.vue";
+import InputText from "primevue/inputtext";
 
 const contextMenuRef = ref<ContextMenuMethods>();
 const leftPanelRef = ref<HTMLElement>();
@@ -98,18 +97,35 @@ const noteList = ref<Note[]>([]);
 const currentNotebook = ref<number>();
 
 const showCreateNotebookModel = ref<boolean>(false);
-const expandNotebookList = ref<boolean>(true);
-const expandFileTree = ref<boolean>(true);
 
 const fileTreeIconMap = {
   folder: "pi pi-folder",
   note: "pi pi-file",
 };
 
+const testTree = ref([
+  {
+    id: 1,
+    label: "111",
+    children: [
+      {
+        id: 2,
+        label: "222",
+        children: [],
+      },
+      {
+        id: 3,
+        label: "333",
+        children: [],
+      },
+    ],
+  },
+]);
+
 const tabs = usePageTabs();
 tabs.init();
 tabs.onTabClose((tab: PageTabsItem) => {
-  keepAliveRef.value?.pruneCacheEntry(tab.path);
+  keepAliveRef.value!.pruneCacheEntry(tab.path);
 });
 
 const loadNotebookList = async () => {
