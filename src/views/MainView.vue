@@ -21,10 +21,10 @@
           @node-contextmenu="treeNodeClick"
         />
         <template #extra>
-          <button title="新建文件夹">
+          <button title="新建文件夹" @click="createFolder()">
             <i class="pi pi-folder-plus"></i>
           </button>
-          <button title="新建笔记" @click="createNewNote">
+          <button title="新建笔记" @click="createNote()">
             <i class="pi pi-file-plus"></i>
           </button>
         </template>
@@ -102,25 +102,6 @@ const fileTreeIconMap = {
   note: "pi pi-file",
 };
 
-const testTree = ref([
-  {
-    id: 1,
-    label: "111",
-    children: [
-      {
-        id: 2,
-        label: "222",
-        children: [],
-      },
-      {
-        id: 3,
-        label: "333",
-        children: [],
-      },
-    ],
-  },
-]);
-
 const tabs = usePageTabs();
 tabs.init();
 tabs.onTabClose((tab: PageTabsItem) => {
@@ -179,10 +160,29 @@ const treeNodeClick = (node: TreeItem, event: MouseEvent) => {
   }
 };
 
-const createNewNote = () => {
+const createFolder = (folder_id?: number) => {
+  const folder: Folder = {
+    notebook_id: currentNotebook.value || 1,
+    folder_id: folder_id,
+    name: "新文件夹",
+    type: "folder",
+    created_at: new Date(),
+    updated_at: new Date(),
+  };
+
+  db.folders.add(folder).then((id) => {
+    folderList.value.push(folder);
+
+    if (id) {
+      expandedItems.value![id] = true;
+    }
+  });
+};
+
+const createNote = (folder_id?: number) => {
   const note: Note = {
     notebook_id: currentNotebook.value || 1,
-    folder_id: undefined,
+    folder_id: folder_id,
     title: "新笔记",
     type: "note",
     content: "<p></p>",
@@ -203,6 +203,9 @@ const createNewNote = () => {
 
     tabs.push(newTab);
     tabs.to(newTab);
+    if (folder_id) {
+      expandedItems.value![folder_id] = true;
+    }
   });
 };
 
@@ -237,9 +240,21 @@ const fileTreeContextMenu = computed<MenuItem[]>(() => {
     return [
       {
         label: "新笔记",
+        command: () => {
+          const folder_id = selectedTreeNode.value!.id;
+          if (folder_id) {
+            createNote(folder_id);
+          }
+        },
       },
       {
         label: "新文件夹",
+        command: () => {
+          const folder_id = selectedTreeNode.value!.id;
+          if (folder_id) {
+            createFolder(folder_id);
+          }
+        },
       },
       {
         label: "删除",

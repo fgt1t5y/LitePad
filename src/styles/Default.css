@@ -131,7 +131,16 @@ button {
   user-select: none;
 
   .TreeChildren {
-    padding: 0px 0px 0px 1rem;
+    padding: 0px 0px 0px 1.2rem;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      width: 1px;
+      height: 100%;
+      background-color: var(--p-content-border-color);
+    }
   }
 
   .TreeLeaf {
