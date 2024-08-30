@@ -211,7 +211,6 @@ button {
 .Panel {
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid var(--p-content-border-color);
 
   .PanelHeader {
     display: flex;

@@ -81,7 +81,6 @@ import PageTabs from "@/components/PageTabs.vue";
 import Tree from "@/components/Tree.vue";
 import Panel from "@/components/Panel.vue";
 import ListSelect from "@/components/ListSelect.vue";
-import InputText from "primevue/inputtext";
 
 const contextMenuRef = ref<ContextMenuMethods>();
 const leftPanelRef = ref<HTMLElement>();

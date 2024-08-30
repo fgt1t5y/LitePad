@@ -34,7 +34,8 @@
       :highlighted-item="highlightedItem"
       :group-type="groupType"
       @node-click="onNodeClick"
-      @node-contextmenu="onNodeContext"
+      @node-contextmenu="onNodeContextmenu"
+      @node-move="onNodeMove"
     />
   </ul>
 </template>
@@ -60,11 +61,13 @@ const props = defineProps<{
 const emits = defineEmits<{
   (e: "node-click", node: TreeItem, event: MouseEvent): void;
   (e: "node-contextmenu", node: TreeItem, event: MouseEvent): void;
+  (e: "node-move", from: number, to: number): void;
 }>();
 
 const dndStat = inject<TreeDnDStat>("tree_dnd");
 
 const onDragStart = (event: DragEvent) => {
+  event.dataTransfer!.effectAllowed = "move";
   const startID = (event.currentTarget as HTMLElement).getAttribute("data-id");
   if (startID) {
     dndStat!.startId = startID;
@@ -84,7 +87,7 @@ const onDragOver = (event: DragEvent) => {
 };
 
 const onDrop = (event: DragEvent) => {
-  console.log(dndStat?.startId, dndStat?.endId);
+  emits("node-move", Number(dndStat!.startId), Number(dndStat!.endId));
 };
 
 const getLabel = () => {
@@ -110,8 +113,12 @@ const onNodeClick = (node: TreeItem, event: MouseEvent) => {
   emits("node-click", node, event);
 };
 
-const onNodeContext = (node: TreeItem, event: MouseEvent) => {
+const onNodeContextmenu = (node: TreeItem, event: MouseEvent) => {
   event.preventDefault();
   emits("node-contextmenu", node, event);
+};
+
+const onNodeMove = (from: number, to: number) => {
+  emits("node-move", from, to);
 };
 </script>

@@ -12,7 +12,8 @@
         :highlighted-item="highlightedItem || -1"
         :group-type="groupType"
         @node-click="onNodeClick"
-        @node-contextmenu="onNodeContext"
+        @node-contextmenu="onNodeContextenu"
+        @node-move="onNodeMove"
       />
     </ul>
   </div>
@@ -36,6 +37,7 @@ const props = defineProps<{
 const emits = defineEmits<{
   (e: "node-click", node: TreeItem, event: MouseEvent): void;
   (e: "node-contextmenu", node: TreeItem, event: MouseEvent): void;
+  (e: "node-move", from: number, to: number): void;
 }>();
 
 const expandedItems = defineModel<IDs>("expandedItems");
@@ -51,8 +53,12 @@ const onNodeClick = (node: TreeItem, event: MouseEvent) => {
   emits("node-click", node, event);
 };
 
-const onNodeContext = (node: TreeItem, event: MouseEvent) => {
+const onNodeContextenu = (node: TreeItem, event: MouseEvent) => {
   event.preventDefault();
   emits("node-contextmenu", node, event);
+};
+
+const onNodeMove = (from: number, to: number) => {
+  emits("node-move", from, to);
 };
 </script>
