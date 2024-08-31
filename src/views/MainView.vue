@@ -9,7 +9,7 @@
           </button>
         </template>
       </Panel>
-      <Panel title="笔记" flex-grow>
+      <Panel title="笔记">
         <Tree
           :items="fileTreeNodes"
           :icon-map="fileTreeIconMap"
@@ -126,6 +126,26 @@ const loadNotebook = async (notebook_id: number | null) => {
     .toArray();
 };
 
+const toggleFolderNode = (folder_id: number) => {
+  if (expandedItems.value[folder_id]) {
+    expandedItems.value![folder_id] = false;
+    return;
+  }
+  expandedItems.value![folder_id] = true;
+};
+
+const openNotePage = (note_id: number, label: string) => {
+  const path = `/note/${note_id}`;
+  const newTab = {
+    id: note_id,
+    label: label,
+    path: path,
+  };
+
+  tabs.push(newTab);
+  tabs.to(newTab);
+};
+
 const treeNodeClick = (node: TreeItem, event: MouseEvent) => {
   selectedTreeNode.value = node;
   selectedItems.value = { [node.id]: true };
@@ -136,27 +156,12 @@ const treeNodeClick = (node: TreeItem, event: MouseEvent) => {
   }
 
   if (node.type === "folder") {
-    if (expandedItems.value[node.id]) {
-      expandedItems.value![node.id] = false;
-      return;
-    }
-    expandedItems.value![node.id] = true;
-
+    toggleFolderNode(node.id);
     return;
   }
 
   if (node.type === "note") {
-    const path = `/note/${node.id}`;
-    const newTab = {
-      id: node.id,
-      label: node.title,
-      path: path,
-    };
-
-    tabs.push(newTab);
-    tabs.to(newTab);
-
-    return;
+    openNotePage(node.id, node.title);
   }
 };
 
@@ -231,6 +236,10 @@ const fileTreeContextMenu = computed<MenuItem[]>(() => {
     return [
       {
         label: "打开",
+        command: () => {
+          const { id, title } = selectedTreeNode.value!;
+          openNotePage(id, title);
+        },
       },
       {
         label: "删除",
