@@ -15,7 +15,7 @@ const DefaultPreset = definePreset(Aura, {
       light: {
         content: {
           background: "{surface.100}",
-          hoverBackground: "{surface.200}"
+          hoverBackground: "{surface.200}",
         },
         highlight: {
           focusBackground: "{primary.300}",
@@ -27,6 +27,17 @@ const DefaultPreset = definePreset(Aura, {
         },
         highlight: {
           focusBackground: "{primary.500}",
+        },
+      },
+    },
+  },
+  components: {
+    contextmenu: {
+      colorScheme: {
+        light: {
+          root: {
+            background: "{surface.50}",
+          },
         },
       },
     },
