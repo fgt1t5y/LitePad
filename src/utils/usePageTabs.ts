@@ -1,4 +1,4 @@
-import { defineStore } from "pinia";
+import { defineStore, acceptHMRUpdate } from "pinia";
 import { ref } from "vue";
 import type { PageTabsItem } from "@/types";
 import router from "@/router";
@@ -11,7 +11,7 @@ const defaultTab: PageTabsItem = {
 
 export const usePageTabs = defineStore("pageTabs", () => {
   const _tabsID = new Set<number>();
-  const _tabCloseCallbacks = ref<Function[]>([])
+  const _tabCloseCallbacks = ref<Function[]>([]);
   const tabs = ref<PageTabsItem[]>([]);
   const current = ref<number>();
 
@@ -22,14 +22,14 @@ export const usePageTabs = defineStore("pageTabs", () => {
   };
 
   const _fireOnTabClose = (tab: PageTabsItem) => {
-    if (tab.id === defaultTab.id) return
+    if (tab.id === defaultTab.id) return;
 
     if (_tabCloseCallbacks.value.length) {
       _tabCloseCallbacks.value.forEach((callback) => {
-        callback(tab)
-      })
+        callback(tab);
+      });
     }
-  }
+  };
 
   // 标签页是否存在
   const has = (tab_key: number) => {
@@ -57,7 +57,7 @@ export const usePageTabs = defineStore("pageTabs", () => {
     // 若关闭的标签页不是当前标签页，直接关闭即可
     if (tab.id !== current.value) {
       _close(tab);
-      _fireOnTabClose(tab)
+      _fireOnTabClose(tab);
       return;
     }
 
@@ -84,7 +84,7 @@ export const usePageTabs = defineStore("pageTabs", () => {
     }
 
     // 触发钩子
-    _fireOnTabClose(tab)
+    _fireOnTabClose(tab);
 
     if (tabs.value.length === 0) {
       current.value = defaultTab.id;
@@ -99,8 +99,12 @@ export const usePageTabs = defineStore("pageTabs", () => {
 
   // hooks
   const onTabClose = (calback: Function) => {
-    _tabCloseCallbacks.value.push(calback)
-  }
+    _tabCloseCallbacks.value.push(calback);
+  };
 
   return { tabs, current, push, to, close, init, onTabClose };
 });
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(usePageTabs, import.meta.hot));
+}
