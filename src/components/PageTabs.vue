@@ -9,7 +9,7 @@
       <button
         :class="{ Tab: true, TabActive: element.id === pageTabs.current }"
         :title="element.label"
-        @click="tabClick(element)"
+        @mousedown="tabClick(element)"
       >
         <span>
           <i class="pi pi-file"></i>
