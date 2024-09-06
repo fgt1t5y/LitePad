@@ -39,6 +39,11 @@ const DefaultPreset = definePreset(Aura, {
             background: "{surface.50}",
           },
         },
+        dark: {
+          root: {
+            background: "{surface.950}",
+          },
+        },
       },
     },
   },
