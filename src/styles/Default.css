@@ -311,5 +311,6 @@ p:has(img) {
 code {
   padding: 0.125rem 0.25rem;
   font-size: 0.85rem;
+  font-family: var(--FontMonospace);
   background-color: var(--p-content-hover-background);
 }
