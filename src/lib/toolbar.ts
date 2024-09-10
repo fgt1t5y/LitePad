@@ -1,8 +1,10 @@
 import type { Command } from "prosemirror-state";
+import type { EditorTool } from "@/types";
 
 import { Plugin } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 import { toggleMark, setBlockType } from "prosemirror-commands";
+import { undo, redo } from "prosemirror-history";
 import { schema } from "./schema";
 
 const heading = (level: number) => {
@@ -37,11 +39,13 @@ const insertHorizontalRule = (): Command => {
   };
 };
 
-const tools = [
-  { command: toggleMark(schema.marks.bold), name: "bold" },
-  { command: toggleMark(schema.marks.italic), name: "italic" },
+export const tools = [
+  { command: undo, name: "undo", key: "Mod-z" },
+  { command: redo, name: "redo", key: "Mod-y" },
+  { command: toggleMark(schema.marks.bold), name: "bold", key: "Mod-b" },
+  { command: toggleMark(schema.marks.italic), name: "italic", key: "Mod-i" },
   { command: toggleMark(schema.marks.del), name: "del" },
-  { command: toggleMark(schema.marks.code), name: "code" },
+  { command: toggleMark(schema.marks.code), name: "code", key: "Mod-`" },
   {
     command: insertImage(
       "https://picx.zhimg.com/80/v2-a3e754cb7b23a9daa569e211652dd2fa_720w.jpeg"
@@ -58,7 +62,7 @@ const tools = [
   heading(4),
   heading(5),
   heading(6),
-];
+] as EditorTool[];
 
 class ToolbarView {
   // Editor root element
@@ -71,6 +75,7 @@ class ToolbarView {
     this.wrapper = document.createElement("div");
     this.wrapper.classList.add("Toolbar");
     this.root.prepend(this.wrapper);
+    console.log(schema);
 
     tools.forEach(({ command, name }) => {
       const btn = document.createElement("button");

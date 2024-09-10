@@ -1,3 +1,5 @@
+import type { Command } from "prosemirror-state";
+
 interface Model {
   id?: number;
   created_at: Date;
@@ -65,4 +67,10 @@ export interface AppStat {
 
 export interface PatchedKeepAlive {
   pruneCacheEntry: (key: any) => void;
+}
+
+export interface EditorTool {
+  command: Command;
+  name: string;
+  key?: string;
 }

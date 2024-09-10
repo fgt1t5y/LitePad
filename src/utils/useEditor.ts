@@ -1,10 +1,28 @@
+import type { Command } from "prosemirror-state";
+
 import { EditorView } from "prosemirror-view";
 import { EditorState } from "prosemirror-state";
 import { keymap } from "prosemirror-keymap";
 import { baseKeymap } from "prosemirror-commands";
-import { history, undo, redo } from "prosemirror-history";
+import { history } from "prosemirror-history";
 import { schema } from "@/lib/schema";
-import { toolbar } from "@/lib/toolbar";
+import { toolbar, tools } from "@/lib/toolbar";
+
+interface Keymap {
+  [key: string]: Command;
+}
+
+const buildKeymap = () => {
+  const keymap = {} as Keymap;
+
+  tools.forEach((tool) => {
+    if (tool.key) {
+      keymap[tool.key] = tool.command;
+    }
+  });
+
+  return keymap;
+};
 
 export const useEditor = (root: HTMLElement): EditorView | null => {
   if (!root) return null;
@@ -14,10 +32,7 @@ export const useEditor = (root: HTMLElement): EditorView | null => {
     plugins: [
       keymap(baseKeymap),
       history(),
-      keymap({
-        "Mod-z": undo,
-        "Mod-y": redo,
-      }),
+      keymap(buildKeymap()),
       toolbar(root),
     ],
   });
