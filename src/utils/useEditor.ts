@@ -4,9 +4,10 @@ import { keymap } from "prosemirror-keymap";
 import { baseKeymap } from "prosemirror-commands";
 import { history, undo, redo } from "prosemirror-history";
 import { schema } from "@/lib/schema";
+import { toolbar } from "@/lib/toolbar";
 
-export const useEditor = (el: HTMLElement) => {
-  if (!el) return;
+export const useEditor = (el: HTMLElement): EditorView | null => {
+  if (!el) return null;
 
   const state = EditorState.create({
     schema,
@@ -17,12 +18,11 @@ export const useEditor = (el: HTMLElement) => {
         "Mod-z": undo,
         "Mod-y": redo,
       }),
+      toolbar(el),
     ],
   });
 
-  const view = new EditorView(el, {
-    state,
-  });
+  const view = new EditorView(el, { state });
 
-  return;
+  return view;
 };

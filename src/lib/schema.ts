@@ -1,54 +1,102 @@
-import { Schema } from 'prosemirror-model';
+import { Schema } from "prosemirror-model";
 
 export const schema = new Schema({
   nodes: {
     doc: {
-      content: 'block+'
+      content: "block+",
     },
     paragraph: {
-      content: 'inline*',
-      group: 'block',
+      content: "inline*",
+      group: "block",
+      parseDOM: [
+        {
+          tag: "p",
+        },
+      ],
       toDOM: () => {
-        return ['p', 0]
+        return ["p", 0];
       },
-      parseDOM: [{
-        tag: 'p'
-      }]
+    },
+    hr: {
+      group: "block",
+      parseDOM: [{ tag: "hr" }],
+      toDOM() {
+        return ["hr"];
+      },
     },
     text: {
-      group: 'inline'
+      group: "inline",
     },
     heading: {
       attrs: {
         level: {
-          default: 1
-        }
+          default: 1,
+          validate: "number",
+        },
       },
-      content: 'inline*',
-      group: 'block',
+      marks: "",
+      content: "inline*",
+      group: "block",
       defining: true,
-      toDOM(node) {
-        const tag = `h${node.attrs.level}`
-        return [tag, 0]
-      },
       parseDOM: [
-        {tag: "h1", attrs: {level: 1}},
-        {tag: "h2", attrs: {level: 2}},
-        {tag: "h3", attrs: {level: 3}},
-        {tag: "h4", attrs: {level: 4}},
-        {tag: "h5", attrs: {level: 5}},
-        {tag: "h6", attrs: {level: 6}}
+        { tag: "h1", attrs: { level: 1 } },
+        { tag: "h2", attrs: { level: 2 } },
+        { tag: "h3", attrs: { level: 3 } },
+        { tag: "h4", attrs: { level: 4 } },
+        { tag: "h5", attrs: { level: 5 } },
+        { tag: "h6", attrs: { level: 6 } },
       ],
-    }
+      toDOM(node) {
+        const tag = `h${node.attrs.level}`;
+        return [tag, 0];
+      },
+    },
+    image: {
+      attrs: {
+        src: { validate: "string" },
+      },
+      group: "block",
+      draggable: true,
+      parseDOM: [
+        {
+          tag: "img[src]",
+          getAttrs(dom: HTMLElement) {
+            return {
+              src: dom.getAttribute("src"),
+            };
+          },
+        },
+      ],
+      toDOM(node) {
+        let { src } = node.attrs;
+        return ["p", ["img", { src }]];
+      },
+    },
   },
   marks: {
     bold: {
+      parseDOM: [{ tag: "b" }],
       toDOM() {
-        return ['strong', 0]
+        return ["b", 0];
       },
-      parseDOM: [
-        { tag: 'strong' },
-      ],
-    }
-  }
-})
+    },
+    italic: {
+      parseDOM: [{ tag: "i" }],
+      toDOM() {
+        return ["i", 0];
+      },
+    },
+    del: {
+      parseDOM: [{ tag: "del" }],
+      toDOM() {
+        return ["del", 0];
+      },
+    },
+    code: {
+      parseDOM: [{ tag: "code" }],
+      toDOM() {
+        return ["code", 0];
+      },
+    },
+  },
+});

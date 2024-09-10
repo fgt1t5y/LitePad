@@ -54,8 +54,6 @@
 </template>
 
 <script setup lang="ts">
-import "@/styles/Default.css";
-
 import type { MenuItem } from "primevue/menuitem";
 import type {
   Folder,

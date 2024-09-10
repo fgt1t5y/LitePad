@@ -285,3 +285,22 @@ button {
     gap: 16px;
   }
 }
+
+/* Editor style */
+.Toolbar {
+  padding: 1rem;
+  background-color: var(--p-content-background);
+  border-bottom: 1px solid var(--p-content-border-color);
+  display: flex;
+  gap: 1rem;
+}
+
+p:has(img) {
+  text-align: center;
+}
+
+code {
+  padding: 0.125rem 0.25rem;
+  font-size: 0.85rem;
+  background-color: var(--p-content-hover-background);
+}
