@@ -192,6 +192,7 @@ button {
     line-height: 35px;
     border-right: 1px solid var(--p-content-border-color);
     position: relative;
+    width: 200px;
 
     &:hover,
     &:focus {
@@ -210,6 +211,14 @@ button {
 
     i {
       font-size: 12px;
+    }
+
+    .TabLabel {
+      flex-grow: 1;
+      text-align: left;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     .TabButton {

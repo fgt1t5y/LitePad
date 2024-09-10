@@ -1,22 +1,15 @@
 <template>
-  <draggable
-    v-model="tabs"
-    class="Tabs"
-    item-key="id"
-    ghost-class="Dragging"
-  >
+  <draggable v-model="tabs" class="Tabs" item-key="id" ghost-class="Dragging">
     <template #item="{ element }">
       <button
         :class="{ Tab: true, TabActive: element.id === pageTabs.current }"
         :title="element.label"
-        @mousedown="tabClick(element)"
+        @click="tabClick(element)"
       >
         <span>
           <i class="pi pi-file"></i>
         </span>
-        <div>
-          <span>{{ element.label }}</span>
-        </div>
+        <span class="TabLabel">{{ element.label }}</span>
         <span
           class="TabButton"
           tabindex="0"
@@ -29,9 +22,7 @@
       </button>
     </template>
     <template #footer>
-      <button class="Tab">
-        <i class="pi pi-plus"></i>
-      </button>
+      <Button size="small" icon="pi pi-plus" text></Button>
     </template>
   </draggable>
 </template>
