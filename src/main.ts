@@ -4,7 +4,6 @@ import PrimeVue from "primevue/config";
 import Aura from "@primevue/themes/aura";
 import { definePreset } from "@primevue/themes";
 import "@/styles/Default.css";
-import "@/styles/prosemirror.css";
 import "primeicons/primeicons.css";
 import ToastService from "primevue/toastservice";
 
