@@ -11,7 +11,15 @@ import { onMounted, shallowRef, ref } from "vue";
 const editorBodyRef = ref<HTMLElement>();
 const view = shallowRef<EditorView | null>(null);
 
+const destroy = () => {
+  if (view.value) {
+    view.value.destroy();
+  }
+};
+
 onMounted(() => {
   view.value = useEditor(editorBodyRef.value!);
 });
+
+defineExpose({ destroy });
 </script>

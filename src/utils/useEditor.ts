@@ -6,8 +6,8 @@ import { history, undo, redo } from "prosemirror-history";
 import { schema } from "@/lib/schema";
 import { toolbar } from "@/lib/toolbar";
 
-export const useEditor = (el: HTMLElement): EditorView | null => {
-  if (!el) return null;
+export const useEditor = (root: HTMLElement): EditorView | null => {
+  if (!root) return null;
 
   const state = EditorState.create({
     schema,
@@ -18,11 +18,11 @@ export const useEditor = (el: HTMLElement): EditorView | null => {
         "Mod-z": undo,
         "Mod-y": redo,
       }),
-      toolbar(el),
+      toolbar(root),
     ],
   });
 
-  const view = new EditorView(el, { state });
+  const view = new EditorView(root, { state });
 
   return view;
 };
