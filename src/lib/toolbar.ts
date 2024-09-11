@@ -64,18 +64,18 @@ export const tools = [
   heading(6),
 ] as EditorTool[];
 
-class ToolbarView {
-  // Editor root element
-  root: HTMLElement;
-  // Editor's toolbar root element
-  wrapper: HTMLElement;
+interface ToolButton {
+  [name: string]: HTMLElement;
+}
 
-  constructor(view: EditorView, root: HTMLElement) {
-    this.root = root;
-    this.wrapper = document.createElement("div");
-    this.wrapper.classList.add("Toolbar");
-    this.root.prepend(this.wrapper);
-    console.log(schema);
+class ToolbarView {
+  // Etoolbar element
+  root: HTMLElement;
+  buttons: ToolButton;
+
+  constructor(view: EditorView, toolbar: HTMLElement) {
+    this.root = toolbar;
+    this.buttons = {};
 
     tools.forEach(({ command, name }) => {
       const btn = document.createElement("button");
@@ -84,21 +84,22 @@ class ToolbarView {
         command(view.state, view.dispatch, view);
         view.focus();
       });
-      this.wrapper.appendChild(btn);
+      this.buttons[name] = btn;
+      this.root.appendChild(btn);
     });
   }
 
-  update() {}
+  update(view: EditorView) {}
 
   destory() {
-    this.wrapper.remove();
+    this.root.remove();
   }
 }
 
-export const toolbar = (el: HTMLElement): Plugin => {
+export const toolbar = (toolbar: HTMLElement): Plugin => {
   return new Plugin({
     view(view) {
-      return new ToolbarView(view, el);
+      return new ToolbarView(view, toolbar);
     },
   });
 };

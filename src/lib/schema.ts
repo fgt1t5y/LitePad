@@ -98,5 +98,25 @@ export const schema = new Schema({
         return ["code", 0];
       },
     },
+    link: {
+      attrs: {
+        href: { validate: "string" },
+      },
+      inclusive: false,
+      parseDOM: [
+        {
+          tag: "a[href]",
+          getAttrs(dom: HTMLElement) {
+            return {
+              href: dom.getAttribute("href"),
+            };
+          },
+        },
+      ],
+      toDOM(node) {
+        let { href } = node.attrs;
+        return ["a", { href }, 0];
+      },
+    },
   },
 });

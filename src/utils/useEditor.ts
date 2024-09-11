@@ -24,8 +24,11 @@ const buildKeymap = () => {
   return keymap;
 };
 
-export const useEditor = (root: HTMLElement): EditorView | null => {
-  if (!root) return null;
+export const useEditor = (
+  toolbarEl: HTMLElement,
+  body: HTMLElement
+): EditorView | null => {
+  if (!toolbarEl || !body) return null;
 
   const state = EditorState.create({
     schema,
@@ -33,11 +36,11 @@ export const useEditor = (root: HTMLElement): EditorView | null => {
       keymap(baseKeymap),
       history(),
       keymap(buildKeymap()),
-      toolbar(root),
+      toolbar(toolbarEl),
     ],
   });
 
-  const view = new EditorView(root, { state });
+  const view = new EditorView(body, { state });
 
   return view;
 };

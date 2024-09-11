@@ -32,8 +32,7 @@ body {
 
 /* Native element override style */
 a {
-  display: block;
-  color: unset;
+  color: var(--p-primary-color);
   text-decoration: none;
 }
 
@@ -81,7 +80,6 @@ button {
 #PageWrapper {
   height: calc(100vh - 36px);
   position: relative;
-  overflow-y: scroll;
 }
 
 #WelcomeView {
