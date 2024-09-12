@@ -297,7 +297,7 @@ button {
 
 /* Editor style */
 .Toolbar {
-  padding: 1rem;
+  padding: 0.5rem 0.75rem;
   background-color: var(--p-content-background);
   border-bottom: 1px solid var(--p-content-border-color);
   display: flex;
@@ -397,4 +397,10 @@ code {
   font-size: 0.85rem;
   font-family: var(--FontMonospace);
   background-color: var(--p-content-hover-background);
+}
+
+svg {
+  height: 100%;
+  width: 18px;
+  fill: var(--p-text-color);
 }

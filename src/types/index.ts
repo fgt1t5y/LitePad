@@ -73,4 +73,5 @@ export interface EditorTool {
   command: Command;
   name: string;
   key?: string;
+  icon: string;
 }

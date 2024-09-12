@@ -20,10 +20,12 @@ const isHeadingActive = (view: EditorView) => {
   return typeof node.attrs.level !== "undefined";
 };
 
-const heading = (level: number) => {
+const heading = (level: number): EditorTool => {
   return {
     command: setBlockType(schema.nodes.heading, { level }),
     name: `h${level}`,
+    key: `Mod-${level}`,
+    icon: `H${level}`,
   };
 };
 
@@ -71,16 +73,36 @@ const insertLink = (): Command => {
 };
 
 export const tools = [
-  { command: undo, name: "undo", key: "Mod-z" },
-  { command: redo, name: "redo", key: "Mod-y" },
-  { command: toggleMark(schema.marks.bold), name: "bold", key: "Mod-b" },
-  { command: toggleMark(schema.marks.italic), name: "italic", key: "Mod-i" },
-  { command: toggleMark(schema.marks.del), name: "del" },
-  { command: toggleMark(schema.marks.code), name: "code", key: "Mod-`" },
-  { command: insertImage(), name: "image" },
-  { command: insertLink(), name: "link", key: "Mod-k" },
-  { command: insertHorizontalRule(), name: "hr" },
-  { command: setBlockType(schema.nodes.paragraph), name: "正文" },
+  { command: undo, name: "undo", key: "Mod-z", icon: "Undo" },
+  { command: redo, name: "redo", key: "Mod-y", icon: "Redo" },
+  {
+    command: toggleMark(schema.marks.bold),
+    name: "bold",
+    key: "Mod-b",
+    icon: "Bold",
+  },
+  {
+    command: toggleMark(schema.marks.italic),
+    name: "italic",
+    key: "Mod-i",
+    icon: "Italic",
+  },
+  { command: toggleMark(schema.marks.del), name: "del", icon: "Strikethrough" },
+  {
+    command: toggleMark(schema.marks.code),
+    name: "code",
+    key: "Mod-`",
+    icon: "Code",
+  },
+  { command: insertImage(), name: "image", icon: "Image" },
+  { command: insertLink(), name: "link", key: "Mod-k", icon: "Link" },
+  { command: insertHorizontalRule(), name: "hr", icon: "HorizontalLine" },
+  {
+    command: setBlockType(schema.nodes.paragraph),
+    name: "正文",
+    key: "Mod-0",
+    icon: "Paragraph",
+  },
   heading(1),
   heading(2),
   heading(3),
@@ -102,9 +124,16 @@ class ToolbarView {
     this.root = toolbar;
     this.buttons = {};
 
-    tools.forEach(({ command, name }) => {
+    tools.forEach(({ command, name, icon }) => {
       const btn = document.createElement("button");
-      btn.innerText = name;
+      btn.innerHTML = `<svg
+    viewBox="0 0 1024 1024"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+  >
+    <use xlink:href="#${icon}" />
+  </svg>
+    `;
       btn.addEventListener("click", () => {
         command(view.state, view.dispatch, view);
         view.focus();

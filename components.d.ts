@@ -12,6 +12,8 @@ declare module 'vue' {
     CreateNoteModal: typeof import('./src/components/modal/CreateNoteModal.vue')['default']
     Dialog: typeof import('primevue/dialog')['default']
     Editor: typeof import('./src/components/Editor.vue')['default']
+    IconDefine: typeof import('./src/components/IconDefine.vue')['default']
+    IconHost: typeof import('./src/components/IconHost.vue')['default']
     InputText: typeof import('primevue/inputtext')['default']
     ListSelect: typeof import('./src/components/ListSelect.vue')['default']
     PageTabs: typeof import('./src/components/PageTabs.vue')['default']

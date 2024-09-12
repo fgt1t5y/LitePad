@@ -51,6 +51,7 @@
     @success="loadNotebookList"
   />
   <ContextMenu ref="contextMenuRef" :model="fileTreeContextMenu" />
+  <IconDefine />
 </template>
 
 <script setup lang="ts">
@@ -72,13 +73,14 @@ import { get } from "@/utils/helpers";
 import { usePageTabs } from "@/utils/usePageTabs";
 import { useElementResize } from "@/utils/useElementResize";
 import { arrayToTree } from "performant-array-to-tree";
-import CreateNotebookModal from "@/components/modal/CreateNoteModal.vue";
 import { RouterView } from "vue-router";
 
 import PageTabs from "@/components/PageTabs.vue";
 import Tree from "@/components/Tree.vue";
 import Panel from "@/components/Panel.vue";
 import ListSelect from "@/components/ListSelect.vue";
+import IconDefine from "@/components/IconDefine.vue";
+import CreateNotebookModal from "@/components/modal/CreateNoteModal.vue";
 
 const contextMenuRef = ref<ContextMenuMethods>();
 const leftPanelRef = ref<HTMLElement>();
