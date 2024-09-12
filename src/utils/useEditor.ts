@@ -7,6 +7,7 @@ import { baseKeymap } from "prosemirror-commands";
 import { history } from "prosemirror-history";
 import { schema } from "@/lib/schema";
 import { toolbar, tools } from "@/lib/toolbar";
+import { placeholder } from "@/lib/placeholder";
 
 interface Keymap {
   [key: string]: Command;
@@ -37,6 +38,7 @@ export const useEditor = (
       history(),
       keymap(buildKeymap()),
       toolbar(toolbarEl),
+      placeholder(),
     ],
   });
 

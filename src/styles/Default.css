@@ -305,6 +305,10 @@ button {
   position: sticky;
   top: 0px;
   z-index: 2;
+
+  .ToolActive {
+    color: var(--p-primary-color);
+  }
 }
 
 .ProseMirror {
@@ -319,6 +323,14 @@ button {
   margin: 0px auto;
   outline: none;
   font-size: 1rem;
+}
+
+.isEmpty::after {
+  content: "点击此处输入正文...";
+  position: absolute;
+  top: 0px;
+  color: var(--p-text-muted-color);
+  cursor: text;
 }
 
 .ProseMirror pre {

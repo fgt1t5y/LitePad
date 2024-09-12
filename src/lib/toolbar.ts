@@ -1,4 +1,5 @@
-import type { Command } from "prosemirror-state";
+import type { Command, EditorState } from "prosemirror-state";
+import type { MarkType } from "prosemirror-model";
 import type { EditorTool } from "@/types";
 
 import { Plugin } from "prosemirror-state";
@@ -7,6 +8,18 @@ import { toggleMark, setBlockType } from "prosemirror-commands";
 import { undo, redo } from "prosemirror-history";
 import { schema } from "./schema";
 
+const isActive = (state: EditorState, type: MarkType): boolean => {
+  const { from, $from, to, empty } = state.selection;
+  if (empty) return !!type.isInSet(state.storedMarks || $from.marks());
+  else return state.doc.rangeHasMark(from, to, type);
+};
+
+const isHeadingActive = (view: EditorView) => {
+  const node = view.state.selection.$from.node(1);
+
+  return typeof node.attrs.level !== "undefined";
+};
+
 const heading = (level: number) => {
   return {
     command: setBlockType(schema.nodes.heading, { level }),
@@ -14,8 +27,11 @@ const heading = (level: number) => {
   };
 };
 
-const insertImage = (src: string): Command => {
+const insertImage = (): Command => {
   return (state, dispatch) => {
+    const src = prompt("Image URL: ");
+    if (!src) return false;
+
     const node = schema.nodes.image.createAndFill({ src });
     if (!node) return false;
 
@@ -39,6 +55,21 @@ const insertHorizontalRule = (): Command => {
   };
 };
 
+const insertLink = (): Command => {
+  return (state, dispatch) => {
+    if (state.selection.empty) {
+      console.log(state.selection);
+      return false;
+    }
+
+    const url = prompt("URL: ");
+
+    if (!url) return false;
+
+    return toggleMark(schema.marks.link, { href: url })(state, dispatch);
+  };
+};
+
 export const tools = [
   { command: undo, name: "undo", key: "Mod-z" },
   { command: redo, name: "redo", key: "Mod-y" },
@@ -46,16 +77,10 @@ export const tools = [
   { command: toggleMark(schema.marks.italic), name: "italic", key: "Mod-i" },
   { command: toggleMark(schema.marks.del), name: "del" },
   { command: toggleMark(schema.marks.code), name: "code", key: "Mod-`" },
-  {
-    command: insertImage(
-      "https://picx.zhimg.com/80/v2-a3e754cb7b23a9daa569e211652dd2fa_720w.jpeg"
-    ),
-    name: "image",
-  },
-  {
-    command: insertHorizontalRule(),
-    name: "hr",
-  },
+  { command: insertImage(), name: "image" },
+  { command: insertLink(), name: "link", key: "Mod-k" },
+  { command: insertHorizontalRule(), name: "hr" },
+  { command: setBlockType(schema.nodes.paragraph), name: "正文" },
   heading(1),
   heading(2),
   heading(3),

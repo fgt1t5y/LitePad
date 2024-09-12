@@ -12,3 +12,15 @@ export const getOrSet = (key: string, if_no: string) => {
 };
 
 export const has = (key: string) => get(key) !== null;
+
+export const setClass = (
+  el: HTMLElement,
+  classname: string,
+  on: boolean = true
+) => {
+  if (on) {
+    el.classList.add(classname);
+  } else {
+    el.classList.remove(classname);
+  }
+};
