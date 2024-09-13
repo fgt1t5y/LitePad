@@ -143,7 +143,7 @@ class ToolbarView {
 
   update(view: EditorView) {}
 
-  destory() {
+  destroy() {
     this.root.remove();
   }
 }
