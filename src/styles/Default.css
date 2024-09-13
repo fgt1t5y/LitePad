@@ -26,17 +26,6 @@ body {
   background-color: var(--p-surface-950);
 }
 
-::-webkit-scrollbar {
-  width: 8px !important;
-  height: 8px !important;
-  background-color: var(--p-content-background);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--p-primary-color) !important;
-  border-radius: calc(0px) !important;
-}
-
 /* Native element override style */
 a {
   color: var(--p-primary-color);
@@ -50,6 +39,7 @@ button {
   cursor: pointer;
   font-family: inherit;
   font-size: inherit;
+  color: inherit;
 }
 
 /* Layout */
@@ -108,6 +98,11 @@ button {
   outline: 2px dashed var(--p-primary-color);
 }
 
+.Active {
+  color: var(--p-contextmenu-item-focus-color);
+  background-color: var(--p-navigation-item-focus-background) !important;
+}
+
 /* Custom components style */
 .Tree {
   user-select: none;
@@ -128,10 +123,6 @@ button {
   .TreeLeaf {
     .pi:first-child {
       visibility: hidden;
-    }
-
-    &.Active {
-      background-color: var(--p-highlight-focus-background);
     }
   }
 
@@ -190,7 +181,7 @@ button {
       left: 0px;
       height: 2px;
       width: 100%;
-      background-color: var(--p-highlight-focus-background);
+      background-color: var(--p-navigation-item-focus-background);
     }
 
     i {
@@ -260,10 +251,6 @@ button {
     &:focus {
       outline: none;
       background-color: var(--p-content-hover-background);
-    }
-
-    &.ListItemActive {
-      background-color: var(--p-highlight-focus-background);
     }
   }
 }

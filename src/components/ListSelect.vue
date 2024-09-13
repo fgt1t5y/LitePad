@@ -1,7 +1,7 @@
 <template>
   <div class="ListSelect">
     <button
-      :class="{ ListSelectItem: true, ListItemActive: item.id === active }"
+      :class="{ ListSelectItem: true, Active: item.id === active }"
       :title="item.name"
       v-for="item in items"
     >

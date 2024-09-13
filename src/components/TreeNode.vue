@@ -17,7 +17,7 @@
     <button class="TreeToggle" @click="emits('node-click', items, $event)">
       <i v-if="expanded" class="pi pi-angle-down"></i>
       <i v-else class="pi pi-angle-right"></i>
-      {{ getLabel() }}
+      <span>{{ getLabel() }}</span>
     </button>
   </div>
   <div v-if="expanded && hasChildren" class="TreeChildren">

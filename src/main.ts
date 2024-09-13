@@ -17,16 +17,10 @@ const DefaultPreset = definePreset(Nora, {
         content: {
           background: "{surface.100}",
         },
-        highlight: {
-          focusBackground: "{primary.300}",
-        },
       },
       dark: {
         content: {
           background: "{surface.900}",
-        },
-        highlight: {
-          focusBackground: "{primary.500}",
         },
       },
     },
