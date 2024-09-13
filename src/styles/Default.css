@@ -6,6 +6,13 @@
     "Courier New", monospace;
 }
 
+@font-face {
+  font-family: "Material Symbols Outlined";
+  src: url("/src/assets/fonts/MaterialSymbolsOutlined-Regular.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* Body style */
 body {
   margin: 0px;
@@ -403,4 +410,18 @@ svg {
   height: 100%;
   width: 18px;
   fill: var(--p-text-color);
+}
+
+.Icon {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px; /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
 }

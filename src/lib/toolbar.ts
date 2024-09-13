@@ -25,7 +25,7 @@ const heading = (level: number): EditorTool => {
     command: setBlockType(schema.nodes.heading, { level }),
     name: `h${level}`,
     key: `Mod-${level}`,
-    icon: `H${level}`,
+    icon: `format_h${level}`,
   };
 };
 
@@ -73,42 +73,46 @@ const insertLink = (): Command => {
 };
 
 export const tools = [
-  { command: undo, name: "undo", key: "Mod-z", icon: "Undo" },
-  { command: redo, name: "redo", key: "Mod-y", icon: "Redo" },
+  { command: undo, name: "undo", key: "Mod-z", icon: "undo" },
+  { command: redo, name: "redo", key: "Mod-y", icon: "redo" },
   {
     command: toggleMark(schema.marks.bold),
     name: "bold",
     key: "Mod-b",
-    icon: "Bold",
+    icon: "format_bold",
   },
   {
     command: toggleMark(schema.marks.italic),
     name: "italic",
     key: "Mod-i",
-    icon: "Italic",
+    icon: "format_italic",
   },
-  { command: toggleMark(schema.marks.del), name: "del", icon: "Strikethrough" },
+  {
+    command: toggleMark(schema.marks.del),
+    name: "del",
+    icon: "strikethrough_s",
+  },
   {
     command: toggleMark(schema.marks.code),
     name: "code",
     key: "Mod-`",
-    icon: "Code",
+    icon: "code",
   },
-  { command: insertImage(), name: "image", icon: "Image" },
-  { command: insertLink(), name: "link", key: "Mod-k", icon: "Link" },
-  { command: insertHorizontalRule(), name: "hr", icon: "HorizontalLine" },
-  {
-    command: setBlockType(schema.nodes.paragraph),
-    name: "正文",
-    key: "Mod-0",
-    icon: "Paragraph",
-  },
+  { command: insertImage(), name: "image", icon: "image" },
+  { command: insertLink(), name: "link", key: "Mod-k", icon: "link" },
+  { command: insertHorizontalRule(), name: "hr", icon: "horizontal_rule " },
   heading(1),
   heading(2),
   heading(3),
   heading(4),
   heading(5),
   heading(6),
+  {
+    command: setBlockType(schema.nodes.paragraph),
+    name: "正文",
+    key: "Mod-0",
+    icon: "format_paragraph",
+  },
 ] as EditorTool[];
 
 interface ToolButton {
@@ -126,14 +130,8 @@ class ToolbarView {
 
     tools.forEach(({ command, name, icon }) => {
       const btn = document.createElement("button");
-      btn.innerHTML = `<svg
-    viewBox="0 0 1024 1024"
-    xmlns="http://www.w3.org/2000/svg"
-    xmlns:xlink="http://www.w3.org/1999/xlink"
-  >
-    <use xlink:href="#${icon}" />
-  </svg>
-    `;
+      btn.classList.add("Icon");
+      btn.innerText = icon;
       btn.addEventListener("click", () => {
         command(view.state, view.dispatch, view);
         view.focus();
