@@ -77,7 +77,6 @@ import PageTabs from "@/components/PageTabs.vue";
 import Tree from "@/components/Tree.vue";
 import Panel from "@/components/Panel.vue";
 import ListSelect from "@/components/ListSelect.vue";
-import IconDefine from "@/components/IconDefine.vue";
 import CreateNotebookModal from "@/components/modal/CreateNoteModal.vue";
 
 const contextMenuRef = ref<ContextMenuMethods>();
