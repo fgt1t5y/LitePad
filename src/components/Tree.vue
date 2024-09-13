@@ -1,26 +1,23 @@
 <template>
   <div class="Tree">
-    <ul class="TreeRoot">
-      <TreeNode
-        v-for="item of items"
-        :key="item.id"
-        :items="item"
-        :level="0"
-        :icon-map="iconMap"
-        :expanded-items="expandedItems || {}"
-        :selected-items="selectedItems || {}"
-        :highlighted-item="highlightedItem || -1"
-        :group-type="groupType"
-        @node-click="onNodeClick"
-        @node-contextmenu="onNodeContextenu"
-        @node-move="onNodeMove"
-      />
-    </ul>
+    <TreeNode
+      v-for="item of items"
+      :key="item.id"
+      :items="item"
+      :level="0"
+      :expanded-items="expandedItems || {}"
+      :selected-items="selectedItems || {}"
+      :highlighted-item="highlightedItem || -1"
+      :group-type="groupType"
+      @node-click="onNodeClick"
+      @node-contextmenu="onNodeContextenu"
+      @node-move="onNodeMove"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { TreeItem, IDs, IconMap, TreeDnDStat } from "@/types";
+import type { TreeItem, IDs, TreeDnDStat } from "@/types";
 import TreeNode from "./TreeNode.vue";
 import { provide, ref } from "vue";
 
@@ -30,7 +27,6 @@ defineOptions({
 
 const props = defineProps<{
   items: TreeItem[];
-  iconMap: IconMap;
   groupType: string;
 }>();
 

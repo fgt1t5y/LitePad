@@ -87,6 +87,7 @@ button {
 #PageWrapper {
   height: calc(100vh - 36px);
   position: relative;
+  overflow: auto;
 }
 
 #WelcomeView {
@@ -103,34 +104,8 @@ button {
 }
 
 /* Atom class */
-.Padding {
-  padding: var(--p-form-field-padding-y) var(--p-form-field-padding-x);
-}
-
-.VGap {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.Flex {
-  display: flex;
-}
-
-.CenterV {
-  align-items: center;
-}
-
-.CenterH {
-  justify-content: center;
-}
-
 .Dragging {
   outline: 2px dashed var(--p-primary-color);
-}
-
-.Dropping {
-  outline: 1px solid var(--p-primary-color);
 }
 
 /* Custom components style */
@@ -160,6 +135,14 @@ button {
     }
   }
 
+  .TreeGroup,
+  .TreeLeaf {
+    &:hover,
+    &:focus {
+      background-color: var(--p-content-hover-background);
+    }
+  }
+
   .TreeToggle {
     display: flex;
     gap: 8px;
@@ -167,12 +150,6 @@ button {
     width: 100%;
     padding: 0.5rem 0.75rem;
     word-break: keep-all;
-  }
-
-  ul {
-    list-style: none;
-    margin: 0px;
-    padding: 0px;
   }
 
   li {

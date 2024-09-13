@@ -12,7 +12,6 @@
       <Panel title="笔记">
         <Tree
           :items="fileTreeNodes"
-          :icon-map="fileTreeIconMap"
           v-model:expanded-items="expandedItems"
           v-model:selected-items="selectedItems"
           v-model:highlighted-item="tabs.current"
@@ -51,7 +50,6 @@
     @success="loadNotebookList"
   />
   <ContextMenu ref="contextMenuRef" :model="fileTreeContextMenu" />
-  <IconDefine />
 </template>
 
 <script setup lang="ts">
@@ -96,11 +94,6 @@ const noteList = ref<Note[]>([]);
 const currentNotebook = ref<number>();
 
 const showCreateNotebookModel = ref<boolean>(false);
-
-const fileTreeIconMap = {
-  folder: "pi pi-folder",
-  note: "pi pi-file",
-};
 
 const tabs = usePageTabs();
 tabs.init();

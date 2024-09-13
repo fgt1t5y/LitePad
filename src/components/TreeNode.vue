@@ -1,5 +1,5 @@
 <template>
-  <li
+  <div
     :class="{
       TreeLeaf: !isGroup,
       TreeGroup: isGroup,
@@ -7,7 +7,6 @@
     }"
     :title="items.label"
     :data-id="items.id"
-    :data-type="items.type"
     draggable="true"
     @contextmenu="emits('node-contextmenu', items, $event)"
     @dragstart="onDragStart"
@@ -18,17 +17,15 @@
     <button class="TreeToggle" @click="emits('node-click', items, $event)">
       <i v-if="expanded" class="pi pi-angle-down"></i>
       <i v-else class="pi pi-angle-right"></i>
-      <i :class="iconMap[items.type!]"></i>
       {{ getLabel() }}
     </button>
-  </li>
-  <ul v-if="expanded && hasChildren" class="TreeChildren">
+  </div>
+  <div v-if="expanded && hasChildren" class="TreeChildren">
     <TreeNode
       v-for="item of items.children"
       :key="item.id"
       :items="item"
       :level="level + 1"
-      :icon-map="iconMap"
       :expanded-items="expandedItems || {}"
       :selected-items="selectedItems || {}"
       :highlighted-item="highlightedItem"
@@ -37,11 +34,11 @@
       @node-contextmenu="onNodeContextmenu"
       @node-move="onNodeMove"
     />
-  </ul>
+  </div>
 </template>
 
 <script setup lang="ts">
-import type { TreeItem, IDs, IconMap, TreeDnDStat } from "@/types";
+import type { TreeItem, IDs, TreeDnDStat } from "@/types";
 import { computed, inject } from "vue";
 
 defineOptions({
@@ -54,7 +51,6 @@ const props = defineProps<{
   expandedItems: IDs;
   selectedItems: IDs;
   highlightedItem: number | null;
-  iconMap: IconMap;
   groupType: string;
 }>();
 

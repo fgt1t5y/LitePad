@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import PrimeVue from "primevue/config";
-import Aura from "@primevue/themes/aura";
+import Nora from "@primevue/themes/nora";
 import { definePreset } from "@primevue/themes";
 import "@/styles/Default.css";
 import "primeicons/primeicons.css";
@@ -10,13 +10,12 @@ import ToastService from "primevue/toastservice";
 import App from "./App.vue";
 import router from "./router";
 
-const DefaultPreset = definePreset(Aura, {
+const DefaultPreset = definePreset(Nora, {
   semantic: {
     colorScheme: {
       light: {
         content: {
           background: "{surface.100}",
-          hoverBackground: "{surface.200}",
         },
         highlight: {
           focusBackground: "{primary.300}",
@@ -28,22 +27,6 @@ const DefaultPreset = definePreset(Aura, {
         },
         highlight: {
           focusBackground: "{primary.500}",
-        },
-      },
-    },
-  },
-  components: {
-    contextmenu: {
-      colorScheme: {
-        light: {
-          root: {
-            background: "{surface.50}",
-          },
-        },
-        dark: {
-          root: {
-            background: "{surface.950}",
-          },
         },
       },
     },
