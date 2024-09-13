@@ -1,12 +1,12 @@
-import type { Command, EditorState } from "prosemirror-state";
-import type { MarkType } from "prosemirror-model";
 import type { EditorTool } from "@/types";
+import type { MarkType } from "prosemirror-model";
 
-import { Plugin } from "prosemirror-state";
+import { EditorState, Plugin } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
-import { toggleMark, setBlockType } from "prosemirror-commands";
-import { undo, redo } from "prosemirror-history";
-import { schema } from "./schema";
+
+interface ToolButton {
+  [name: string]: HTMLElement;
+}
 
 const isActive = (state: EditorState, type: MarkType): boolean => {
   const { from, $from, to, empty } = state.selection;
@@ -20,111 +20,12 @@ const isHeadingActive = (view: EditorView) => {
   return typeof node.attrs.level !== "undefined";
 };
 
-const heading = (level: number): EditorTool => {
-  return {
-    command: setBlockType(schema.nodes.heading, { level }),
-    name: `h${level}`,
-    key: `Mod-${level}`,
-    icon: `i-h${level}`,
-  };
-};
-
-const insertImage = (): Command => {
-  return (state, dispatch) => {
-    const src = prompt("Image URL: ");
-    if (!src) return false;
-
-    const node = schema.nodes.image.createAndFill({ src });
-    if (!node) return false;
-
-    const tr = state.tr.replaceSelectionWith(node);
-
-    if (dispatch) {
-      dispatch(tr.scrollIntoView());
-    }
-    return true;
-  };
-};
-
-const insertHorizontalRule = (): Command => {
-  return (state, dispatch) => {
-    const tr = state.tr.replaceSelectionWith(schema.nodes.hr.create());
-
-    if (dispatch) {
-      dispatch(tr.scrollIntoView());
-    }
-    return true;
-  };
-};
-
-const insertLink = (): Command => {
-  return (state, dispatch) => {
-    if (state.selection.empty) {
-      console.log(state.selection);
-      return false;
-    }
-
-    const url = prompt("URL: ");
-
-    if (!url) return false;
-
-    return toggleMark(schema.marks.link, { href: url })(state, dispatch);
-  };
-};
-
-export const tools = [
-  { command: undo, name: "undo", key: "Mod-z", icon: "i-undo" },
-  { command: redo, name: "redo", key: "Mod-y", icon: "i-redo" },
-  {
-    command: toggleMark(schema.marks.bold),
-    name: "bold",
-    key: "Mod-b",
-    icon: "i-bold",
-  },
-  {
-    command: toggleMark(schema.marks.italic),
-    name: "italic",
-    key: "Mod-i",
-    icon: "i-italic",
-  },
-  {
-    command: toggleMark(schema.marks.del),
-    name: "del",
-    icon: "i-strikethrough",
-  },
-  {
-    command: toggleMark(schema.marks.code),
-    name: "code",
-    key: "Mod-`",
-    icon: "i-code",
-  },
-  { command: insertImage(), name: "image", icon: "i-image" },
-  { command: insertLink(), name: "link", key: "Mod-k", icon: "i-link" },
-  { command: insertHorizontalRule(), name: "hr", icon: "i-horizontal-rule" },
-  heading(1),
-  heading(2),
-  heading(3),
-  heading(4),
-  heading(5),
-  heading(6),
-  {
-    command: setBlockType(schema.nodes.paragraph),
-    name: "正文",
-    key: "Mod-0",
-    icon: "i-paragraph",
-  },
-] as EditorTool[];
-
-interface ToolButton {
-  [name: string]: HTMLElement;
-}
-
 class ToolbarView {
   // Etoolbar element
   root: HTMLElement;
   buttons: ToolButton;
 
-  constructor(view: EditorView, toolbar: HTMLElement) {
+  constructor(view: EditorView, toolbar: HTMLElement, tools: EditorTool[]) {
     this.root = toolbar;
     this.buttons = {};
 
@@ -147,10 +48,10 @@ class ToolbarView {
   }
 }
 
-export const toolbar = (toolbar: HTMLElement): Plugin => {
+export const toolbar = (toolbar: HTMLElement, tools: EditorTool[]): Plugin => {
   return new Plugin({
     view(view) {
-      return new ToolbarView(view, toolbar);
+      return new ToolbarView(view, toolbar, tools);
     },
   });
 };
