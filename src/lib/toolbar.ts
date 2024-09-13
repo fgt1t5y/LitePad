@@ -25,7 +25,7 @@ const heading = (level: number): EditorTool => {
     command: setBlockType(schema.nodes.heading, { level }),
     name: `h${level}`,
     key: `Mod-${level}`,
-    icon: `format_h${level}`,
+    icon: `i-h${level}`,
   };
 };
 
@@ -73,34 +73,34 @@ const insertLink = (): Command => {
 };
 
 export const tools = [
-  { command: undo, name: "undo", key: "Mod-z", icon: "undo" },
-  { command: redo, name: "redo", key: "Mod-y", icon: "redo" },
+  { command: undo, name: "undo", key: "Mod-z", icon: "i-undo" },
+  { command: redo, name: "redo", key: "Mod-y", icon: "i-redo" },
   {
     command: toggleMark(schema.marks.bold),
     name: "bold",
     key: "Mod-b",
-    icon: "format_bold",
+    icon: "i-bold",
   },
   {
     command: toggleMark(schema.marks.italic),
     name: "italic",
     key: "Mod-i",
-    icon: "format_italic",
+    icon: "i-italic",
   },
   {
     command: toggleMark(schema.marks.del),
     name: "del",
-    icon: "strikethrough_s",
+    icon: "i-strikethrough",
   },
   {
     command: toggleMark(schema.marks.code),
     name: "code",
     key: "Mod-`",
-    icon: "code",
+    icon: "i-code",
   },
-  { command: insertImage(), name: "image", icon: "image" },
-  { command: insertLink(), name: "link", key: "Mod-k", icon: "link" },
-  { command: insertHorizontalRule(), name: "hr", icon: "horizontal_rule " },
+  { command: insertImage(), name: "image", icon: "i-image" },
+  { command: insertLink(), name: "link", key: "Mod-k", icon: "i-link" },
+  { command: insertHorizontalRule(), name: "hr", icon: "i-horizontal-rule" },
   heading(1),
   heading(2),
   heading(3),
@@ -111,7 +111,7 @@ export const tools = [
     command: setBlockType(schema.nodes.paragraph),
     name: "正文",
     key: "Mod-0",
-    icon: "format_paragraph",
+    icon: "i-paragraph",
   },
 ] as EditorTool[];
 
@@ -130,8 +130,7 @@ class ToolbarView {
 
     tools.forEach(({ command, name, icon }) => {
       const btn = document.createElement("button");
-      btn.classList.add("Icon");
-      btn.innerText = icon;
+      btn.classList.add("i", icon);
       btn.addEventListener("click", () => {
         command(view.state, view.dispatch, view);
         view.focus();

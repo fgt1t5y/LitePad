@@ -1,0 +1,84 @@
+@font-face {
+  font-family: "Material Symbols Outlined";
+  src: url("/src/assets/fonts/MaterialSymbolsOutlined-Regular.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.i {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px; /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+}
+
+.i-undo::before {
+  content: "undo";
+}
+
+.i-redo::before {
+  content: "redo";
+}
+
+.i-bold::before {
+  content: "format_bold";
+}
+
+.i-italic::before {
+  content: "format_italic";
+}
+
+.i-strikethrough::before {
+  content: "strikethrough_s";
+}
+
+.i-code::before {
+  content: "code";
+}
+
+.i-image::before {
+  content: "image";
+}
+
+.i-link::before {
+  content: "link";
+}
+
+.i-horizontal-rule::before {
+  content: "horizontal_rule";
+}
+
+.i-h1::before {
+  content: "format_h1";
+}
+
+.i-h2::before {
+  content: "format_h2";
+}
+
+.i-h3::before {
+  content: "format_h3";
+}
+
+.i-h4::before {
+  content: "format_h4";
+}
+
+.i-h5::before {
+  content: "format_h5";
+}
+
+.i-h6::before {
+  content: "format_h6";
+}
+
+.i-paragraph::before {
+  content: "format_paragraph";
+}

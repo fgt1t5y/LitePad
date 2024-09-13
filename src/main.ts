@@ -3,12 +3,14 @@ import { createPinia } from "pinia";
 import PrimeVue from "primevue/config";
 import Nora from "@primevue/themes/nora";
 import { definePreset } from "@primevue/themes";
-import "@/styles/Default.css";
-import "primeicons/primeicons.css";
 import ToastService from "primevue/toastservice";
 
 import App from "./App.vue";
 import router from "./router";
+
+import "@/styles/Default.css";
+import "@/styles/Icons.css";
+import "primeicons/primeicons.css";
 
 const DefaultPreset = definePreset(Nora, {
   semantic: {
