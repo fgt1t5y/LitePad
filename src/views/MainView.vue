@@ -43,7 +43,13 @@
       ></div>
     </aside>
     <main id="RightPanel">
-      <PageTabs v-model:tabs="tabs.tabs" ref="pageTabsRef"></PageTabs>
+      <PageTabs v-model:tabs="tabs.tabs" ref="pageTabsRef">
+        <template #footer>
+          <button id="AddTab" @click="createNote()">
+            <i class="i i-add"></i>
+          </button>
+        </template>
+      </PageTabs>
       <div id="PageWrapper">
         <RouterView #default="{ Component, route }">
           <KeepAlive ref="keepAliveRef" :max="32">
@@ -73,7 +79,7 @@ import type {
 } from "@/types";
 import type { ContextMenuMethods } from "primevue/contextmenu";
 
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, provide, ref } from "vue";
 import { db } from "@/db";
 import { get } from "@/utils/helpers";
 import { usePageTabs } from "@/utils/usePageTabs";
@@ -191,7 +197,6 @@ const createNote = (folder_id?: number) => {
     title: "新笔记",
     type: "note",
     content: "<p></p>",
-    preview: "",
     labels: [],
     created_at: new Date(),
     updated_at: new Date(),

@@ -8,9 +8,8 @@ export const db = new Dexie("LitePad_db") as Dexie & {
 };
 
 db.version(4).stores({
-  notebooks:
-    "++id, name, description, created_at, updated_at",
+  notebooks: "++id, name, description, created_at, updated_at",
   folders: "++id, notebook_id, folder_id, name, type, created_at, updated_at",
   notes:
-    "++id, notebook_id, folder_id, title, type, content, preview, labels, created_at, updated_at",
+    "++id, notebook_id, folder_id, title, type, content, labels, created_at, updated_at",
 });

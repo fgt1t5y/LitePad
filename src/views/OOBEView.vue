@@ -150,7 +150,6 @@ const prepare = (activateCallback: Function) => {
       title: "Welcome to LitePad!",
       type: "note",
       content: "<p>Welcome!</p>",
-      preview: "Welcome",
       labels: [],
       created_at: new Date(),
       updated_at: new Date(),

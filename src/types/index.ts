@@ -3,7 +3,7 @@ import type { Command } from "prosemirror-state";
 interface Model {
   id?: number;
   created_at: Date;
-  updated_at: Date;
+  updated_at?: Date;
 }
 
 export interface Notebook extends Model {
@@ -24,7 +24,6 @@ export interface Note extends Model {
   title: string;
   type: string;
   content: string;
-  preview: string;
   labels: string[];
 }
 

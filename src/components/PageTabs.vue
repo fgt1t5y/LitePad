@@ -19,9 +19,7 @@
       </button>
     </template>
     <template #footer>
-      <button id="AddTab">
-        <i class="i i-add"></i>
-      </button>
+      <slot name="footer" />
     </template>
   </draggable>
 </template>
