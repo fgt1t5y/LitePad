@@ -6,9 +6,6 @@
         :title="element.label"
         @click="tabClick(element)"
       >
-        <span>
-          <i class="pi pi-file"></i>
-        </span>
         <span class="TabLabel">{{ element.label }}</span>
         <span
           class="TabButton"
@@ -17,12 +14,14 @@
           title="关闭标签页"
           @click.stop="pageTabs.close(element)"
         >
-          <i class="pi pi-times"></i>
+          <i class="i i-close"></i>
         </span>
       </button>
     </template>
     <template #footer>
-      <Button size="small" icon="pi pi-plus" text></Button>
+      <button id="AddTab">
+        <i class="i i-add"></i>
+      </button>
     </template>
   </draggable>
 </template>

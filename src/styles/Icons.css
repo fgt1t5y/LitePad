@@ -9,76 +9,101 @@
   font-family: "Material Symbols Outlined";
   font-weight: normal;
   font-style: normal;
-  font-size: 24px; /* Preferred icon size */
-  display: inline-block;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
+  font-size: 20px;
   word-wrap: normal;
   white-space: nowrap;
   direction: ltr;
 }
 
 .i-undo::before {
-  content: "undo";
+  content: "\e166";
 }
 
 .i-redo::before {
-  content: "redo";
+  content: "\e15a";
 }
 
 .i-bold::before {
-  content: "format_bold";
+  content: "\e238";
 }
 
 .i-italic::before {
-  content: "format_italic";
+  content: "\e23f";
 }
 
 .i-strikethrough::before {
-  content: "strikethrough_s";
+  content: "\e257";
 }
 
 .i-code::before {
-  content: "code";
+  content: "\e86f";
 }
 
 .i-image::before {
-  content: "image";
+  content: "\e3f4";
 }
 
 .i-link::before {
-  content: "link";
+  content: "\e157";
 }
 
 .i-horizontal-rule::before {
-  content: "horizontal_rule";
+  content: "\f108";
 }
 
 .i-h1::before {
-  content: "format_h1";
+  content: "\f85d";
 }
 
 .i-h2::before {
-  content: "format_h2";
+  content: "\f85e";
 }
 
 .i-h3::before {
-  content: "format_h3";
+  content: "\f85f";
 }
 
 .i-h4::before {
-  content: "format_h4";
+  content: "\f860";
 }
 
 .i-h5::before {
-  content: "format_h5";
+  content: "\f861";
 }
 
 .i-h6::before {
-  content: "format_h6";
+  content: "\f862";
 }
 
 .i-paragraph::before {
-  content: "format_paragraph";
+  content: "\f865";
+}
+
+.i-add::before {
+  content: "\e145";
+  height: 20px;
+}
+
+.i-close::before {
+  content: "\e5cd";
+}
+
+.i-note-add::before {
+  content: "\e89c";
+}
+
+.i-folder-add::before {
+  content: "\e2cc";
+}
+
+.i-notebook::before {
+  content: "\f53e";
+}
+
+.i-arrow-down::before {
+  content: "\e5c5";
+}
+
+.i-arrow-right::before {
+  content: "\e5df";
 }

@@ -155,7 +155,6 @@ button {
     display: flex;
     flex-shrink: 0;
     gap: 8px;
-    align-items: center;
     padding: 0px 0.75rem;
     line-height: 35px;
     border-right: 1px solid var(--p-content-border-color);
@@ -177,8 +176,8 @@ button {
       background-color: var(--p-navigation-item-focus-background);
     }
 
-    i {
-      font-size: 12px;
+    .i {
+      font-size: 1rem;
     }
 
     .TabLabel {
@@ -192,6 +191,12 @@ button {
     .TabButton {
       display: inline-block;
     }
+  }
+
+  #AddTab {
+    padding: 0px 8px;
+    display: flex;
+    align-items: center;
   }
 }
 

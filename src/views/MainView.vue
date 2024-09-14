@@ -5,7 +5,7 @@
         <ListSelect v-model:items="notebookList" :active="currentNotebook!" />
         <template #extra>
           <button title="新建笔记本" @click="showCreateNotebookModel = true">
-            <i class="pi pi-plus"></i>
+            <i class="i i-add"></i>
           </button>
         </template>
       </Panel>
@@ -21,10 +21,10 @@
         />
         <template #extra>
           <button title="新建文件夹" @click="createFolder()">
-            <i class="pi pi-folder-plus"></i>
+            <i class="i i-folder-add"></i>
           </button>
           <button title="新建笔记" @click="createNote()">
-            <i class="pi pi-file-plus"></i>
+            <i class="i i-note-add"></i>
           </button>
         </template>
       </Panel>
