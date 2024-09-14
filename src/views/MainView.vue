@@ -1,6 +1,14 @@
 <template>
   <div id="Root">
     <aside ref="leftPanelRef" id="LeftPanel">
+      <div id="MainMenu">
+        <button>
+          <i class="i i-menu"></i>
+        </button>
+        <button>
+          <i class="i i-left-panel-close"></i>
+        </button>
+      </div>
       <Panel title="笔记本列表">
         <ListSelect v-model:items="notebookList" :active="currentNotebook!" />
         <template #extra>

@@ -107,3 +107,15 @@
 .i-arrow-right::before {
   content: "\e5df";
 }
+
+.i-left-panel-open::before {
+  content: "\f716";
+}
+
+.i-left-panel-close::before {
+  content: "\f717";
+}
+
+.i-menu::before {
+  content: "\e5d2";
+}
