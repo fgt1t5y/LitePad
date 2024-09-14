@@ -1,39 +1,47 @@
-# litepad
+# LitePad
 
-This template should help get you started developing with Vue 3 in Vite.
+Litepad 是一个简单的、纯本地、富文本的笔记软件。
 
-## Recommended IDE Setup
+## 构建开发环境
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+克隆此项目：
 
-## Type Support for `.vue` Imports in TS
+```sh
+git clone https://github.com/fgt1t5y/LitePad
+```
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+完成后，进入项目目录：
 
-## Customize configuration
+```sh
+cd LitePad
+```
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+> ⚠️ 注意：此项目强制使用 `pnpm` 管理依赖，如果你还没有安装它，请运行 `corepack enable pnpm`。
 
-## Project Setup
+安装项目依赖：
 
 ```sh
 pnpm install
 ```
 
-### Compile and Hot-Reload for Development
+至此，你完成了开发环境的构建。接下来，执行你需要的操作的命令:
 
 ```sh
-pnpm dev
+pnpm run <命令>
 ```
 
-### Type-Check, Compile and Minify for Production
+命令列表：
 
-```sh
-pnpm build
-```
+| 命令    | 说明                             |
+| ------- | -------------------------------- |
+| dev     | 启动开发服务器和 SDK 模式的 NWJS |
+| dev:app | 仅启动开发服务器                 |
+| dev:nw  | 仅启动 SDK 模式的 NWJS           |
+| build   | 构建 App 并打包 NWJS             |
+| dev:app | 仅构建 App                       |
+| dev:nw  | 仅打包 NWJS                      |
+| preview | 启动预览服务器（需要先构建 App） |
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+## 软件截图
 
-```sh
-pnpm test:unit
-```
+![](/images/app.png)
