@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { db } from "@/db";
+import { db, rest } from "@/db";
 import { useToast } from "primevue/usetoast";
 
 defineOptions({
@@ -52,30 +52,27 @@ const closeModal = () => {
   modelValue.value = false;
 };
 
-const onCreateNotebookClick = () => {
-  db.notebooks
-    .add({
-      name: name.value,
-      description: description.value,
-      created_at: new Date(),
-      updated_at: new Date(),
-    })
-    .then((id) => {
-      emits("success", id!);
-      toast.add({
-        severity: "success",
-        summary: "创建笔记本成功",
-        detail: name.value,
-        life: 3000,
-      });
-      closeModal();
-    })
-    .catch(() => {
-      toast.add({
-        severity: "error",
-        summary: "创建笔记本失败",
-        life: 3000,
-      });
+const onCreateNotebookClick = async () => {
+  const id = await db.notebooks.add({
+    name: name.value,
+    description: description.value,
+    ...rest(),
+  });
+
+  if (id) {
+    emits("success", id);
+    toast.add({
+      severity: "success",
+      summary: "创建笔记本成功",
+      detail: name.value,
+      life: 3000,
     });
+    closeModal();
+  } else {
+    toast.add({
+      severity: "error",
+      summary: "创建笔记本失败",
+    });
+  }
 };
 </script>

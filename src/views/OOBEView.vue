@@ -96,10 +96,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useTheme } from "@/utils/useTheme";
-import { db } from "@/db";
+import { db, rest } from "@/db";
+import { useShared } from "@/utils/useShared";
 import { set } from "@/utils/helpers";
 
 const { theme, switchTo } = useTheme();
+const d = useShared();
 
 const isPreparing = ref<boolean>(false);
 const notebookName = ref<string>("");
@@ -119,7 +121,6 @@ const themeModeList = ref([
   },
 ]);
 
-
 const prepare = (activateCallback: Function) => {
   isPreparing.value = true;
   let notebook: number;
@@ -128,8 +129,7 @@ const prepare = (activateCallback: Function) => {
     const notebook_id = await db.notebooks.add({
       name: notebookName.value,
       description: notebookDescription.value,
-      created_at: new Date(),
-      updated_at: new Date(),
+      ...rest(),
     });
     notebook = notebook_id || 1;
 
@@ -138,8 +138,7 @@ const prepare = (activateCallback: Function) => {
       folder_id: undefined,
       name: "示例文件夹",
       type: "folder",
-      created_at: new Date(),
-      updated_at: new Date(),
+      ...rest(),
     });
 
     await db.notes.add({
@@ -151,14 +150,14 @@ const prepare = (activateCallback: Function) => {
       type: "note",
       content: "<p>Welcome!</p>",
       labels: [],
-      created_at: new Date(),
-      updated_at: new Date(),
+      ...rest(),
     });
   })
     .then(() => {
       activateCallback("done");
       set("LP_OOBE_PASSED", "1");
-      set("LP_LAST_NOTEBOOK", String(notebook));
+      d.state.lastNotebook = notebook;
+      d.saveState();
     })
     .catch((error) => {
       console.log(error);
@@ -185,11 +184,6 @@ const prepare = (activateCallback: Function) => {
   gap: 16px;
 }
 
-#OOBEView #Spinner {
-  height: 50px;
-  width: 50px;
-}
-
 #OOBEView .Step {
   display: flex;
   flex-direction: column;
@@ -208,6 +202,6 @@ const prepare = (activateCallback: Function) => {
 
 #OOBEView h4 {
   margin: 0px;
-  color: var(--p-surface-500);
+  color: var(--p-text-muted-color);
 }
 </style>

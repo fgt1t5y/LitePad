@@ -13,3 +13,10 @@ db.version(4).stores({
   notes:
     "++id, notebook_id, folder_id, title, type, content, labels, created_at, updated_at",
 });
+
+export const rest = () => {
+  return {
+    created_at: new Date(),
+    updated_at: new Date(),
+  };
+};

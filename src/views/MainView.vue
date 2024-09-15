@@ -12,7 +12,10 @@
       <Panel title="笔记本列表">
         <ListSelect v-model:items="notebookList" :active="currentNotebook!" />
         <template #extra>
-          <button title="新建笔记本" @click="showCreateNotebookModel = true">
+          <button
+            title="新建笔记本"
+            @click="d.modalVisible.createNotebook = true"
+          >
             <i class="i i-add"></i>
           </button>
         </template>
@@ -52,7 +55,7 @@
       </PageTabs>
       <div id="PageWrapper">
         <RouterView #default="{ Component, route }">
-          <KeepAlive ref="keepAliveRef" :max="32">
+          <KeepAlive ref="keepAliveRef">
             <component :key="route.fullPath" :is="Component" />
           </KeepAlive>
         </RouterView>
@@ -60,13 +63,14 @@
     </main>
   </div>
   <CreateNotebookModal
-    v-model="showCreateNotebookModel"
+    v-model="d.modalVisible.createNotebook"
     @success="loadNotebookList"
   />
   <ContextMenu ref="contextMenuRef" :model="fileTreeContextMenu" />
 </template>
 
 <script setup lang="ts">
+// Types
 import type { MenuItem } from "primevue/menuitem";
 import type {
   Folder,
@@ -79,14 +83,16 @@ import type {
 } from "@/types";
 import type { ContextMenuMethods } from "primevue/contextmenu";
 
-import { computed, onMounted, provide, ref } from "vue";
-import { db } from "@/db";
-import { get } from "@/utils/helpers";
+// Functions or methods
+import { computed, onMounted, ref } from "vue";
+import { db, rest } from "@/db";
 import { usePageTabs } from "@/utils/usePageTabs";
 import { useElementResize } from "@/utils/useElementResize";
 import { arrayToTree } from "performant-array-to-tree";
 import { RouterView } from "vue-router";
+import { useShared } from "@/utils/useShared";
 
+// Components
 import PageTabs from "@/components/PageTabs.vue";
 import Tree from "@/components/Tree.vue";
 import Panel from "@/components/Panel.vue";
@@ -106,7 +112,8 @@ const folderList = ref<Folder[]>([]);
 const noteList = ref<Note[]>([]);
 const currentNotebook = ref<number>();
 
-const showCreateNotebookModel = ref<boolean>(false);
+const d = useShared();
+d.init();
 
 const tabs = usePageTabs();
 tabs.init();
@@ -115,8 +122,7 @@ tabs.onTabClose((tab: PageTabsItem) => {
 });
 
 const loadNotebookList = async () => {
-  const notebooks = await db.notebooks.orderBy("id").toArray();
-  notebookList.value = notebooks;
+  notebookList.value = await db.notebooks.orderBy("id").toArray();
 };
 
 const loadNotebook = async (notebook_id: number | null) => {
@@ -133,20 +139,13 @@ const loadNotebook = async (notebook_id: number | null) => {
 };
 
 const toggleFolderNode = (folder_id: number) => {
-  if (expandedItems.value[folder_id]) {
-    expandedItems.value![folder_id] = false;
-    return;
-  }
-  expandedItems.value![folder_id] = true;
+  if (expandedItems.value[folder_id]) expandedItems.value![folder_id] = false;
+  else expandedItems.value![folder_id] = true;
 };
 
-const openNotePage = (note_id: number, label: string) => {
-  const path = `/note/${note_id}`;
-  const newTab = {
-    id: note_id,
-    label: label,
-    path: path,
-  };
+const openNotePage = (id: number, label: string) => {
+  const path = `/note/${id}`;
+  const newTab = { id, label, path };
 
   tabs.push(newTab);
   tabs.to(newTab);
@@ -171,44 +170,42 @@ const treeNodeClick = (node: TreeItem, event: MouseEvent) => {
   }
 };
 
-const createFolder = (folder_id?: number) => {
-  const folder: Folder = {
-    notebook_id: currentNotebook.value || 1,
+const createFolder = async (folder_id?: number) => {
+  const folder = {
+    notebook_id: currentNotebook.value!,
     folder_id: folder_id,
     name: "新文件夹",
     type: "folder",
-    created_at: new Date(),
-    updated_at: new Date(),
+    ...rest(),
   };
+  const id = await db.folders.add(folder);
 
-  db.folders.add(folder).then((id) => {
+  if (id) {
     folderList.value.push(folder);
-
-    if (id) {
-      expandedItems.value![id] = true;
-    }
-  });
+    toggleFolderNode(id);
+  }
 };
 
-const createNote = (folder_id?: number) => {
+const createNote = async (folder_id?: number) => {
   const note: Note = {
-    notebook_id: currentNotebook.value || 1,
+    notebook_id: currentNotebook.value!,
     folder_id: folder_id,
     title: "新笔记",
     type: "note",
     content: "<p></p>",
     labels: [],
-    created_at: new Date(),
-    updated_at: new Date(),
+    ...rest(),
   };
 
-  db.notes.add(note).then((note_id) => {
+  const id = await db.notes.add(note);
+
+  if (id) {
     noteList.value.push(note);
 
     const newTab: PageTabsItem = {
-      id: note_id!,
+      id,
       label: note.title,
-      path: `/note/${note_id}`,
+      path: `/note/${id}`,
     };
 
     tabs.push(newTab);
@@ -216,7 +213,7 @@ const createNote = (folder_id?: number) => {
     if (folder_id) {
       expandedItems.value![folder_id] = true;
     }
-  });
+  }
 };
 
 const fileTreeNodes = computed(() => {
@@ -278,10 +275,9 @@ const fileTreeContextMenu = computed<MenuItem[]>(() => {
 });
 
 onMounted(() => {
-  const lastNotebook = Number(get("LP_LAST_NOTEBOOK"));
-  currentNotebook.value = Number.isInteger(lastNotebook) ? lastNotebook : 1;
+  currentNotebook.value = d.state.lastNotebook;
   loadNotebookList();
-  loadNotebook(currentNotebook.value);
+  loadNotebook(currentNotebook.value!);
 
   useElementResize(resizeHandleRef.value!, leftPanelRef.value!);
 });
