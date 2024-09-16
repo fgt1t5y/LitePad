@@ -1,16 +1,16 @@
 <template>
   <div id="Root">
-    <aside ref="leftPanelRef" id="LeftPanel">
+    <aside v-show="d.state.showAsidePanel" ref="leftPanelRef" id="LeftPanel">
       <div id="MainMenu">
-        <button @click="mainMenuRef!.show">
+        <button title="主菜单" @click="mainMenuRef!.show">
           <i class="i i-menu"></i>
         </button>
-        <button>
+        <button title="隐藏侧栏" @click="d.hiddenAsidePanel">
           <i class="i i-left-panel-close"></i>
         </button>
       </div>
       <Panel title="笔记本列表">
-        <ListSelect v-model:items="notebookList" :active="currentNotebook!" />
+        <ListSelect v-model:items="notebookList" :active="currentNotebook" />
         <template #extra>
           <button
             title="新建笔记本"
@@ -47,8 +47,18 @@
     </aside>
     <main id="RightPanel">
       <PageTabs v-model:tabs="tabs.tabs" ref="pageTabsRef">
+        <template #header>
+          <button
+            v-show="!d.state.showAsidePanel"
+            class="Tab AutoWidth"
+            title="显示侧栏"
+            @click="d.showAsidePanel"
+          >
+            <i class="i i-left-panel-open"></i>
+          </button>
+        </template>
         <template #footer>
-          <button id="AddTab" @click="createNote()">
+          <button class="Tab AutoWidth" title="新建笔记" @click="createNote()">
             <i class="i i-add"></i>
           </button>
         </template>
@@ -319,6 +329,11 @@ onMounted(() => {
   loadNotebookList();
   loadNotebook(currentNotebook.value!);
 
-  useElementResize(resizeHandleRef.value!, leftPanelRef.value!);
+  useElementResize(resizeHandleRef.value!, leftPanelRef.value!, {
+    min: 250,
+    max: 700,
+    onLessThanMin: d.hiddenAsidePanel,
+    onGreaterThanMin: d.showAsidePanel,
+  });
 });
 </script>

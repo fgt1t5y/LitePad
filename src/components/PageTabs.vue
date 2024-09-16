@@ -1,5 +1,8 @@
 <template>
   <draggable v-model="tabs" class="Tabs" item-key="id" ghost-class="Dragging">
+    <template #header>
+      <slot name="header" />
+    </template>
     <template #item="{ element }">
       <button
         :class="{ Tab: true, TabActive: element.id === pageTabs.current }"

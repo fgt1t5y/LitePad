@@ -169,8 +169,8 @@ button {
 
   .Tab {
     display: flex;
+    align-items: center;
     flex-shrink: 0;
-    gap: 8px;
     padding: 0px 0.75rem;
     line-height: 35px;
     border-right: 1px solid var(--p-content-border-color);
@@ -180,6 +180,10 @@ button {
     &:hover,
     &:focus {
       background-color: var(--p-content-hover-background);
+    }
+
+    &.AutoWidth {
+      width: auto;
     }
 
     &.TabActive::after {
@@ -192,10 +196,6 @@ button {
       background-color: var(--p-navigation-item-focus-background);
     }
 
-    .i {
-      font-size: 1rem;
-    }
-
     .TabLabel {
       flex-grow: 1;
       text-align: left;
@@ -205,14 +205,8 @@ button {
     }
 
     .TabButton {
-      display: inline-block;
+      display: inline-flex;
     }
-  }
-
-  #AddTab {
-    padding: 0px 8px;
-    display: flex;
-    align-items: center;
   }
 }
 

@@ -1,11 +1,15 @@
 interface UseElementResizeOptions {
   min: number;
   max: number;
+  onLessThanMin?: () => void;
+  onGreaterThanMin?: () => void;
 }
 
 const defaultOption: UseElementResizeOptions = {
   min: 250,
   max: 700,
+  onLessThanMin: undefined,
+  onGreaterThanMin: undefined,
 };
 
 export const useElementResize = (
@@ -15,9 +19,10 @@ export const useElementResize = (
 ) => {
   const realOption = option || defaultOption;
 
-  const { min, max } = realOption;
+  const { min, max, onLessThanMin, onGreaterThanMin } = realOption;
   let startX: number;
   let startWidth: number;
+  let isPassedMin: boolean = false;
 
   const mousedown = (event: MouseEvent) => {
     startX = event.clientX;
@@ -29,7 +34,16 @@ export const useElementResize = (
 
   const mousemove = (event: MouseEvent) => {
     const newWidth = startWidth + event.clientX - startX;
-    if (newWidth > max || newWidth < min) return;
+    if (newWidth > max || newWidth < min) {
+      if (min - newWidth > 30) {
+        !isPassedMin && onLessThanMin && onLessThanMin();
+        isPassedMin = true;
+      } else {
+        isPassedMin && onGreaterThanMin && onGreaterThanMin();
+        isPassedMin = false;
+      }
+      return;
+    }
     target.style.setProperty("width", `${newWidth}px`);
   };
 

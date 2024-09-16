@@ -156,7 +156,12 @@ const prepare = (activateCallback: Function) => {
     .then(() => {
       activateCallback("done");
       set("LP_OOBE_PASSED", "1");
-      d.state.lastNotebook = notebook;
+      d.$patch({
+        state: {
+          lastNotebook: notebook,
+          showAsidePanel: true,
+        },
+      });
       d.saveState();
     })
     .catch((error) => {
