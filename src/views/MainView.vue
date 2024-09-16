@@ -2,7 +2,7 @@
   <div id="Root">
     <aside ref="leftPanelRef" id="LeftPanel">
       <div id="MainMenu">
-        <button>
+        <button @click="mainMenuRef!.show">
           <i class="i i-menu"></i>
         </button>
         <button>
@@ -66,7 +66,8 @@
     v-model="d.modalVisible.createNotebook"
     @success="loadNotebookList"
   />
-  <ContextMenu ref="contextMenuRef" :model="fileTreeContextMenu" />
+  <ContextMenu ref="contextMenuRef" :model="fileTreeContextMenuItems" />
+  <Menu ref="mainMenuRef" :model="mainMenuItems" popup />
 </template>
 
 <script setup lang="ts">
@@ -82,6 +83,7 @@ import type {
   PatchedKeepAlive,
 } from "@/types";
 import type { ContextMenuMethods } from "primevue/contextmenu";
+import type { MenuMethods } from "primevue/menu";
 
 // Functions or methods
 import { computed, onMounted, ref } from "vue";
@@ -91,6 +93,7 @@ import { useElementResize } from "@/utils/useElementResize";
 import { arrayToTree } from "performant-array-to-tree";
 import { RouterView } from "vue-router";
 import { useShared } from "@/utils/useShared";
+import { useTheme } from "@/utils/useTheme";
 
 // Components
 import PageTabs from "@/components/PageTabs.vue";
@@ -103,6 +106,7 @@ const contextMenuRef = ref<ContextMenuMethods>();
 const leftPanelRef = ref<HTMLElement>();
 const resizeHandleRef = ref<HTMLDivElement>();
 const keepAliveRef = ref<PatchedKeepAlive>();
+const mainMenuRef = ref<MenuMethods>();
 
 const expandedItems = ref<IDs>({});
 const selectedItems = ref<IDs>({});
@@ -120,6 +124,8 @@ tabs.init();
 tabs.onTabClose((tab: PageTabsItem) => {
   keepAliveRef.value!.pruneCacheEntry(tab.path);
 });
+
+const { mode: themeMode, switchTo } = useTheme();
 
 const loadNotebookList = async () => {
   notebookList.value = await db.notebooks.orderBy("id").toArray();
@@ -233,7 +239,7 @@ const fileTreeNodes = computed(() => {
   }) as TreeItem[];
 });
 
-const fileTreeContextMenu = computed<MenuItem[]>(() => {
+const fileTreeContextMenuItems = computed<MenuItem[]>(() => {
   if (selectedTreeNode.value?.type === "note") {
     return [
       {
@@ -272,6 +278,40 @@ const fileTreeContextMenu = computed<MenuItem[]>(() => {
       },
     ];
   }
+});
+
+const mainMenuItems = computed<MenuItem[]>(() => {
+  return [
+    {
+      label: "设置",
+    },
+    {
+      label: "主题模式",
+      items: [
+        {
+          label: "跟随系统",
+          disabled: themeMode.value === "auto",
+          command() {
+            switchTo("auto");
+          },
+        },
+        {
+          label: "浅色模式",
+          disabled: themeMode.value === "light",
+          command() {
+            switchTo("light");
+          },
+        },
+        {
+          label: "深色模式",
+          disabled: themeMode.value === "dark",
+          command() {
+            switchTo("dark");
+          },
+        },
+      ],
+    },
+  ];
 });
 
 onMounted(() => {

@@ -15,7 +15,7 @@ export const useTheme = defineStore("theme", () => {
     getOrSet(KEY_THEME_MODE, "auto") as ThemeMode
   );
 
-  const theme = computed(() => {
+  const mode = computed(() => {
     return currentTheme;
   });
 
@@ -53,5 +53,5 @@ export const useTheme = defineStore("theme", () => {
     return applyAndSava();
   };
 
-  return { theme, init, switchTo };
+  return { mode, init, switchTo };
 });

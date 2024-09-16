@@ -56,7 +56,7 @@
               :options="themeModeList"
               option-label="name"
               option-value="value"
-              :model-value="theme"
+              :model-value="mode"
               @change="switchTo"
             />
             <div id="Buttons">
@@ -100,7 +100,7 @@ import { db, rest } from "@/db";
 import { useShared } from "@/utils/useShared";
 import { set } from "@/utils/helpers";
 
-const { theme, switchTo } = useTheme();
+const { mode, switchTo } = useTheme();
 const d = useShared();
 
 const isPreparing = ref<boolean>(false);
