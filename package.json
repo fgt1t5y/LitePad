@@ -13,7 +13,8 @@
     "width": 1060,
     "min_height": 600,
     "min_width": 800,
-    "icon": "public/appicon.png"
+    "icon": "public/appicon.png",
+    "show": false
   },
   "scripts": {
     "dev": "concurrently \"npm run dev:app\" \"npm run dev:nw\"",

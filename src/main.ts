@@ -33,6 +33,8 @@ if (window.nw) {
 
       win.resizeTo(Number(width), Number(height));
     }
+
+    win.show();
   });
 
   win.on("resize", () => {
