@@ -45,6 +45,7 @@ button {
 #LeftPanel {
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   width: 300px;
   border-right: 1px solid var(--p-content-border-color);
   position: relative;
@@ -78,6 +79,7 @@ button {
 
 #RightPanel {
   flex-grow: 1;
+  overflow: hidden;
 }
 
 #PageWrapper {
@@ -166,6 +168,7 @@ button {
   background-color: var(--p-content-background);
   border-bottom: 1px solid var(--p-content-border-color);
   user-select: none;
+  overflow: hidden;
 
   .Tab {
     display: flex;

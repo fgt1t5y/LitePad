@@ -46,7 +46,7 @@
       ></div>
     </aside>
     <main id="RightPanel">
-      <PageTabs v-model:tabs="tabs.tabs" ref="pageTabsRef">
+      <PageTabs id="PageTab" v-model:tabs="tabs.tabs" ref="pageTabsRef">
         <template #header>
           <button
             v-show="!d.state.showAsidePanel"
@@ -111,6 +111,7 @@ import Tree from "@/components/Tree.vue";
 import Panel from "@/components/Panel.vue";
 import ListSelect from "@/components/ListSelect.vue";
 import CreateNotebookModal from "@/components/modal/CreateNoteModal.vue";
+import { useXScroll } from "@/utils/useXScroll";
 
 const contextMenuRef = ref<ContextMenuMethods>();
 const leftPanelRef = ref<HTMLElement>();
@@ -335,5 +336,8 @@ onMounted(() => {
     onLessThanMin: d.hiddenAsidePanel,
     onGreaterThanMin: d.showAsidePanel,
   });
+
+  // 标签页多到溢出时可用鼠标滚轮滚动X轴
+  useXScroll(document.getElementById("PageTab")!);
 });
 </script>
