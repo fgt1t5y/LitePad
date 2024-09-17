@@ -5,7 +5,7 @@
         <button title="主菜单" @click="mainMenuRef!.show">
           <i class="i i-menu"></i>
         </button>
-        <button title="隐藏侧栏" @click="d.hiddenAsidePanel">
+        <button title="隐藏侧栏" @click="d.hideAsidePanel">
           <i class="i i-left-panel-close"></i>
         </button>
       </div>
@@ -333,7 +333,7 @@ onMounted(() => {
   useElementResize(resizeHandleRef.value!, leftPanelRef.value!, {
     min: 250,
     max: 700,
-    onLessThanMin: d.hiddenAsidePanel,
+    onLessThanMin: d.hideAsidePanel,
     onGreaterThanMin: d.showAsidePanel,
   });
 

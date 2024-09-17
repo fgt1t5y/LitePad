@@ -22,7 +22,7 @@ export const useShared = defineStore("shared", () => {
     saveState();
   };
 
-  const hiddenAsidePanel = () => {
+  const hideAsidePanel = () => {
     state.value.showAsidePanel = false;
     saveState();
   };
@@ -35,7 +35,7 @@ export const useShared = defineStore("shared", () => {
     modalVisible,
     state,
     showAsidePanel,
-    hiddenAsidePanel,
+    hideAsidePanel,
     saveState,
     init,
   };
