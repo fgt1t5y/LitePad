@@ -42,7 +42,7 @@
       <div
         class="ResizeHandle"
         ref="resizeHandleRef"
-        title="按住左键以调整边栏宽度"
+        title="按住左键以调整侧栏宽度"
       ></div>
     </aside>
     <main id="RightPanel">
