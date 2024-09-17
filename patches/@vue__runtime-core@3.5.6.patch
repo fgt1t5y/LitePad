@@ -1,0 +1,39 @@
+diff --git a/dist/runtime-core.esm-bundler.js b/dist/runtime-core.esm-bundler.js
+index ef945f3ae990784f7edb6cefc44f1681e1f90bb6..594a2e81d2cf3acdb3dbd8d29865e8346448fdb6 100644
+--- a/dist/runtime-core.esm-bundler.js
++++ b/dist/runtime-core.esm-bundler.js
+@@ -2461,7 +2461,7 @@ const KeepAliveImpl = {
+     exclude: [String, RegExp, Array],
+     max: [String, Number]
+   },
+-  setup(props, { slots }) {
++  setup(props, { slots, expose }) {
+     const instance = getCurrentInstance();
+     const sharedContext = instance.ctx;
+     if (!sharedContext.renderer) {
+@@ -2537,11 +2537,15 @@ const KeepAliveImpl = {
+       resetShapeFlag(vnode);
+       _unmount(vnode, instance, parentSuspense, true);
+     }
++    console.log('Patched - vue 3.5.6')
+     function pruneCache(filter) {
+       cache.forEach((vnode, key) => {
+         const name = getComponentName(vnode.type);
+-        if (name && !filter(name)) {
+-          pruneCacheEntry(key);
++        // if (name && !filter(name)) {
++        //   pruneCacheEntry(key);
++        // }
++        if (!filter || (name && !filter(name)) || !filter(key.toString())) {
++          pruneCacheEntry(key)
+         }
+       });
+     }
+@@ -2591,6 +2595,7 @@ const KeepAliveImpl = {
+         unmount(cached);
+       });
+     });
++    expose({ pruneCacheEntry })
+     return () => {
+       pendingCacheKey = null;
+       if (!slots.default) {
