@@ -1,14 +1,9 @@
-import type { Command } from "prosemirror-state";
 import type { EditorTool } from "@/types";
+import type { Command } from "prosemirror-state";
 
-import { EditorView } from "prosemirror-view";
-import { EditorState } from "prosemirror-state";
-import { keymap } from "prosemirror-keymap";
-import { baseKeymap, setBlockType, toggleMark } from "prosemirror-commands";
-import { history, undo, redo } from "prosemirror-history";
-import { schema } from "@/lib/schema";
-import { toolbar } from "@/lib/toolbar";
-import { placeholder } from "@/lib/placeholder";
+import { setBlockType, toggleMark } from "prosemirror-commands";
+import { undo, redo } from "prosemirror-history";
+import { schema } from "@/components/editor/schema";
 
 const insertImage = (): Command => {
   return (state, dispatch) => {
@@ -104,41 +99,3 @@ export const tools = [
     icon: "i-paragraph",
   },
 ] as EditorTool[];
-
-interface Keymap {
-  [key: string]: Command;
-}
-
-const buildKeymap = () => {
-  const keymap = {} as Keymap;
-
-  tools.forEach((tool) => {
-    if (tool.key) {
-      keymap[tool.key] = tool.command;
-    }
-  });
-
-  return keymap;
-};
-
-export const useEditor = (
-  toolbarEl: HTMLElement,
-  body: HTMLElement
-): EditorView | null => {
-  if (!toolbarEl || !body) return null;
-
-  const state = EditorState.create({
-    schema,
-    plugins: [
-      keymap(baseKeymap),
-      history(),
-      keymap(buildKeymap()),
-      toolbar(toolbarEl, tools),
-      placeholder(),
-    ],
-  });
-
-  const view = new EditorView(body, { state });
-
-  return view;
-};

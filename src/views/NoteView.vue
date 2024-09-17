@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import Editor from "@/components/Editor.vue";
+import Editor from "@/components/editor/Editor.vue";
 import { ref, onBeforeUnmount } from "vue";
 
 const editorRef = ref<InstanceType<typeof Editor>>();

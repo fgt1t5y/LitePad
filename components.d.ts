@@ -11,7 +11,7 @@ declare module 'vue' {
     ContextMenu: typeof import('primevue/contextmenu')['default']
     CreateNoteModal: typeof import('./src/components/modal/CreateNoteModal.vue')['default']
     Dialog: typeof import('primevue/dialog')['default']
-    Editor: typeof import('./src/components/Editor.vue')['default']
+    Editor: typeof import('./src/components/editor/Editor.vue')['default']
     InputText: typeof import('primevue/inputtext')['default']
     ListSelect: typeof import('./src/components/ListSelect.vue')['default']
     Menu: typeof import('primevue/menu')['default']
