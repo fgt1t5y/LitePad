@@ -1,6 +1,9 @@
 <template>
   <div class="Toolbar" ref="toolbarRef"></div>
-  <div class="EditorBody" ref="editorBodyRef"></div>
+  <div class="EditArea">
+    <input class="TitleInput" type="text" placeholder="无标题笔记" />
+    <div class="EditorBody" ref="editorBodyRef"></div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -19,6 +22,7 @@ import { onMounted, ref } from "vue";
 
 const toolbarRef = ref<HTMLElement>();
 const editorBodyRef = ref<HTMLElement>();
+
 let view: EditorView | null = null;
 
 interface Keymap {

@@ -35,6 +35,10 @@ button {
   color: inherit;
 }
 
+input {
+  font-family: inherit;
+}
+
 /* Layout */
 #Root {
   display: flex;
@@ -288,9 +292,25 @@ button {
   position: sticky;
   top: 0px;
   z-index: 2;
+  overflow: hidden;
 
   .ToolActive {
     color: var(--p-primary-color);
+  }
+}
+
+.EditArea {
+  max-width: 800px;
+  margin: 0px auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+
+  .TitleInput {
+    font-size: 2rem;
+    background-color: transparent;
+    outline: none;
+    border: none;
   }
 }
 
@@ -302,8 +322,6 @@ button {
   -webkit-font-variant-ligatures: none;
   font-variant-ligatures: no-common-ligatures;
   font-feature-settings: "liga" 0; /* the above doesn't seem to work in Edge */
-  max-width: 800px;
-  margin: 0px auto;
   outline: none;
   font-size: 1rem;
 }
