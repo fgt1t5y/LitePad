@@ -1,8 +1,17 @@
 {
   "name": "litepad",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
+  "license": "MIT",
+  "author": {
+    "name": "fgt1t5y <https://github.com/fgt1t5y>"
+  },
+  "description": "A simple, local-save and rich-text notes app.",
+  "homepage": "https://github.com/fgt1t5y/LitePad",
+  "bugs": {
+    "url": "https://github.com/fgt1t5y/LitePad/issues"
+  },
   "main": "http://localhost:5173",
   "node-remote": "http://localhost:5173",
   "window": {
@@ -71,8 +80,7 @@
     "unplugin-vue-components": "^0.27.4",
     "vite": "^5.4.6",
     "vitest": "^1.6.0",
-    "vue-tsc": "^2.1.6",
-    "wait-on": "^7.2.0"
+    "vue-tsc": "^2.1.6"
   },
   "pnpm": {
     "patchedDependencies": {
