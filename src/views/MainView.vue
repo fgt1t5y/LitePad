@@ -104,6 +104,7 @@ import { arrayToTree } from "performant-array-to-tree";
 import { RouterView } from "vue-router";
 import { useShared } from "@/utils/useShared";
 import { useTheme } from "@/utils/useTheme";
+import { useXScroll } from "@/utils/useXScroll";
 
 // Components
 import PageTabs from "@/components/PageTabs.vue";
@@ -111,7 +112,6 @@ import Tree from "@/components/Tree.vue";
 import Panel from "@/components/Panel.vue";
 import ListSelect from "@/components/ListSelect.vue";
 import CreateNotebookModal from "@/components/modal/CreateNoteModal.vue";
-import { useXScroll } from "@/utils/useXScroll";
 
 const contextMenuRef = ref<ContextMenuMethods>();
 const leftPanelRef = ref<HTMLElement>();

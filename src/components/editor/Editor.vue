@@ -19,6 +19,7 @@ import { toolbar } from "@/components/editor/toolbar";
 import { placeholder } from "@/components/editor/placeholder";
 import { tools } from "@/components/editor/tools";
 import { onMounted, ref } from "vue";
+import { useXScroll } from "@/utils/useXScroll";
 
 const toolbarRef = ref<HTMLElement>();
 const editorBodyRef = ref<HTMLElement>();
@@ -58,6 +59,8 @@ onMounted(() => {
   });
 
   view = new EditorView(editorBodyRef.value!, { state });
+
+  useXScroll(toolbarRef.value!)
 });
 
 defineExpose({ destroy });
