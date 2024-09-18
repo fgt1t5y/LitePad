@@ -51,6 +51,14 @@
           <button
             v-show="!d.state.showAsidePanel"
             class="Tab AutoWidth"
+            title="主菜单"
+            @click="mainMenuRef!.show"
+          >
+            <i class="i i-menu"></i>
+          </button>
+          <button
+            v-show="!d.state.showAsidePanel"
+            class="Tab AutoWidth"
             title="显示侧栏"
             @click="d.showAsidePanel"
           >
@@ -77,7 +85,7 @@
     @success="loadNotebookList"
   />
   <ContextMenu ref="contextMenuRef" :model="fileTreeContextMenuItems" />
-  <Menu ref="mainMenuRef" :model="mainMenuItems" popup />
+  <ContextMenu ref="mainMenuRef" :model="mainMenuItems" popup />
 </template>
 
 <script setup lang="ts">
@@ -93,7 +101,6 @@ import type {
   PatchedKeepAlive,
 } from "@/types";
 import type { ContextMenuMethods } from "primevue/contextmenu";
-import type { MenuMethods } from "primevue/menu";
 
 // Functions or methods
 import { computed, onMounted, ref } from "vue";
@@ -112,12 +119,13 @@ import Tree from "@/components/Tree.vue";
 import Panel from "@/components/Panel.vue";
 import ListSelect from "@/components/ListSelect.vue";
 import CreateNotebookModal from "@/components/modal/CreateNoteModal.vue";
+import ContextMenu from "primevue/contextmenu";
 
 const contextMenuRef = ref<ContextMenuMethods>();
 const leftPanelRef = ref<HTMLElement>();
 const resizeHandleRef = ref<HTMLDivElement>();
 const keepAliveRef = ref<PatchedKeepAlive>();
-const mainMenuRef = ref<MenuMethods>();
+const mainMenuRef = ref<ContextMenuMethods>();
 
 const expandedItems = ref<IDs>({});
 const selectedItems = ref<IDs>({});
@@ -128,7 +136,6 @@ const noteList = ref<Note[]>([]);
 const currentNotebook = ref<number>();
 
 const d = useShared();
-d.init();
 
 const tabs = usePageTabs();
 tabs.init();
