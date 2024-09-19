@@ -17,6 +17,7 @@ declare module 'vue' {
     Menu: typeof import('primevue/menu')['default']
     PageTabs: typeof import('./src/components/PageTabs.vue')['default']
     Panel: typeof import('./src/components/Panel.vue')['default']
+    Popover: typeof import('primevue/popover')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SelectButton: typeof import('primevue/selectbutton')['default']

@@ -10,10 +10,11 @@
   font-weight: normal;
   font-style: normal;
   font-size: 20px;
-  line-height: 1;
+  line-height: 1.5;
   word-wrap: normal;
   white-space: nowrap;
   direction: ltr;
+  user-select: none;
 }
 
 .i-undo::before {

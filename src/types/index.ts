@@ -70,3 +70,7 @@ export interface EditorTool {
   key?: string;
   icon: string;
 }
+
+export interface Keymap {
+  [key: string]: Command;
+}
