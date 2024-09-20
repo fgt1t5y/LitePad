@@ -120,7 +120,7 @@ export const toolsRaw = [
     name: "link",
     key: "Mod-k",
     icon: "i-link",
-    type: "node",
+    type: "mark",
   },
   {
     command: insertHorizontalRule(),
