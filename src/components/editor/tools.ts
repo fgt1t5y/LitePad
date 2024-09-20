@@ -37,7 +37,6 @@ const insertHorizontalRule = (): Command => {
 const insertLink = (): Command => {
   return (state, dispatch) => {
     if (state.selection.empty) {
-      console.log(state.selection);
       return false;
     }
 
