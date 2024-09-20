@@ -284,18 +284,31 @@ input {
 
 /* Editor style */
 .Toolbar {
-  padding: 0.5rem 0.75rem;
   background-color: var(--p-content-background);
   border-bottom: 1px solid var(--p-content-border-color);
   display: flex;
-  gap: 1rem;
   position: sticky;
   top: 0px;
   z-index: 2;
   overflow: hidden;
 
+  .i {
+    font-size: 24px;
+  }
+
+  .ToolGroup {
+    display: flex;
+    gap: 1rem;
+    padding: 0px 0.75rem;
+    border-right: 1px solid var(--p-content-border-color);
+  }
+
   .ToolActive {
     color: var(--p-primary-color);
+  }
+
+  button:disabled {
+    color: var(--p-text-muted-color);
   }
 }
 
@@ -317,11 +330,8 @@ input {
 .ProseMirror {
   position: relative;
   word-wrap: break-word;
-  white-space: pre-wrap;
   white-space: break-spaces;
-  -webkit-font-variant-ligatures: none;
   font-variant-ligatures: no-common-ligatures;
-  font-feature-settings: "liga" 0; /* the above doesn't seem to work in Edge */
   outline: none;
   font-size: 1rem;
 }
@@ -329,7 +339,7 @@ input {
 .isEmpty::after {
   content: "点击此处输入正文...";
   position: absolute;
-  top: 0px;
+  top: 1rem;
   color: var(--p-text-muted-color);
   cursor: text;
 }
@@ -370,17 +380,6 @@ li.ProseMirror-selectednode {
   outline: none;
 }
 
-li.ProseMirror-selectednode:after {
-  content: "";
-  position: absolute;
-  left: -32px;
-  right: -2px;
-  top: -2px;
-  bottom: -2px;
-  border: 2px solid var(--p-primary-color);
-  pointer-events: none;
-}
-
 /* Protect against generic img rules */
 
 img.ProseMirror-separator {
@@ -398,10 +397,4 @@ code {
   font-size: 0.85rem;
   font-family: var(--FontMonospace);
   background-color: var(--p-content-hover-background);
-}
-
-svg {
-  height: 100%;
-  width: 18px;
-  fill: var(--p-text-color);
 }

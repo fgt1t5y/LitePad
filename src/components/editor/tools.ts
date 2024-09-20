@@ -1,5 +1,6 @@
-import type { EditorTool } from "@/types";
+import type { EditorTool, EditorTools } from "@/types";
 import type { Command } from "prosemirror-state";
+import type { Keymap } from "@/types";
 
 import { setBlockType, toggleMark } from "prosemirror-commands";
 import { undo, redo } from "prosemirror-history";
@@ -54,38 +55,53 @@ const heading = (level: number): EditorTool => {
     name: `h${level}`,
     key: `Mod-${level}`,
     icon: `i-h${level}`,
+    type: "node",
   };
 };
 
-export const tools = [
-  { command: undo, name: "undo", key: "Mod-z", icon: "i-undo" },
-  { command: redo, name: "redo", key: "Mod-y", icon: "i-redo" },
+export const toolsRaw = [
+  {
+    command: undo,
+    name: "undo",
+    key: "Mod-z",
+    icon: "i-undo",
+    type: "history",
+    enable: (view) => undo(view.state),
+  },
+  {
+    command: redo,
+    name: "redo",
+    key: "Mod-y",
+    icon: "i-redo",
+    type: "history",
+  },
   {
     command: toggleMark(schema.marks.bold),
     name: "bold",
     key: "Mod-b",
     icon: "i-bold",
+    type: "mark",
   },
   {
     command: toggleMark(schema.marks.italic),
     name: "italic",
     key: "Mod-i",
     icon: "i-italic",
+    type: "mark",
   },
   {
     command: toggleMark(schema.marks.del),
     name: "del",
     icon: "i-strikethrough",
+    type: "mark",
   },
   {
     command: toggleMark(schema.marks.code),
     name: "code",
     key: "Mod-`",
     icon: "i-code",
+    type: "mark",
   },
-  { command: insertImage(), name: "image", icon: "i-image" },
-  { command: insertLink(), name: "link", key: "Mod-k", icon: "i-link" },
-  { command: insertHorizontalRule(), name: "hr", icon: "i-horizontal-rule" },
   heading(1),
   heading(2),
   heading(3),
@@ -94,8 +110,42 @@ export const tools = [
   heading(6),
   {
     command: setBlockType(schema.nodes.paragraph),
-    name: "正文",
+    name: "paragraph",
     key: "Mod-0",
     icon: "i-paragraph",
+    type: "node",
+  },
+  { command: insertImage(), name: "image", icon: "i-image", type: "node" },
+  {
+    command: insertLink(),
+    name: "link",
+    key: "Mod-k",
+    icon: "i-link",
+    type: "node",
+  },
+  {
+    command: insertHorizontalRule(),
+    name: "hr",
+    icon: "i-horizontal-rule",
+    type: "node",
   },
 ] as EditorTool[];
+
+export const tools = Object.groupBy(
+  toolsRaw,
+  ({ type }) => type
+) as EditorTools;
+
+const buildKeymap = () => {
+  const keymap = {} as Keymap;
+
+  toolsRaw.forEach((tool) => {
+    if (tool.key) {
+      keymap[tool.key] = tool.command;
+    }
+  });
+
+  return keymap;
+};
+
+export const extraKeymap = buildKeymap();

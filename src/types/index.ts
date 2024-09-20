@@ -1,4 +1,5 @@
 import type { Command } from "prosemirror-state";
+import type { EditorView } from "prosemirror-view";
 
 interface Model {
   id?: number;
@@ -56,21 +57,37 @@ export interface IDs {
   [id: number]: any;
 }
 
-export interface AppStat {
-  last_notebook: number;
-}
-
 export interface PatchedKeepAlive {
   pruneCacheEntry: (key: any) => void;
 }
 
+export type EditorToolType = "node" | "mark" | "history";
+
 export interface EditorTool {
   command: Command;
+  enable?: (view: EditorView) => boolean;
+  type: EditorToolType;
   name: string;
   key?: string;
   icon: string;
 }
 
+export interface EditorTools {
+  history: EditorTool[];
+  node: EditorTool[];
+  mark: EditorTool[];
+}
+
 export interface Keymap {
   [key: string]: Command;
+}
+
+interface ToolBarButton {
+  [name: string]: HTMLElement;
+}
+
+export interface ToolbarButtons {
+  history: ToolBarButton;
+  node: ToolBarButton;
+  mark: ToolBarButton;
 }
