@@ -81,7 +81,7 @@
     v-model="s.modal.createNotebook"
     @submit="onCreateNotebookSubmit"
   />
-  <ContextMenu ref="contextMenuRef" :model="fileTreeContextMenuItems" />
+  <ContextMenu ref="fileTreeMenuRef" :model="fileTreeContextMenuItems" />
   <ContextMenu ref="mainMenuRef" :model="mainMenuItems" popup />
 </template>
 
@@ -111,9 +111,8 @@ import Tree from "@/components/Tree.vue";
 import Panel from "@/components/Panel.vue";
 import ListSelect from "@/components/ListSelect.vue";
 import CreateNotebookModal from "@/components/modal/CreateNotebook.vue";
-import ContextMenu from "primevue/contextmenu";
 
-const contextMenuRef = ref<ContextMenuMethods>();
+const fileTreeMenuRef = ref<ContextMenuMethods>();
 const leftPanelRef = ref<HTMLElement>();
 const resizeHandleRef = ref<HTMLDivElement>();
 const keepAliveRef = ref<PatchedKeepAlive>();
@@ -178,7 +177,7 @@ const treeNodeClick = (node: TreeItem, event: MouseEvent) => {
   selectedTreeNode.value = node;
 
   if (event.button === 2) {
-    contextMenuRef.value!.show(event);
+    fileTreeMenuRef.value!.show(event);
     return;
   }
 
@@ -333,6 +332,7 @@ onMounted(() => {
     onGreaterThanMin: () => (c.showAsidePanel = true),
   });
 
+  console.log(1)
   // 标签页多到溢出时可用鼠标滚轮滚动X轴
   useXScroll(document.getElementById("PageTab")!);
 });

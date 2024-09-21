@@ -15,8 +15,13 @@ export const usePageTabs = defineStore("pageTabs", () => {
   const tabs = ref<PageTabsItem[]>([]);
   const current = ref<number>();
 
+  const _getIndex = (tab: PageTabsItem) => {
+    console.log(1);
+    return tabs.value.findIndex((item) => item.id === tab.id);
+  };
+
   const _close = (tab: PageTabsItem) => {
-    const tabIndex = tabs.value.findIndex((item) => item.id === tab.id);
+    const tabIndex = _getIndex(tab);
     _tabsID.delete(tab.id);
     tabs.value.splice(tabIndex, 1);
   };
@@ -50,9 +55,36 @@ export const usePageTabs = defineStore("pageTabs", () => {
     router.replace(tab.path);
   };
 
+  const closeBefore = (tab: PageTabsItem) => {
+    const tabIndex = _getIndex(tab);
+    const before = tabs.value.slice(0, tabIndex);
+
+    before.forEach((tab) => {
+      _close(tab);
+    });
+
+    to(tab);
+  };
+
+  const closeAfter = (tab: PageTabsItem) => {
+    const tabIndex = _getIndex(tab);
+    const before = tabs.value.slice(tabIndex + 1);
+
+    before.forEach((tab) => {
+      _close(tab);
+    });
+
+    to(tab);
+  };
+
+  const closeOther = (tab: PageTabsItem) => {
+    closeBefore(tab);
+    closeAfter(tab);
+  };
+
   // 删除标签页
   const close = (tab: PageTabsItem) => {
-    if (!has(tab.id)) return;
+    if (!has(tab.id) || !_tabsID.size) return;
 
     // 若关闭的标签页不是当前标签页，直接关闭即可
     if (tab.id !== current.value) {
@@ -68,7 +100,9 @@ export const usePageTabs = defineStore("pageTabs", () => {
      * 就跳到前一个标签页并删除当前标签页。
      */
 
-    const closeTabIndex = tabs.value.findIndex((item) => item.id === tab.id);
+    const closeTabIndex = _getIndex(tab);
+
+    if (closeTabIndex < 0) return;
 
     const before = tabs.value[closeTabIndex - 1];
     const after = tabs.value[closeTabIndex + 1];
@@ -102,7 +136,18 @@ export const usePageTabs = defineStore("pageTabs", () => {
     _tabCloseCallbacks.value.push(calback);
   };
 
-  return { tabs, current, push, to, close, init, onTabClose };
+  return {
+    tabs,
+    current,
+    push,
+    to,
+    close,
+    closeBefore,
+    closeAfter,
+    closeOther,
+    init,
+    onTabClose,
+  };
 });
 
 if (import.meta.hot) {
