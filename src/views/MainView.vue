@@ -1,21 +1,18 @@
 <template>
   <div id="Root">
-    <aside v-show="d.state.showAsidePanel" ref="leftPanelRef" id="LeftPanel">
+    <aside v-show="c.showAsidePanel" ref="leftPanelRef" id="LeftPanel">
       <div id="MainMenu">
         <button title="主菜单" @click="mainMenuRef!.show">
           <i class="i i-menu"></i>
         </button>
-        <button title="隐藏侧栏" @click="d.hideAsidePanel">
+        <button title="隐藏侧栏" @click="c.showAsidePanel = false">
           <i class="i i-left-panel-close"></i>
         </button>
       </div>
       <Panel title="笔记本列表">
         <ListSelect v-model:items="notebookList" :active="currentNotebook" />
         <template #extra>
-          <button
-            title="新建笔记本"
-            @click="d.modalVisible.createNotebook = true"
-          >
+          <button title="新建笔记本" @click="s.modal.createNotebook = true">
             <i class="i i-add"></i>
           </button>
         </template>
@@ -49,7 +46,7 @@
       <PageTabs id="PageTab" v-model:tabs="tabs.tabs" ref="pageTabsRef">
         <template #header>
           <button
-            v-show="!d.state.showAsidePanel"
+            v-show="!c.showAsidePanel"
             class="Tab AutoWidth"
             title="主菜单"
             @click="mainMenuRef!.show"
@@ -57,10 +54,10 @@
             <i class="i i-menu"></i>
           </button>
           <button
-            v-show="!d.state.showAsidePanel"
+            v-show="!c.showAsidePanel"
             class="Tab AutoWidth"
             title="显示侧栏"
-            @click="d.showAsidePanel"
+            @click="c.showAsidePanel = true"
           >
             <i class="i i-left-panel-open"></i>
           </button>
@@ -81,7 +78,7 @@
     </main>
   </div>
   <CreateNotebookModal
-    v-model="d.modalVisible.createNotebook"
+    v-model="s.modal.createNotebook"
     @success="loadNotebookList"
   />
   <ContextMenu ref="contextMenuRef" :model="fileTreeContextMenuItems" />
@@ -103,7 +100,7 @@ import type {
 import type { ContextMenuMethods } from "primevue/contextmenu";
 
 // Functions or methods
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, provide, ref } from "vue";
 import { db, rest } from "@/db";
 import { usePageTabs } from "@/utils/usePageTabs";
 import { useElementResize } from "@/utils/useElementResize";
@@ -112,6 +109,7 @@ import { RouterView } from "vue-router";
 import { useShared } from "@/utils/useShared";
 import { useTheme } from "@/utils/useTheme";
 import { useXScroll } from "@/utils/useXScroll";
+import { useConfig } from "@/utils/useConfig";
 
 // Components
 import PageTabs from "@/components/PageTabs.vue";
@@ -135,7 +133,13 @@ const folderList = ref<Folder[]>([]);
 const noteList = ref<Note[]>([]);
 const currentNotebook = ref<number>();
 
-const d = useShared();
+const s = useShared();
+
+const c = useConfig();
+c.load();
+c.$subscribe(() => {
+  c.save();
+});
 
 const tabs = usePageTabs();
 tabs.init();
@@ -149,8 +153,9 @@ const loadNotebookList = async () => {
   notebookList.value = await db.notebooks.orderBy("id").toArray();
 };
 
-const loadNotebook = async (notebook_id: number | null) => {
-  if (!notebook_id || !Number.isInteger(notebook_id)) return;
+const loadNotebook = async (notebook_id?: number) => {
+  if (!notebook_id || !Number.isInteger(notebook_id))
+    throw new Error("Can't load notebook");
 
   folderList.value = await db.folders
     .where("notebook_id")
@@ -163,8 +168,8 @@ const loadNotebook = async (notebook_id: number | null) => {
 };
 
 const toggleFolderNode = (folder_id: number) => {
-  if (expandedItems.value[folder_id]) expandedItems.value![folder_id] = false;
-  else expandedItems.value![folder_id] = true;
+  if (expandedItems.value[folder_id]) expandedItems.value[folder_id] = false;
+  else expandedItems.value[folder_id] = true;
 };
 
 const openNotePage = (id: number, label: string) => {
@@ -235,7 +240,7 @@ const createNote = async (folder_id?: number) => {
     tabs.push(newTab);
     tabs.to(newTab);
     if (folder_id) {
-      expandedItems.value![folder_id] = true;
+      expandedItems.value[folder_id] = true;
     }
   }
 };
@@ -333,15 +338,15 @@ const mainMenuItems = computed<MenuItem[]>(() => {
 });
 
 onMounted(() => {
-  currentNotebook.value = d.state.lastNotebook;
+  currentNotebook.value = c.lastNotebook;
   loadNotebookList();
-  loadNotebook(currentNotebook.value!);
+  loadNotebook(currentNotebook.value);
 
   useElementResize(resizeHandleRef.value!, leftPanelRef.value!, {
     min: 250,
     max: 700,
-    onLessThanMin: d.hideAsidePanel,
-    onGreaterThanMin: d.showAsidePanel,
+    onLessThanMin: () => (c.showAsidePanel = false),
+    onGreaterThanMin: () => (c.showAsidePanel = true),
   });
 
   // 标签页多到溢出时可用鼠标滚轮滚动X轴

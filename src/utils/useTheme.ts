@@ -1,4 +1,4 @@
-import { defineStore } from "pinia";
+import { defineStore, acceptHMRUpdate } from "pinia";
 import { getOrSet, set } from "@/utils/helpers";
 import { computed, ref } from "vue";
 
@@ -55,3 +55,7 @@ export const useTheme = defineStore("theme", () => {
 
   return { mode, init, switchTo };
 });
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useTheme, import.meta.hot));
+}

@@ -97,11 +97,11 @@
 import { ref } from "vue";
 import { useTheme } from "@/utils/useTheme";
 import { db, rest } from "@/db";
-import { useShared } from "@/utils/useShared";
 import { set } from "@/utils/helpers";
+import { useConfig } from "@/utils/useConfig";
 
 const { mode, switchTo } = useTheme();
-const d = useShared();
+const c = useConfig();
 
 const isPreparing = ref<boolean>(false);
 const notebookName = ref<string>("");
@@ -156,13 +156,11 @@ const prepare = (activateCallback: Function) => {
     .then(() => {
       activateCallback("done");
       set("LP_OOBE_PASSED", "1");
-      d.$patch({
-        state: {
-          lastNotebook: notebook,
-          showAsidePanel: true,
-        },
+      c.$patch({
+        lastNotebook: notebook,
+        showAsidePanel: true,
       });
-      d.saveState();
+      c.save();
     })
     .catch((error) => {
       console.log(error);
