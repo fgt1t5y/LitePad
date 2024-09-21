@@ -303,12 +303,32 @@ input {
     border-right: 1px solid var(--p-content-border-color);
   }
 
-  .ToolActive {
-    color: var(--p-primary-color);
-  }
 
   button:disabled {
     color: var(--p-text-muted-color);
+  }
+}
+
+.ToolActive {
+  color: var(--p-primary-color);
+}
+
+.BubbleMenu {
+  background-color: var(--p-content-background);
+  position: absolute;
+  padding: 0px 0.75rem;
+  border: 1px solid var(--p-content-border-color);
+  gap: 1rem;
+  border-radius: var(--p-border-radius-xs);
+  display: none;
+  z-index: 3;
+
+  .i {
+    font-size: 24px;
+  }
+
+  &.Visible {
+    display: flex;
   }
 }
 

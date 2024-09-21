@@ -82,7 +82,7 @@ export interface Keymap {
   [key: string]: Command;
 }
 
-interface ToolBarButton {
+export interface ToolBarButton {
   [name: string]: HTMLElement;
 }
 

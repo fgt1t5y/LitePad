@@ -1,5 +1,6 @@
 <template>
   <div class="Toolbar" ref="toolbarRef"></div>
+  <div class="BubbleMenu" ref="bubbleMenuRef"></div>
   <div class="EditArea">
     <input class="TitleInput" type="text" placeholder="无标题笔记" />
     <div class="ContentInput" ref="editorBodyRef"></div>
@@ -18,8 +19,10 @@ import { placeholder } from "./placeholder";
 import { tools, extraKeymap } from "@/components/editor/tools";
 import { onMounted, ref } from "vue";
 import { useXScroll } from "@/utils/useXScroll";
+import { bubbleMenu } from "./bubblemenu";
 
 const toolbarRef = ref<HTMLElement>();
+const bubbleMenuRef = ref<HTMLElement>();
 const editorBodyRef = ref<HTMLElement>();
 
 let view: EditorView | null = null;
@@ -38,6 +41,10 @@ onMounted(() => {
       toolbar({
         target: toolbarRef.value!,
         tools,
+      }),
+      bubbleMenu({
+        target: bubbleMenuRef.value!,
+        tools: tools.mark,
       }),
       placeholder(),
     ],
