@@ -79,7 +79,7 @@
   </div>
   <CreateNotebookModal
     v-model="s.modal.createNotebook"
-    @submit="createNotebook"
+    @submit="onCreateNotebookSubmit"
   />
   <ContextMenu ref="contextMenuRef" :model="fileTreeContextMenuItems" />
   <ContextMenu ref="mainMenuRef" :model="mainMenuItems" popup />
@@ -103,6 +103,7 @@ import { useTheme } from "@/utils/useTheme";
 import { useXScroll } from "@/utils/useXScroll";
 import { useConfig } from "@/utils/useConfig";
 import { emptyNotebook, emptyFolder, emptyNote } from "@/constant";
+import { useToast } from "primevue/usetoast";
 
 // Components
 import PageTabs from "@/components/PageTabs.vue";
@@ -120,6 +121,8 @@ const mainMenuRef = ref<ContextMenuMethods>();
 
 const selectedTreeNode = ref<TreeItem>();
 
+const toast = useToast();
+
 const s = useShared();
 
 const c = useConfig();
@@ -135,6 +138,13 @@ tabs.onTabClose((tab: PageTabsItem) => {
 });
 
 const { mode: themeMode, switchTo } = useTheme();
+
+const onCreateNotebookSubmit = async (name: string, description: string) => {
+  if (await createNotebook(name, description)) {
+    toast.add({ severity: "success", summary: "创建成功" });
+    s.modal.createNotebook = false;
+  }
+};
 
 const loadNotebookList = async () => {
   s.notebooks = await db.notebooks.orderBy("id").toArray();
@@ -185,9 +195,10 @@ const treeNodeClick = (node: TreeItem, event: MouseEvent) => {
 const createNotebook = async (name: string, description: string) => {
   const notebook = emptyNotebook(name, description);
   const id = await db.notebooks.add(notebook);
-  if (!id) return;
+  if (!id) return false;
 
   s.notebooks.push(notebook);
+  return true;
 };
 
 const createFolder = async (folder_id?: number) => {
