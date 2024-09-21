@@ -21,58 +21,34 @@
     />
     <template #footer>
       <Button severity="secondary" @click="closeModal">取消</Button>
-      <Button :disabled="!name" @click="onCreateNotebookClick">创建</Button>
+      <Button :disabled="!name" @click="submit">创建</Button>
     </template>
   </Dialog>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { db, rest } from "@/db";
-import { useToast } from "primevue/usetoast";
 
 defineOptions({
   name: "CreateNotebookModal",
 });
 
 const emits = defineEmits<{
-  (e: "success", id: number): void;
+  (e: "submit", name: string, description: string): void;
 }>();
-
-const toast = useToast();
 
 const name = ref<string>("");
 const description = ref<string>("");
 
 const [modelValue] = defineModel({ type: Boolean });
 
+const submit = () => {
+  emits("submit", name.value, description.value);
+};
+
 const closeModal = () => {
   name.value = "";
   description.value = "";
   modelValue.value = false;
-};
-
-const onCreateNotebookClick = async () => {
-  const id = await db.notebooks.add({
-    name: name.value,
-    description: description.value,
-    ...rest(),
-  });
-
-  if (id) {
-    emits("success", id);
-    toast.add({
-      severity: "success",
-      summary: "创建笔记本成功",
-      detail: name.value,
-      life: 3000,
-    });
-    closeModal();
-  } else {
-    toast.add({
-      severity: "error",
-      summary: "创建笔记本失败",
-    });
-  }
 };
 </script>
