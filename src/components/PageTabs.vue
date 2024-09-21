@@ -8,6 +8,7 @@
         :class="{ Tab: true, TabActive: element.id === pageTabs.current }"
         :title="element.label"
         @click="tabClick(element, $event)"
+        @auxclick="pageTabs.close(element)"
         @contextmenu="tabClick(element, $event)"
       >
         <span class="TabLabel">{{ element.label }}</span>
