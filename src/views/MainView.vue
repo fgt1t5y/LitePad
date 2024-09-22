@@ -23,9 +23,10 @@
           v-model:expanded-items="s.tree.expanded"
           v-model:selected-items="s.tree.selected"
           v-model:highlighted-item="tabs.current"
+          v-model:renaming-item="renamingFileTreeNode"
           group-type="folder"
-          @node-click="treeNodeClick"
-          @node-contextmenu="treeNodeClick"
+          @node-click="fileTreeNodeClick"
+          @rename="fileTreeNodeRename"
         />
         <template #extra>
           <button title="新建文件夹" @click="createFolder()">
@@ -118,7 +119,8 @@ const resizeHandleRef = ref<HTMLDivElement>();
 const keepAliveRef = ref<PatchedKeepAlive>();
 const mainMenuRef = ref<ContextMenuMethods>();
 
-const selectedTreeNode = ref<TreeItem>();
+const selectedFileTreeNode = ref<TreeItem>();
+const renamingFileTreeNode = ref<number>();
 
 const toast = useToast();
 
@@ -173,8 +175,8 @@ const openNotePage = (id: number, label: string) => {
   tabs.to(newTab);
 };
 
-const treeNodeClick = (node: TreeItem, event: MouseEvent) => {
-  selectedTreeNode.value = node;
+const fileTreeNodeClick = (node: TreeItem, event: MouseEvent) => {
+  selectedFileTreeNode.value = node;
 
   if (event.button === 2) {
     fileTreeMenuRef.value!.show(event);
@@ -189,6 +191,10 @@ const treeNodeClick = (node: TreeItem, event: MouseEvent) => {
   if (node.type === "note") {
     openNotePage(node.id, node.title);
   }
+};
+
+const fileTreeNodeRename = () => {
+  renamingFileTreeNode.value = undefined;
 };
 
 const createNotebook = async (name: string, description: string) => {
@@ -247,18 +253,21 @@ const fileTreeNodes = computed(() => {
 });
 
 const fileTreeContextMenuItems = computed<MenuItem[]>(() => {
-  if (selectedTreeNode.value?.type === "note") {
+  if (selectedFileTreeNode.value?.type === "note") {
     return [
       {
         label: "打开",
         command: () => {
-          const { id, title } = selectedTreeNode.value!;
+          const { id, title } = selectedFileTreeNode.value!;
           openNotePage(id, title);
         },
       },
       {
         label: "重命名",
-        command() {},
+        command() {
+          const { id } = selectedFileTreeNode.value!;
+          renamingFileTreeNode.value = id;
+        },
       },
       {
         separator: true,
@@ -272,7 +281,7 @@ const fileTreeContextMenuItems = computed<MenuItem[]>(() => {
       {
         label: "新笔记",
         command: () => {
-          const folder_id = selectedTreeNode.value!.id;
+          const folder_id = selectedFileTreeNode.value!.id;
           if (folder_id) {
             createNote(folder_id);
           }
@@ -281,11 +290,21 @@ const fileTreeContextMenuItems = computed<MenuItem[]>(() => {
       {
         label: "新文件夹",
         command: () => {
-          const folder_id = selectedTreeNode.value!.id;
+          const folder_id = selectedFileTreeNode.value!.id;
           if (folder_id) {
             createFolder(folder_id);
           }
         },
+      },
+      {
+        label: "重命名",
+        command() {
+          const { id } = selectedFileTreeNode.value!;
+          renamingFileTreeNode.value = id;
+        },
+      },
+      {
+        separator: true,
       },
       {
         label: "删除",

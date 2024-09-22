@@ -158,6 +158,12 @@ input {
     word-break: keep-all;
   }
 
+  .TreeRenaming {
+    padding: .5rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+  }
+
   li {
     &:hover,
     &:focus {
