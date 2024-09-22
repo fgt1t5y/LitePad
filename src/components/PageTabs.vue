@@ -8,7 +8,7 @@
         :class="{ Tab: true, TabActive: element.id === pageTabs.current }"
         :title="element.label"
         @click="tabClick(element, $event)"
-        @auxclick="pageTabs.close(element)"
+        @auxclick="tabClick(element, $event)"
         @contextmenu="tabClick(element, $event)"
       >
         <span class="TabLabel">{{ element.label }}</span>
@@ -55,6 +55,11 @@ const pageTabs = usePageTabs();
 
 const tabClick = (tab: PageTabsItem, event?: MouseEvent) => {
   selectedTab.value = tab;
+
+  if (event && event.button === 1) {
+    pageTabs.close(tab);
+    return;
+  }
 
   if (event && event.button === 2) {
     tabMenuRef.value!.show(event);
