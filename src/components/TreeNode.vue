@@ -7,12 +7,7 @@
     }"
     :title="items.label"
     :data-id="items.id"
-    draggable="true"
     @contextmenu="emits('node-contextmenu', items, $event)"
-    @dragstart="onDragStart"
-    @dragenter="onDragEnter"
-    @dragover="onDragOver"
-    @drop="onDrop"
   >
     <button class="TreeToggle" @click="emits('node-click', items, $event)">
       <i v-if="expanded" class="pi pi-angle-down"></i>
@@ -33,14 +28,13 @@
       :prev-path="`${prevPath}/${item.label}`"
       @node-click="onNodeClick"
       @node-contextmenu="onNodeContextmenu"
-      @node-move="onNodeMove"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { TreeItem, IDs, TreeDnDStat } from "@/types";
-import { computed, inject } from "vue";
+import type { TreeItem, IDs } from "@/types";
+import { computed, } from "vue";
 
 defineOptions({
   name: "TreeNode",
@@ -62,31 +56,6 @@ const emits = defineEmits<{
   (e: "node-move", from: number, to: number): void;
 }>();
 
-const dndStat = inject<TreeDnDStat>("tree_dnd");
-
-const onDragStart = (event: DragEvent) => {
-  event.dataTransfer!.effectAllowed = "move";
-  const startID = (event.currentTarget as HTMLElement).getAttribute("data-id");
-  if (startID) {
-    dndStat!.startId = startID;
-  }
-};
-
-const onDragEnter = (event: DragEvent) => {
-  const endID = (event.currentTarget as HTMLElement).getAttribute("data-id");
-  if (endID) {
-    dndStat!.endId = endID;
-  }
-};
-
-const onDragOver = (event: DragEvent) => {
-  event.preventDefault();
-  event.dataTransfer!.dropEffect = "move";
-};
-
-const onDrop = (event: DragEvent) => {
-  emits("node-move", Number(dndStat!.startId), Number(dndStat!.endId));
-};
 
 const getLabel = () => {
   if (typeof props.items === "object") {
@@ -114,9 +83,5 @@ const onNodeClick = (node: TreeItem, event: MouseEvent) => {
 const onNodeContextmenu = (node: TreeItem, event: MouseEvent) => {
   event.preventDefault();
   emits("node-contextmenu", node, event);
-};
-
-const onNodeMove = (from: number, to: number) => {
-  emits("node-move", from, to);
 };
 </script>

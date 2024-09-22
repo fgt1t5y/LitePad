@@ -42,11 +42,6 @@ export interface TreeItem {
   [key: string]: any;
 }
 
-export interface TreeDnDStat {
-  startId?: string;
-  endId?: string;
-}
-
 export interface PageTabsItem {
   id: number;
   label: string;

@@ -11,16 +11,14 @@
       :group-type="groupType"
       :prev-path="item.label"
       @node-click="onNodeClick"
-      @node-contextmenu="onNodeContextenu"
-      @node-move="onNodeMove"
+      @node-contextmenu="onNodeContextmenu"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { TreeItem, IDs, TreeDnDStat } from "@/types";
+import type { TreeItem, IDs } from "@/types";
 import TreeNode from "./TreeNode.vue";
-import { provide, ref } from "vue";
 
 defineOptions({
   name: "Tree",
@@ -34,28 +32,19 @@ const props = defineProps<{
 const emits = defineEmits<{
   (e: "node-click", node: TreeItem, event: MouseEvent): void;
   (e: "node-contextmenu", node: TreeItem, event: MouseEvent): void;
-  (e: "node-move", from: number, to: number): void;
 }>();
 
 const expandedItems = defineModel<IDs>("expandedItems");
 const selectedItems = defineModel<IDs>("selectedItems");
 const highlightedItem = defineModel<number | null>("highlightedItem");
 
-const dndStat = ref<TreeDnDStat>({});
-
-provide("tree_dnd", dndStat);
-
 const onNodeClick = (node: TreeItem, event: MouseEvent) => {
   event.preventDefault();
   emits("node-click", node, event);
 };
 
-const onNodeContextenu = (node: TreeItem, event: MouseEvent) => {
+const onNodeContextmenu = (node: TreeItem, event: MouseEvent) => {
   event.preventDefault();
   emits("node-contextmenu", node, event);
-};
-
-const onNodeMove = (from: number, to: number) => {
-  emits("node-move", from, to);
 };
 </script>

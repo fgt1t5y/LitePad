@@ -82,7 +82,7 @@
     @submit="onCreateNotebookSubmit"
   />
   <ContextMenu ref="fileTreeMenuRef" :model="fileTreeContextMenuItems" />
-  <ContextMenu ref="mainMenuRef" :model="mainMenuItems" popup />
+  <ContextMenu ref="mainMenuRef" :model="mainMenuItems" />
 </template>
 
 <script setup lang="ts">
@@ -255,6 +255,13 @@ const fileTreeContextMenuItems = computed<MenuItem[]>(() => {
           const { id, title } = selectedTreeNode.value!;
           openNotePage(id, title);
         },
+      },
+      {
+        label: "重命名",
+        command() {},
+      },
+      {
+        separator: true,
       },
       {
         label: "删除",
