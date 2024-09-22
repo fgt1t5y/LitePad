@@ -162,9 +162,6 @@ const prepare = (activateCallback: Function) => {
       });
       c.save();
     })
-    .catch((error) => {
-      console.log(error);
-    })
     .finally(() => {
       isPreparing.value = false;
     });

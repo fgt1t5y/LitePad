@@ -30,6 +30,7 @@
       :selected-items="selectedItems || {}"
       :highlighted-item="highlightedItem"
       :group-type="groupType"
+      :prev-path="`${prevPath}/${item.label}`"
       @node-click="onNodeClick"
       @node-contextmenu="onNodeContextmenu"
       @node-move="onNodeMove"
@@ -52,6 +53,7 @@ const props = defineProps<{
   selectedItems: IDs;
   highlightedItem: number | null;
   groupType: string;
+  prevPath: string;
 }>();
 
 const emits = defineEmits<{

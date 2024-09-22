@@ -9,6 +9,7 @@
       :selected-items="selectedItems || {}"
       :highlighted-item="highlightedItem || -1"
       :group-type="groupType"
+      :prev-path="item.label"
       @node-click="onNodeClick"
       @node-contextmenu="onNodeContextenu"
       @node-move="onNodeMove"

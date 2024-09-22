@@ -16,7 +16,6 @@ export const usePageTabs = defineStore("pageTabs", () => {
   const current = ref<number>();
 
   const _getIndex = (tab: PageTabsItem) => {
-    console.log(1);
     return tabs.value.findIndex((item) => item.id === tab.id);
   };
 

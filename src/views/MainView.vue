@@ -332,7 +332,6 @@ onMounted(() => {
     onGreaterThanMin: () => (c.showAsidePanel = true),
   });
 
-  console.log(1)
   // 标签页多到溢出时可用鼠标滚轮滚动X轴
   useXScroll(document.getElementById("PageTab")!);
 });
