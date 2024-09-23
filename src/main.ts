@@ -26,14 +26,11 @@ if (window.nw) {
   const win = nw.Window.get();
 
   win.once("loaded", () => {
-    const size = localStorage.getItem("window_size");
+    let size = localStorage.getItem("window_size") || "660,1060";
 
-    if (size) {
-      const [height, width] = size.split(",");
+    const [height, width] = size.split(",");
 
-      win.resizeTo(Number(width), Number(height));
-    }
-
+    win.resizeTo(Number(width), Number(height));
     win.show();
   });
 
