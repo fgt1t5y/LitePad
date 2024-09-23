@@ -40,8 +40,8 @@ export const usePageTabs = defineStore("pageTabs", () => {
   };
 
   // 标签页是否存在
-  const has = (tab_key: number) => {
-    return _tabsID.has(tab_key);
+  const has = (id: number) => {
+    return _tabsID.has(id);
   };
 
   // 追加标签页到列表末尾
@@ -129,7 +129,14 @@ export const usePageTabs = defineStore("pageTabs", () => {
     }
   };
 
+  const closeById = (id: number) => {
+    if (!id) return;
+    const index = _getIndex(id);
+    close(tabs.value[index]);
+  };
+
   const setLabel = (id: number, label: string) => {
+    if (!has(id)) return;
     const index = _getIndex(id);
     tabs.value[index].label = label;
   };
@@ -153,6 +160,7 @@ export const usePageTabs = defineStore("pageTabs", () => {
     closeBefore,
     closeAfter,
     closeOther,
+    closeById,
     setLabel,
     init,
     onTabClose,

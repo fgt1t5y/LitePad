@@ -17,12 +17,25 @@ export const useShared = defineStore("shared", {
   }),
   actions: {
     updateFolder(id: number, data: Partial<Folder>) {
-      const index = this.folders.findIndex((note) => id === note.id);
+      const index = this.folders.findIndex((folder) => id === folder.id);
+      if (index === -1) return;
       Object.assign(this.folders[index], data);
     },
     updateNote(id: number, data: Partial<Note>) {
       const index = this.notes.findIndex((note) => id === note.id);
+      if (index === -1) return;
       Object.assign(this.notes[index], data);
+    },
+
+    deleteFolder(id: number) {
+      const index = this.folders.findIndex((folder) => id === folder.id);
+      if (index === -1) return;
+      this.folders.splice(index, 1);
+    },
+    deleteNote(id: number) {
+      const index = this.notes.findIndex((note) => id === note.id);
+      if (index === -1) return;
+      this.notes.splice(index, 1);
     },
   },
 });

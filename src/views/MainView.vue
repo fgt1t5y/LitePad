@@ -254,6 +254,17 @@ const createNote = async (folder_id?: number) => {
   }
 };
 
+const deleteFolder = async (id: number) => {
+  await db.folders.delete(id);
+  s.deleteFolder(id);
+};
+
+const deleteNote = async (id: number) => {
+  await db.notes.delete(id);
+  s.deleteNote(id);
+  tabs.closeById(id);
+};
+
 const fileTreeNodes = computed(() => {
   if (!(s.folders && s.notes)) {
     return [];
@@ -289,6 +300,11 @@ const fileTreeContextMenuItems = computed<MenuItem[]>(() => {
       },
       {
         label: "删除",
+        command() {
+          const { id, name } = selectedFileTreeNode.value!;
+          const choose = window.confirm(`你确定要删除笔记“${name}”吗？`);
+          if (choose) deleteNote(id);
+        },
       },
     ];
   } else {
@@ -323,6 +339,11 @@ const fileTreeContextMenuItems = computed<MenuItem[]>(() => {
       },
       {
         label: "删除",
+        command() {
+          const { id, name } = selectedFileTreeNode.value!;
+          const choose = window.confirm(`你确定要删除文件夹“${name}”吗？`);
+          if (choose) deleteFolder(id);
+        },
       },
     ];
   }
