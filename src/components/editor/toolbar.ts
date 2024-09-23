@@ -1,5 +1,5 @@
 import type { MarkType } from "prosemirror-model";
-import type { EditorTools, ToolbarButtons, EditorToolType } from "@/types";
+import type { EditorTools, ToolbarButtons } from "@/types";
 
 import { EditorState, Plugin } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
@@ -69,7 +69,7 @@ class ToolbarView {
     this.update(view);
   }
 
-  private buildDOM(view: EditorView, type: EditorToolType) {
+  private buildDOM(view: EditorView, type: keyof EditorTools) {
     const tools = this.tools[type];
     const wrapper = document.createElement("div");
     wrapper.classList.add("ToolGroup");

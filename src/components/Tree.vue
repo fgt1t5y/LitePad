@@ -10,7 +10,7 @@
       :highlighted-item="highlightedItem"
       :renaming-item="renamingItem"
       :group-type="groupType"
-      :prev-path="item.label"
+      :prev-path="item[labelField]"
       :label-field="labelField"
       @node-click="onNodeClick"
       @rename="onRename"

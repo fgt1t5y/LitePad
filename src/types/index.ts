@@ -61,21 +61,19 @@ export interface PatchedKeepAlive {
   pruneCacheEntry: (key: any) => void;
 }
 
-export type EditorToolType = "node" | "mark" | "history";
-
-export interface EditorTool {
-  command: Command;
-  enable?: (view: EditorView) => boolean;
-  type: EditorToolType;
-  name: string;
-  key?: string;
-  icon: string;
-}
-
 export interface EditorTools {
   history: EditorTool[];
   node: EditorTool[];
   mark: EditorTool[];
+}
+
+export interface EditorTool {
+  command: Command;
+  enable?: (view: EditorView) => boolean;
+  type: keyof EditorTools;
+  name: string;
+  key?: string;
+  icon: string;
 }
 
 export interface Keymap {
