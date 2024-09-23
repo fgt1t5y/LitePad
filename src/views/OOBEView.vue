@@ -146,7 +146,7 @@ const prepare = (activateCallback: Function) => {
       id: 10001,
       notebook_id: notebook_id || 1,
       folder_id: undefined,
-      title: "Welcome to LitePad!",
+      name: "Welcome to LitePad!",
       type: "note",
       content: "<p>Welcome!</p>",
       labels: [],

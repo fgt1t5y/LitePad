@@ -27,7 +27,7 @@ export interface Folder extends Model {
 export interface Note extends Model {
   notebook_id: number;
   folder_id?: number;
-  title: string;
+  name: string;
   type: string;
   content: string;
   labels: string[];

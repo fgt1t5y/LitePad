@@ -11,6 +11,7 @@
       :renaming-item="renamingItem"
       :group-type="groupType"
       :prev-path="item.label"
+      :label-field="labelField"
       @node-click="onNodeClick"
       @rename="onRename"
     />
@@ -29,6 +30,7 @@ defineOptions({
 const props = defineProps<{
   items: TreeItem[];
   groupType: string;
+  labelField: string;
 }>();
 
 const emits = defineEmits<{

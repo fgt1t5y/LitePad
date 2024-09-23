@@ -39,6 +39,7 @@
       :renaming-item="renamingItem"
       :group-type="groupType"
       :prev-path="`${prevPath}/${item.label}`"
+      :label-field="labelField"
       @node-click="onNodeClick"
       @rename="(o, or) => emits('rename', o, or)"
     />
@@ -62,6 +63,7 @@ const props = defineProps<{
   renamingItem?: number;
   groupType: string;
   prevPath: string;
+  labelField: string;
 }>();
 
 const emits = defineEmits<{
@@ -71,7 +73,7 @@ const emits = defineEmits<{
 
 const getLabel = () => {
   if (typeof props.items === "object") {
-    return props.items.label;
+    return props.items[props.labelField];
   }
   return "";
 };

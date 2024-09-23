@@ -15,6 +15,16 @@ export const useShared = defineStore("shared", {
       createNotebook: false,
     },
   }),
+  actions: {
+    updateFolderName(id: number, name: string) {
+      const index = this.folders.findIndex((note) => id === note.id);
+      this.folders[index].name = name;
+    },
+    updateNoteName(id: number, name: string) {
+      const index = this.notes.findIndex((note) => id === note.id);
+      this.notes[index].name = name;
+    },
+  },
 });
 
 if (import.meta.hot) {

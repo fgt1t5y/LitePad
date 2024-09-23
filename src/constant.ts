@@ -17,7 +17,7 @@ export const emptyFolder = (notebook: number, folder?: number) => ({
 export const emptyNote = (notebook: number, folder?: number) => ({
   notebook_id: notebook,
   folder_id: folder,
-  title: "新笔记",
+  name: "新笔记",
   type: "note",
   content: "<p></p>",
   labels: [],

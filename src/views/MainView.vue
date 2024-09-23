@@ -25,6 +25,7 @@
           v-model:highlighted-item="tabs.current"
           v-model:renaming-item="renamingFileTreeNode"
           group-type="folder"
+          label-field="name"
           @node-click="fileTreeNodeClick"
           @rename="fileTreeNodeRename"
         />
@@ -189,11 +190,24 @@ const fileTreeNodeClick = (node: TreeItem, event: MouseEvent) => {
   }
 
   if (node.type === "note") {
-    openNotePage(node.id, node.title);
+    openNotePage(node.id, node.name);
   }
 };
 
-const fileTreeNodeRename = () => {
+const fileTreeNodeRename = async (newName: string) => {
+  const { id, type } = selectedFileTreeNode.value!;
+  if (!id || !newName) {
+    renamingFileTreeNode.value = undefined;
+    return;
+  }
+
+  if (type === "folder") {
+    await db.folders.update(id, { name: newName });
+    s.updateFolderName(id, newName);
+  } else {
+    await db.notes.update(id, { name: newName });
+    s.updateNoteName(id, newName);
+  }
   renamingFileTreeNode.value = undefined;
 };
 
@@ -224,7 +238,7 @@ const createNote = async (folder_id?: number) => {
 
   const newTab: PageTabsItem = {
     id,
-    label: note.title,
+    label: note.name,
     path: `/note/${id}`,
   };
 
@@ -242,10 +256,6 @@ const fileTreeNodes = computed(() => {
 
   const items = [...s.folders, ...s.notes];
 
-  items.forEach((item: any) => {
-    item.label = item.title || item.name;
-  });
-
   return arrayToTree(items, {
     parentId: "folder_id",
     dataField: null,
@@ -258,8 +268,8 @@ const fileTreeContextMenuItems = computed<MenuItem[]>(() => {
       {
         label: "打开",
         command: () => {
-          const { id, title } = selectedFileTreeNode.value!;
-          openNotePage(id, title);
+          const { id, name } = selectedFileTreeNode.value!;
+          openNotePage(id, name);
         },
       },
       {
