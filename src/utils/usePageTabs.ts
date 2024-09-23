@@ -15,8 +15,12 @@ export const usePageTabs = defineStore("pageTabs", () => {
   const tabs = ref<PageTabsItem[]>([]);
   const current = ref<number>();
 
-  const _getIndex = (tab: PageTabsItem) => {
-    return tabs.value.findIndex((item) => item.id === tab.id);
+  const _getIndex = (tab: PageTabsItem | number) => {
+    if (typeof tab === "number") {
+      return tabs.value.findIndex((item) => item.id === tab);
+    } else {
+      return tabs.value.findIndex((item) => item.id === tab.id);
+    }
   };
 
   const _close = (tab: PageTabsItem) => {
@@ -125,6 +129,11 @@ export const usePageTabs = defineStore("pageTabs", () => {
     }
   };
 
+  const setLabel = (id: number, label: string) => {
+    const index = _getIndex(id);
+    tabs.value[index].label = label;
+  };
+
   const init = () => {
     push(defaultTab);
     to(defaultTab);
@@ -144,6 +153,7 @@ export const usePageTabs = defineStore("pageTabs", () => {
     closeBefore,
     closeAfter,
     closeOther,
+    setLabel,
     init,
     onTabClose,
   };

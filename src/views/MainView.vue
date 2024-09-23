@@ -211,6 +211,7 @@ const fileTreeNodeRename = async (newName: string) => {
     s.updateNote(id, {
       name: newName,
     });
+    tabs.setLabel(id, newName);
   }
   renamingFileTreeNode.value = undefined;
 };
