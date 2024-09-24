@@ -8,7 +8,6 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('primevue/button')['default']
-    ConfirmDialog: typeof import('primevue/confirmdialog')['default']
     ContextMenu: typeof import('primevue/contextmenu')['default']
     CreateNotebook: typeof import('./src/components/modal/CreateNotebook.vue')['default']
     Dialog: typeof import('primevue/dialog')['default']
