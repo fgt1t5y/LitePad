@@ -62,8 +62,10 @@ watch(
     if (!id) return;
     // 聚焦到重命名的输入框
     let t = window.setTimeout(() => {
-      const input = document.getElementById(`Renaming_${id}`);
-      input?.focus();
+      const input = document.getElementById(
+        `Renaming_${id}`
+      ) as HTMLInputElement;
+      input?.select();
       window.clearTimeout(t);
     }, 20);
   }

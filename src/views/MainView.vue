@@ -194,9 +194,10 @@ const fileTreeNodeClick = (node: TreeItem, event: MouseEvent) => {
   }
 };
 
-const fileTreeNodeRename = async (newName: string) => {
+const fileTreeNodeRename = async (newName: string, origin: string) => {
+  console.log(newName, origin);
   const { id, type } = selectedFileTreeNode.value!;
-  if (!id || !newName) {
+  if (!id || !newName || newName === origin) {
     renamingFileTreeNode.value = undefined;
     return;
   }

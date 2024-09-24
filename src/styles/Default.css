@@ -37,6 +37,7 @@ button {
 
 input {
   font-family: inherit;
+  font-size: inherit;
 }
 
 /* Layout */
@@ -156,12 +157,14 @@ input {
     width: 100%;
     padding: 0.5rem 0.75rem;
     word-break: keep-all;
-  }
 
-  .TreeRenaming {
-    padding: .5rem 0.75rem;
-    display: flex;
-    flex-direction: column;
+    input {
+      padding: 0px;
+      outline: none;
+      color: inherit;
+      background-color: transparent;
+      border: none;
+    }
   }
 
   li {
@@ -308,7 +311,6 @@ input {
     padding: 0px 0.75rem;
     border-right: 1px solid var(--p-content-border-color);
   }
-
 
   button:disabled {
     color: var(--p-text-muted-color);

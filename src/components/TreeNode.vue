@@ -9,22 +9,19 @@
     :data-id="items.id"
     @contextmenu="emits('node-click', items, $event)"
   >
-    <div v-if="isRenaming" class="TreeRenaming">
-      <input
-        type="text"
-        :id="`Renaming_${items.id}`"
-        :value="getLabel()"
-        @blur="onRename(getLabel(), $event)"
-      />
-    </div>
-    <button
-      v-else
-      class="TreeToggle"
-      @click="emits('node-click', items, $event)"
-    >
+    <button class="TreeToggle" @click="emits('node-click', items, $event)">
       <i v-if="expanded" class="pi pi-angle-down"></i>
       <i v-else class="pi pi-angle-right"></i>
-      <span>{{ getLabel() }}</span>
+      <input
+        v-if="isRenaming"
+        type="text"
+        autocomplete="off"
+        :id="`Renaming_${items.id}`"
+        :value="label"
+        @blur="onRename(label, $event)"
+        @keydown="onRenameInputKeydown(label, $event)"
+      />
+      <span v-else>{{ label }}</span>
     </button>
   </div>
   <div v-if="expanded && hasChildren" class="TreeChildren">
@@ -71,12 +68,12 @@ const emits = defineEmits<{
   (e: "rename", newName: string, origin: string): void;
 }>();
 
-const getLabel = () => {
+const label = computed(() => {
   if (typeof props.items === "object") {
     return props.items[props.labelField];
   }
   return "";
-};
+});
 
 const expanded = computed(() => {
   return props.expandedItems[props?.items.id] === true;
@@ -99,8 +96,18 @@ const onNodeClick = (node: TreeItem, event: MouseEvent) => {
   emits("node-click", node, event);
 };
 
-const onRename = (origin: string, event: FocusEvent) => {
+const onRename = (origin: string, event: FocusEvent | KeyboardEvent) => {
   const newName = (event.target as HTMLInputElement).value;
   emits("rename", newName, origin);
+};
+
+const onRenameInputKeydown = (origin: string, event: KeyboardEvent) => {
+  if (event.key === "Enter") {
+    (event.target as HTMLInputElement).blur();
+  }
+  if (event.key === "Escape") {
+    (event.target as HTMLInputElement).value = origin;
+    (event.target as HTMLInputElement).blur();
+  }
 };
 </script>
