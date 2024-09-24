@@ -103,6 +103,10 @@ class BubbleMenuView implements PluginView {
   private hide() {
     this.root.classList.remove("Visible");
   }
+
+  destroy() {
+    this.root.remove();
+  }
 }
 
 interface BubbleMenuOptions {
