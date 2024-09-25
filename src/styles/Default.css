@@ -119,6 +119,11 @@ input {
   background-color: var(--p-navigation-item-focus-background) !important;
 }
 
+.Resizing {
+  cursor: col-resize;
+  user-select: none;
+}
+
 /* Custom components style */
 .Tree {
   user-select: none;

@@ -27,6 +27,7 @@ export const useElementResize = (
   const mousedown = (event: MouseEvent) => {
     startX = event.clientX;
     startWidth = parseInt(getComputedStyle(target).width);
+    document.body.classList.add("Resizing");
 
     document.documentElement.addEventListener("mousemove", mousemove);
     document.documentElement.addEventListener("mouseup", mouseup);
@@ -48,6 +49,8 @@ export const useElementResize = (
   };
 
   const mouseup = () => {
+    document.body.classList.remove("Resizing");
+
     document.documentElement.removeEventListener("mousemove", mousemove);
     document.documentElement.removeEventListener("mouseup", mouseup);
   };
