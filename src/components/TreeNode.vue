@@ -9,7 +9,11 @@
     :data-id="items.id"
     @contextmenu="emits('node-click', items, $event)"
   >
-    <button class="TreeToggle" @click="emits('node-click', items, $event)">
+    <button
+      class="TreeToggle"
+      :disabled="isRenaming"
+      @click="emits('node-click', items, $event)"
+    >
       <i v-if="expanded" class="pi pi-angle-down"></i>
       <i v-else class="pi pi-angle-right"></i>
       <input

@@ -164,6 +164,7 @@ input {
       color: inherit;
       background-color: transparent;
       border: none;
+      flex-grow: 1;
     }
   }
 
