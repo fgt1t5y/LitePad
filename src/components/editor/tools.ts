@@ -2,7 +2,7 @@ import type { EditorTool, EditorTools } from "@/types";
 import type { Command } from "prosemirror-state";
 import type { Keymap } from "@/types";
 
-import { setBlockType, toggleMark } from "prosemirror-commands";
+import { setBlockType, toggleMark, wrapIn } from "prosemirror-commands";
 import { undo, redo } from "prosemirror-history";
 import { schema } from "@/components/editor/schema";
 
@@ -101,6 +101,13 @@ export const toolsRaw = [
     icon: "i-code",
     type: "mark",
   },
+  {
+    command: insertLink(),
+    name: "link",
+    key: "Mod-k",
+    icon: "i-link",
+    type: "mark",
+  },
   heading(1),
   heading(2),
   heading(3),
@@ -114,14 +121,14 @@ export const toolsRaw = [
     icon: "i-paragraph",
     type: "node",
   },
-  { command: insertImage(), name: "image", icon: "i-image", type: "node" },
   {
-    command: insertLink(),
-    name: "link",
-    key: "Mod-k",
-    icon: "i-link",
-    type: "mark",
+    command: wrapIn(schema.nodes.blockquote),
+    name: "blockquote",
+    key: "Mod-q",
+    icon: "i-quote",
+    type: "node",
   },
+  { command: insertImage(), name: "image", icon: "i-image", type: "node" },
   {
     command: insertHorizontalRule(),
     name: "hr",

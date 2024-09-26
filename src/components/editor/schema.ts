@@ -72,6 +72,15 @@ export const schema = new Schema({
         return ["p", ["img", { src }]];
       },
     },
+    blockquote: {
+      content: "block+",
+      group: "block",
+      defining: true,
+      parseDOM: [{ tag: "blockquote" }],
+      toDOM() {
+        return ["blockquote", 0];
+      },
+    },
   },
   marks: {
     bold: {

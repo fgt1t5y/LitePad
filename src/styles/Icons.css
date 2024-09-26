@@ -130,3 +130,7 @@
 .i-menu::before {
   content: "\e5d2";
 }
+
+.i-quote::before {
+  content: "\e244";
+}

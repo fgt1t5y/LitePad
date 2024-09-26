@@ -41,7 +41,7 @@ const getActiveNode = (view: EditorView) => {
     return `h${node.attrs.level}`;
   }
 
-  return "paragraph";
+  return node.type.name;
 };
 
 class ToolbarView {

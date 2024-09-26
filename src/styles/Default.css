@@ -424,3 +424,11 @@ code {
   font-family: var(--FontMonospace);
   background-color: var(--p-content-hover-background);
 }
+
+blockquote {
+  margin: 1rem 0px;
+  color: var(--p-text-muted-color);
+  border-left: 4px solid var(--p-primary-color);
+  background-color: var(--p-content-background);
+  padding: 1px 16px;
+}

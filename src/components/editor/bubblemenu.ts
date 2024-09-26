@@ -24,7 +24,11 @@ const isActive = (state: EditorState, type: MarkType): boolean => {
 const isMarkActive = (view: EditorView) => {
   const node = view.state.selection.$from.node(1);
 
-  return node.hasMarkup(schema.nodes.paragraph);
+  // 如果node的mark属性为空字符串，即不能插入mark
+  // 则直接返回false
+  if (node.type.spec.marks === "") return false;
+
+  return node.hasMarkup(node.type);
 };
 
 class BubbleMenuView implements PluginView {
@@ -52,17 +56,17 @@ class BubbleMenuView implements PluginView {
   }
 
   update(view: EditorView) {
-    if (isMarkActive(view)) {
-      this.tools.forEach((tool) => {
-        setActive(
-          this.buttons[tool.name],
-          isActive(view.state, schema.marks[tool.name])
-        );
-      });
-    } else {
+    if (!isMarkActive(view)) {
       this.hide();
       return;
     }
+
+    this.tools.forEach((tool) => {
+      setActive(
+        this.buttons[tool.name],
+        isActive(view.state, schema.marks[tool.name])
+      );
+    });
 
     this.alignElement(view);
   }
