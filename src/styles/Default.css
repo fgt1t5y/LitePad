@@ -307,10 +307,6 @@ input {
   z-index: 2;
   overflow: hidden;
 
-  .i {
-    font-size: 24px;
-  }
-
   .ToolGroup {
     display: flex;
     gap: 1rem;
@@ -336,10 +332,6 @@ input {
   border-radius: var(--p-border-radius-xs);
   display: none;
   z-index: 3;
-
-  .i {
-    font-size: 24px;
-  }
 
   &.Visible {
     display: flex;

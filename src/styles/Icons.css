@@ -5,16 +5,25 @@
   font-style: normal;
 }
 
+/* Icon Size
+  Small - 1.25rem (Default size)
+  Medium - 1.5rem (Used for editor tools icon)
+*/
+
 .i {
   font-family: "Material Symbols Outlined";
   font-weight: normal;
   font-style: normal;
-  font-size: 20px;
+  font-size: 1.25rem;
   line-height: 1.5;
   word-wrap: normal;
   white-space: nowrap;
   direction: ltr;
   user-select: none;
+}
+
+.i-m {
+  font-size: 1.5rem;
 }
 
 .i-undo::before {

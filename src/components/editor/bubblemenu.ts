@@ -41,7 +41,7 @@ class BubbleMenuView implements PluginView {
 
     tools.forEach(({ command, name, icon }) => {
       const btn = document.createElement("button");
-      btn.classList.add("i", icon);
+      btn.classList.add("i", "i-m", icon);
       btn.addEventListener("click", () => {
         command(view.state, view.dispatch, view);
         view.focus();

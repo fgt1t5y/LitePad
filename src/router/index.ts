@@ -23,7 +23,7 @@ const router = createRouter({
       component: MainView,
       children: [
         {
-          path: "/note/:id",
+          path: "/note/:id(\\d+)",
           name: "note",
           component: NoteView,
         },
