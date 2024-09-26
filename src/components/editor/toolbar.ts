@@ -31,13 +31,21 @@ const isActive = (state: EditorState, type: MarkType): boolean => {
 const isMarkActive = (view: EditorView) => {
   const node = view.state.selection.$from.node(1);
 
+  if (!node) return false;
+
   return node.hasMarkup(schema.nodes.paragraph);
 };
 
-const getActiveNode = (view: EditorView) => {
-  const node = view.state.selection.$from.node(1);
+const getActiveNodeName = (view: EditorView) => {
+  const from = view.state.selection.$from;
 
-  if (node.attrs.level) {
+  if (from.nodeAfter && from.nodeAfter.type.name !== "text") {
+    return from.nodeAfter.type.name;
+  }
+
+  const node = from.node(1);
+
+  if (node.type.name === "heading") {
     return `h${node.attrs.level}`;
   }
 
@@ -98,7 +106,7 @@ class ToolbarView {
       setActive(this.buttons.node[this.currentActiveNode], false);
     }
 
-    const activeNode = getActiveNode(view);
+    const activeNode = getActiveNodeName(view);
     setActive(this.buttons.node[activeNode], true);
     this.currentActiveNode = activeNode;
 
