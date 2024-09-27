@@ -73,7 +73,7 @@ export const schema = new Schema({
       },
     },
     blockquote: {
-      content: "inline*",
+      content: "paragraph+",
       group: "block",
       defining: true,
       parseDOM: [{ tag: "blockquote" }],

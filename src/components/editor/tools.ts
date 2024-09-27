@@ -121,11 +121,11 @@ export const toolsRaw = [
     type: "lineFormat",
   },
   {
-    command: setBlockType(schema.nodes.blockquote),
+    command: wrapIn(schema.nodes.blockquote),
     name: "blockquote",
     key: "Mod-q",
     icon: "i-quote",
-    type: "lineFormat",
+    type: "node",
   },
   { command: insertImage(), name: "image", icon: "i-image", type: "node" },
   {

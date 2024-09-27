@@ -75,7 +75,7 @@ class ToolbarView {
     }
 
     const activeNode = getActiveNodeName(view);
-    if (activeNode) {
+    if (activeNode && activeNode in this.buttons.lineFormat) {
       setActive(this.buttons.lineFormat[activeNode], true);
       this.lastActiveLineFormat = activeNode;
     }
