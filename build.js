@@ -3,6 +3,7 @@ import { copyFile, existsSync } from "fs";
 
 const build = () => {
   nwbuild({
+    version: "0.91.0",
     mode: "build",
     srcDir: "./dist",
     glob: false,
@@ -24,8 +25,8 @@ const build = () => {
   });
 };
 
-if (!existsSync('dist/')) {
-  throw new Error('Please build app first.')
+if (!existsSync("dist/")) {
+  throw new Error("Please build app first.");
 }
 
 copyFile("package.json", "dist/package.json", (err) => {
