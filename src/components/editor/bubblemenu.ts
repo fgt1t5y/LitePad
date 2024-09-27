@@ -1,4 +1,4 @@
-import type {PluginView } from "prosemirror-state";
+import type { PluginView } from "prosemirror-state";
 import type { EditorView } from "prosemirror-view";
 import type { EditorTool, ToolBarButton } from "@/types";
 

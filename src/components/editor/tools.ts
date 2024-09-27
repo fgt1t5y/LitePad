@@ -65,7 +65,6 @@ export const toolsRaw = [
     key: "Mod-z",
     icon: "i-undo",
     type: "history",
-    enable: (view) => undo(view.state),
   },
   {
     command: redo,
@@ -122,7 +121,7 @@ export const toolsRaw = [
     type: "lineFormat",
   },
   {
-    command: wrapIn(schema.nodes.blockquote),
+    command: setBlockType(schema.nodes.blockquote),
     name: "blockquote",
     key: "Mod-q",
     icon: "i-quote",

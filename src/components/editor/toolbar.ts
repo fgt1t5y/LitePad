@@ -9,6 +9,8 @@ import { isMarkActive, hasMarkActive, setDisabled, setActive } from "./helper";
 const getActiveNodeName = (view: EditorView) => {
   const node = view.state.selection.$from.node(1);
 
+  if (!node) return null;
+
   if (node.type.name === "heading") {
     return `h${node.attrs.level}`;
   }
@@ -73,8 +75,10 @@ class ToolbarView {
     }
 
     const activeNode = getActiveNodeName(view);
-    setActive(this.buttons.lineFormat[activeNode], true);
-    this.lastActiveLineFormat = activeNode;
+    if (activeNode) {
+      setActive(this.buttons.lineFormat[activeNode], true);
+      this.lastActiveLineFormat = activeNode;
+    }
 
     if (hasMarkActive(view)) {
       this.tools.textFormat.forEach((tool) => {
