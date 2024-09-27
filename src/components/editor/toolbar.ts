@@ -1,49 +1,13 @@
-import type { MarkType } from "prosemirror-model";
 import type { EditorTools, ToolbarButtons } from "@/types";
 
-import { EditorState, Plugin } from "prosemirror-state";
+import { Plugin } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 import { redo, undo } from "prosemirror-history";
 import { schema } from "./schema";
-
-const setDisabled = (el: HTMLElement, on: boolean) => {
-  if (on) {
-    el.setAttribute("disabled", "");
-  } else {
-    el.removeAttribute("disabled");
-  }
-};
-
-const setActive = (el: HTMLElement, on: boolean) => {
-  if (on) {
-    el.classList.add("ToolActive");
-  } else {
-    el.classList.remove("ToolActive");
-  }
-};
-
-const isActive = (state: EditorState, type: MarkType): boolean => {
-  const { from, $from, to, empty } = state.selection;
-  if (empty) return !!type.isInSet(state.storedMarks || $from.marks());
-  else return state.doc.rangeHasMark(from, to, type);
-};
-
-const isMarkActive = (view: EditorView) => {
-  const node = view.state.selection.$from.node(1);
-
-  if (!node) return false;
-
-  return node.hasMarkup(schema.nodes.paragraph);
-};
+import { isMarkActive, hasMarkActive, setDisabled, setActive } from "./helper";
 
 const getActiveNodeName = (view: EditorView) => {
-  const from = view.state.selection.$from;
-
-  if (from.nodeAfter && from.nodeAfter.type.name !== "text") {
-    return from.nodeAfter.type.name;
-  }
-
-  const node = from.node(1);
+  const node = view.state.selection.$from.node(1);
 
   if (node.type.name === "heading") {
     return `h${node.attrs.level}`;
@@ -58,21 +22,23 @@ class ToolbarView {
   buttons: ToolbarButtons;
   tools: EditorTools;
 
-  currentActiveNode: string | null;
+  lastActiveLineFormat: string | null;
 
   constructor(view: EditorView, toolbar: HTMLElement, tools: EditorTools) {
     this.root = toolbar;
     this.buttons = {
       history: {},
+      lineFormat: {},
+      textFormat: {},
       node: {},
-      mark: {},
     };
     this.tools = tools;
-    this.currentActiveNode = null;
+    this.lastActiveLineFormat = null;
 
-    this.root.appendChild(this.buildDOM(view, "node"));
-    this.root.appendChild(this.buildDOM(view, "mark"));
     this.root.appendChild(this.buildDOM(view, "history"));
+    this.root.appendChild(this.buildDOM(view, "lineFormat"));
+    this.root.appendChild(this.buildDOM(view, "textFormat"));
+    this.root.appendChild(this.buildDOM(view, "node"));
 
     this.update(view);
   }
@@ -102,19 +68,19 @@ class ToolbarView {
     setDisabled(this.buttons.history.undo, !canUndo);
     setDisabled(this.buttons.history.redo, !canRedo);
 
-    if (this.currentActiveNode) {
-      setActive(this.buttons.node[this.currentActiveNode], false);
+    if (this.lastActiveLineFormat) {
+      setActive(this.buttons.lineFormat[this.lastActiveLineFormat], false);
     }
 
     const activeNode = getActiveNodeName(view);
-    setActive(this.buttons.node[activeNode], true);
-    this.currentActiveNode = activeNode;
+    setActive(this.buttons.lineFormat[activeNode], true);
+    this.lastActiveLineFormat = activeNode;
 
-    if (isMarkActive(view)) {
-      this.tools.mark.forEach((tool) => {
+    if (hasMarkActive(view)) {
+      this.tools.textFormat.forEach((tool) => {
         setActive(
-          this.buttons.mark[tool.name],
-          isActive(view.state, schema.marks[tool.name])
+          this.buttons.textFormat[tool.name],
+          isMarkActive(view.state, schema.marks[tool.name])
         );
       });
     }

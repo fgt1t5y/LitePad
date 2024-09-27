@@ -1,35 +1,11 @@
-import type { EditorState, PluginView } from "prosemirror-state";
+import type {PluginView } from "prosemirror-state";
 import type { EditorView } from "prosemirror-view";
 import type { EditorTool, ToolBarButton } from "@/types";
-import type { MarkType } from "prosemirror-model";
 
 import { Plugin } from "prosemirror-state";
 import debounce from "debounce";
 import { schema } from "./schema";
-
-const setActive = (el: HTMLElement, on: boolean) => {
-  if (on) {
-    el.classList.add("ToolActive");
-  } else {
-    el.classList.remove("ToolActive");
-  }
-};
-
-const isActive = (state: EditorState, type: MarkType): boolean => {
-  const { from, $from, to, empty } = state.selection;
-  if (empty) return !!type.isInSet(state.storedMarks || $from.marks());
-  else return state.doc.rangeHasMark(from, to, type);
-};
-
-const isMarkActive = (view: EditorView) => {
-  const node = view.state.selection.$from.node(1);
-
-  // 如果node的mark属性为空字符串，即不能插入mark
-  // 则直接返回false
-  if (node.type.spec.marks === "") return false;
-
-  return node.hasMarkup(node.type);
-};
+import { isMarkActive, hasMarkActive, setActive } from "./helper";
 
 class BubbleMenuView implements PluginView {
   root: HTMLElement;
@@ -56,7 +32,7 @@ class BubbleMenuView implements PluginView {
   }
 
   update(view: EditorView) {
-    if (!isMarkActive(view)) {
+    if (!hasMarkActive(view)) {
       this.hide();
       return;
     }
@@ -64,7 +40,7 @@ class BubbleMenuView implements PluginView {
     this.tools.forEach((tool) => {
       setActive(
         this.buttons[tool.name],
-        isActive(view.state, schema.marks[tool.name])
+        isMarkActive(view.state, schema.marks[tool.name])
       );
     });
 

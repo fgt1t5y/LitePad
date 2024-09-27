@@ -69,7 +69,7 @@ export const schema = new Schema({
       ],
       toDOM(node) {
         let { src } = node.attrs;
-        return ["p", ["img", { src }]];
+        return ["figure", ["img", { src }]];
       },
     },
     blockquote: {

@@ -61,7 +61,7 @@ onMounted(() => {
           }),
           bubbleMenu({
             target: bubbleMenuRef.value!,
-            tools: tools.mark,
+            tools: tools.textFormat,
           }),
           placeholder(),
         ],

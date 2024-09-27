@@ -61,31 +61,25 @@ export interface PatchedKeepAlive {
   pruneCacheEntry: (key: any) => void;
 }
 
-export interface EditorTools {
-  history: EditorTool[];
-  node: EditorTool[];
-  mark: EditorTool[];
-}
+export type EditorToolType = "history" | "lineFormat" | "textFormat" | "node";
 
 export interface EditorTool {
+  type: EditorToolType;
+  name: string;
+  icon: string;
+  key?: string;
   command: Command;
   enable?: (view: EditorView) => boolean;
-  type: keyof EditorTools;
-  name: string;
-  key?: string;
-  icon: string;
 }
 
-export interface Keymap {
-  [key: string]: Command;
-}
+export type EditorTools = Record<EditorToolType, EditorTool[]>;
 
 export interface ToolBarButton {
   [name: string]: HTMLElement;
 }
 
-export interface ToolbarButtons {
-  history: ToolBarButton;
-  node: ToolBarButton;
-  mark: ToolBarButton;
+export type ToolbarButtons = Record<EditorToolType, ToolBarButton>;
+
+export interface Keymap {
+  [key: string]: Command;
 }

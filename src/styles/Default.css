@@ -415,10 +415,6 @@ img.ProseMirror-separator {
   margin: 0 !important;
 }
 
-p:has(img) {
-  text-align: center;
-}
-
 code {
   padding: 0.125rem 0.25rem;
   font-size: 0.85rem;
@@ -432,4 +428,8 @@ blockquote {
   border-left: 4px solid var(--p-primary-color);
   background-color: var(--p-content-background);
   padding: 1px 16px;
+}
+
+figure {
+  text-align: center;
 }
