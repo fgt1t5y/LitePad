@@ -2,9 +2,10 @@ import type { EditorTool, EditorTools } from "@/types";
 import type { Command } from "prosemirror-state";
 import type { Keymap } from "@/types";
 
-import { setBlockType, toggleMark, wrapIn } from "prosemirror-commands";
+import { setBlockType, toggleMark } from "prosemirror-commands";
 import { undo, redo } from "prosemirror-history";
 import { schema } from "@/components/editor/schema";
+import { isMarkActive } from "./helper";
 
 const insertImage = (): Command => {
   return (state, dispatch) => {
@@ -34,10 +35,10 @@ const insertHorizontalRule = (): Command => {
   };
 };
 
-const insertLink = (): Command => {
+const toggleLink = (): Command => {
   return (state, dispatch) => {
-    if (state.selection.empty) {
-      return false;
+    if (isMarkActive(state, schema.marks.link)) {
+      return toggleMark(schema.marks.link)(state, dispatch);
     }
 
     const url = prompt("URL: ");
@@ -101,11 +102,12 @@ export const toolsRaw = [
     type: "textFormat",
   },
   {
-    command: insertLink(),
+    command: toggleLink(),
     name: "link",
     key: "Mod-k",
     icon: "i-link",
     type: "textFormat",
+    enable: (view) => !view.state.selection.empty,
   },
   heading(1),
   heading(2),

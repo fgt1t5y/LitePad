@@ -33,6 +33,10 @@ button {
   font-family: inherit;
   font-size: inherit;
   color: inherit;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 }
 
 input {

@@ -82,6 +82,9 @@ class ToolbarView {
 
     if (hasMarkActive(view)) {
       this.tools.textFormat.forEach((tool) => {
+        if (tool.enable) {
+          setDisabled(this.buttons.textFormat[tool.name], !tool.enable(view));
+        }
         setActive(
           this.buttons.textFormat[tool.name],
           isMarkActive(view.state, schema.marks[tool.name])
