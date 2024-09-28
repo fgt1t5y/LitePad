@@ -426,7 +426,7 @@ blockquote {
   margin: 1rem 0px;
   border-left: 4px solid var(--p-primary-color);
   background-color: var(--p-content-background);
-  padding: 1px 16px;
+  padding: 8px 16px;
 }
 
 figure {
