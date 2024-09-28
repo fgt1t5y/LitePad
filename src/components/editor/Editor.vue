@@ -2,7 +2,7 @@
   <div class="Toolbar" ref="toolbarRef"></div>
   <div class="BubbleMenu" ref="bubbleMenuRef"></div>
   <div class="EditArea">
-    <input class="TitleInput" type="text" placeholder="无标题笔记" />
+    <slot />
     <div class="ContentInput" ref="editorBodyRef"></div>
   </div>
 </template>
@@ -17,7 +17,7 @@ import { schema } from "@/components/editor/schema";
 import { toolbar } from "./toolbar";
 import { placeholder } from "./placeholder";
 import { tools, extraKeymap } from "./tools";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useXScroll } from "@/utils/useXScroll";
 import { bubbleMenu } from "./bubblemenu";
 import { getHTMLFromFragment, createNodeFromContent } from "./helper";
@@ -32,13 +32,18 @@ const html = defineModel("html", {
 
 let view: EditorView | null = null;
 
+const syncHTML = () => {
+  if (!view) return;
+  html.value = getHTMLFromFragment(view.state.doc.content, schema);
+};
+
 const dispatchTransaction = (tr: Transaction) => {
   if (!view || view.isDestroyed || !view.editable) return;
 
   const state = view.state.apply(tr);
   view.updateState(state);
 
-  html.value = getHTMLFromFragment(view.state.doc.content, schema);
+  syncHTML();
 };
 
 const destroy = () => {
@@ -72,7 +77,8 @@ onMounted(() => {
       },
     }
   );
-  html.value = getHTMLFromFragment(view.state.doc.content, schema);
+
+  syncHTML();
 
   useXScroll(toolbarRef.value!);
 });
