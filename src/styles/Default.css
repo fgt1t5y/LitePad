@@ -42,6 +42,7 @@ button {
 input {
   font-family: inherit;
   font-size: inherit;
+  background-color: transparent;
 }
 
 /* Layout */
@@ -345,15 +346,48 @@ input {
 .EditArea {
   max-width: 800px;
   margin: 0px auto;
-  padding: 8px;
   display: flex;
   flex-direction: column;
+  padding: 8px 0px;
+
+  .TitlePanle {
+    padding: 0px 30px;
+  }
 
   .TitleInput {
     font-size: 2rem;
-    background-color: transparent;
     outline: none;
     border: none;
+  }
+
+  .ContentInput {
+    padding: 0px 30px;
+  }
+}
+
+.DragHandle {
+  position: fixed;
+  opacity: 1;
+  border-radius: var(--p-border-radius-xs);
+  width: 1.2rem;
+  height: 1.5rem;
+  z-index: 0;
+  cursor: grab;
+  background-color: var(--p-content-background);
+
+  &:hover {
+    background-color: var(--p-content-background);
+    transition: background-color 0.2s;
+  }
+
+  &:active {
+    background-color: var(--p-content-hover-background);
+    cursor: grabbing;
+  }
+
+  &.Hide {
+    opacity: 0;
+    pointer-events: none;
   }
 }
 
@@ -370,7 +404,7 @@ input {
   content: "点击此处输入正文...";
   position: absolute;
   top: 1rem;
-  left: 0px;
+  left: 12px;
   color: var(--p-text-muted-color);
   cursor: text;
 }
@@ -399,10 +433,7 @@ input {
 }
 
 .ProseMirror-selectednode {
-  img,
-  hr {
-    outline: 2px solid var(--p-primary-color);
-  }
+  outline: 2px solid var(--p-primary-color);
 }
 
 /* Make sure li selections wrap around markers */
@@ -435,4 +466,6 @@ blockquote {
 
 figure {
   text-align: center;
+  padding: unset;
+  margin: unset;
 }

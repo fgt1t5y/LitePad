@@ -142,3 +142,11 @@
 .i-save::before {
   content: "\e161";
 }
+
+.i-square::before {
+  content: "\eb36";
+}
+
+.i-drag-handle::before {
+  content: "\e945";
+}

@@ -13,6 +13,7 @@ import { EditorState, Transaction } from "prosemirror-state";
 import { keymap } from "prosemirror-keymap";
 import { baseKeymap } from "prosemirror-commands";
 import { history } from "prosemirror-history";
+import { dropCursor } from "prosemirror-dropcursor";
 import { schema } from "@/components/editor/schema";
 import { toolbar } from "./toolbar";
 import { placeholder } from "./placeholder";
@@ -21,6 +22,7 @@ import { onMounted, ref, watch } from "vue";
 import { useXScroll } from "@/utils/useXScroll";
 import { bubbleMenu } from "./bubblemenu";
 import { getHTMLFromFragment, createNodeFromContent } from "./helper";
+import { dragHandle } from "./draghandle";
 
 const toolbarRef = ref<HTMLElement>();
 const bubbleMenuRef = ref<HTMLElement>();
@@ -60,6 +62,10 @@ onMounted(() => {
           keymap(baseKeymap),
           history(),
           keymap(extraKeymap),
+          dropCursor({
+            color: "var(--p-primary-color)",
+            width: 2,
+          }),
           toolbar({
             target: toolbarRef.value!,
             tools,
@@ -69,6 +75,12 @@ onMounted(() => {
             tools: tools.textFormat,
           }),
           placeholder(),
+          dragHandle({
+            dragHandleWidth: 30,
+            scrollTreshold: 10,
+            excludedTags: [],
+            pluginKey: "2",
+          }),
         ],
         doc: createNodeFromContent(html.value, schema),
       }),

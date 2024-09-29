@@ -48,6 +48,7 @@
     "primeicons": "^7.0.0",
     "primevue": "^4.0.7",
     "prosemirror-commands": "^1.6.0",
+    "prosemirror-dropcursor": "^1.8.1",
     "prosemirror-history": "^1.4.1",
     "prosemirror-keymap": "^1.2.2",
     "prosemirror-model": "^1.22.3",

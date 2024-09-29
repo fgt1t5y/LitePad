@@ -1,17 +1,19 @@
 <template>
   <Editor v-if="noteContent" v-model:html="noteContent" ref="editorRef">
-    <div>
-      <button class="i-hover" title="保存" @click="saveNote">
-        <i class="i i-save i-m"></i>
-      </button>
+    <div class="TitlePanle">
+      <input
+        v-model="noteTitle"
+        class="TitleInput"
+        type="text"
+        placeholder="无标题笔记"
+      />
     </div>
-    <input
-      v-model="noteTitle"
-      class="TitleInput"
-      type="text"
-      placeholder="无标题笔记"
-    />
   </Editor>
+  <div>
+    <button class="i-hover" title="保存" @click="saveNote">
+      <i class="i i-save i-m"></i>
+    </button>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -20,7 +22,7 @@ import { db } from "@/db";
 import { usePageTabs } from "@/utils/usePageTabs";
 import { useShared } from "@/utils/useShared";
 import { useToast } from "primevue/usetoast";
-import { ref, onBeforeUnmount, watchEffect } from "vue";
+import { ref, onBeforeUnmount } from "vue";
 import { useRoute } from "vue-router";
 
 const editorRef = ref<InstanceType<typeof Editor>>();
@@ -54,10 +56,6 @@ const saveNote = async () => {
 
   toast.add({ severity: "success", summary: "保存成功", life: 1000 });
 };
-
-watchEffect(() => {
-  console.log(noteTitle.value);
-});
 
 onBeforeUnmount(() => {
   editorRef.value?.destroy();
