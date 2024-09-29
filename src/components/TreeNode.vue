@@ -9,6 +9,7 @@
     :data-id="items.id"
     @contextmenu="emits('node-click', items, $event)"
   >
+    <Indent />
     <button
       class="TreeToggle"
       :disabled="isRenaming"
@@ -49,7 +50,7 @@
 
 <script setup lang="ts">
 import type { TreeItem, IDs } from "@/types";
-import { computed } from "vue";
+import { computed, h, type VNode } from "vue";
 
 defineOptions({
   name: "TreeNode",
@@ -94,6 +95,15 @@ const isGroup = computed(() => {
 const isRenaming = computed(() => {
   return props.items.id === props.renamingItem;
 });
+
+const Indent = () => {
+  const nodes: VNode[] = [];
+  for (let i = 0; i < props.level; i += 1) {
+    nodes.push(h("div"));
+  }
+
+  return h("div", { class: "Indent" }, nodes);
+};
 
 const onNodeClick = (node: TreeItem, event: MouseEvent) => {
   event.preventDefault();

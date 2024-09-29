@@ -133,19 +133,6 @@ input {
 .Tree {
   user-select: none;
 
-  .TreeChildren {
-    padding: 0px 0px 0px 1.2rem;
-    position: relative;
-
-    &::before {
-      content: "";
-      position: absolute;
-      width: 1px;
-      height: 100%;
-      background-color: var(--p-content-border-color);
-    }
-  }
-
   .TreeLeaf {
     .pi:first-child {
       visibility: hidden;
@@ -154,6 +141,9 @@ input {
 
   .TreeGroup,
   .TreeLeaf {
+    display: flex;
+    min-height: 36px;
+
     &:hover,
     &:focus {
       background-color: var(--p-content-hover-background);
@@ -165,7 +155,7 @@ input {
     gap: 8px;
     align-items: center;
     width: 100%;
-    padding: 0.5rem 0.75rem;
+    padding: 0px 0.75rem;
     word-break: keep-all;
 
     input {
@@ -178,10 +168,23 @@ input {
     }
   }
 
-  li {
-    &:hover,
-    &:focus {
-      background-color: var(--p-content-hover-background);
+  .Indent {
+    display: flex;
+
+    div {
+      width: 1.2rem;
+      height: 100%;
+      position: relative;
+    }
+
+    div::before {
+      content: "";
+      width: 1px;
+      height: 100%;
+      position: absolute;
+      background-color: var(--p-content-border-color);
+      left: 100%;
+      top: 0px;
     }
   }
 }
