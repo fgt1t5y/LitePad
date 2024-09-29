@@ -391,6 +391,15 @@ input {
   }
 }
 
+.isEmpty::after {
+  content: "点击此处输入正文...";
+  position: absolute;
+  top: 1rem;
+  left: 30px;
+  color: var(--p-text-muted-color);
+  cursor: text;
+}
+
 .ProseMirror {
   position: relative;
   word-wrap: break-word;
@@ -398,15 +407,6 @@ input {
   font-variant-ligatures: no-common-ligatures;
   outline: none;
   font-size: 1rem;
-}
-
-.isEmpty::after {
-  content: "点击此处输入正文...";
-  position: absolute;
-  top: 1rem;
-  left: 12px;
-  color: var(--p-text-muted-color);
-  cursor: text;
 }
 
 .ProseMirror pre {
@@ -468,4 +468,8 @@ figure {
   text-align: center;
   padding: unset;
   margin: unset;
+
+  img {
+    max-width: 100%;
+  }
 }
