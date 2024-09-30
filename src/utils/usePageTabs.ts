@@ -132,6 +132,7 @@ export const usePageTabs = defineStore("pageTabs", () => {
   const closeById = (id: number) => {
     if (!id) return;
     const index = _getIndex(id);
+    if (index === -1) return;
     close(tabs.value[index]);
   };
 
