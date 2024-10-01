@@ -2,7 +2,6 @@
 import {
   NodeSelection,
   Plugin,
-  PluginKey,
   TextSelection,
 } from "prosemirror-state";
 import { Fragment, Slice, Node } from "prosemirror-model";
@@ -74,7 +73,7 @@ function calcNodePos(pos: number, view: EditorView) {
 }
 
 export function dragHandle(
-  options: GlobalDragHandleOptions & { pluginKey: string }
+  options: GlobalDragHandleOptions
 ) {
   let listType = "";
   function handleDragStart(event: DragEvent, view: EditorView) {
@@ -177,18 +176,7 @@ export function dragHandle(
     }
   }
 
-  function hideHandleOnEditorOut(event: MouseEvent) {
-    if (event.target instanceof Element) {
-      const isInsideEditor = !!event.target.closest(".ProseMirror");
-      const isHandle =
-        !!event.target.attributes.getNamedItem("data-drag-handle");
-      if (isInsideEditor || isHandle) return;
-    }
-    hideDragHandle();
-  }
-
   return new Plugin({
-    key: new PluginKey(options.pluginKey),
     view: (view) => {
       dragHandleElement = document.createElement("div");
       dragHandleElement.draggable = true;
@@ -205,9 +193,9 @@ export function dragHandle(
         hideDragHandle();
         let scrollY = window.scrollY;
         if (e.clientY < options.scrollTreshold) {
-          window.scrollTo({ top: scrollY - 30, behavior: "smooth" });
+          window.scrollTo({ top: scrollY - 50, behavior: "smooth" });
         } else if (window.innerHeight - e.clientY < options.scrollTreshold) {
-          window.scrollTo({ top: scrollY + 30, behavior: "smooth" });
+          window.scrollTo({ top: scrollY + 50, behavior: "smooth" });
         }
       }
 
@@ -216,11 +204,6 @@ export function dragHandle(
       hideDragHandle();
 
       view.dom.parentElement?.appendChild(dragHandleElement);
-
-      view.dom.parentElement?.addEventListener(
-        "mouseout",
-        hideHandleOnEditorOut
-      );
 
       return {
         destroy: () => {
@@ -231,10 +214,6 @@ export function dragHandle(
             onDragHandleDragStart
           );
           dragHandleElement = null;
-          view.dom.parentElement?.removeEventListener(
-            "mouseout",
-            hideHandleOnEditorOut
-          );
         },
       };
     },
@@ -278,9 +257,9 @@ export function dragHandle(
           rect.top += (lineHeight - 24) / 2;
           rect.top += paddingTop;
           // Li markers
-          if (node.matches("ul:not([data-type=taskList]) li, ol li")) {
-            rect.left -= options.dragHandleWidth;
-          }
+          // if (node.matches("ul:not([data-type=taskList]) li, ol li")) {
+          //   rect.left -= options.dragHandleWidth;
+          // }
           rect.width = options.dragHandleWidth;
 
           if (!dragHandleElement) return;
@@ -328,6 +307,9 @@ export function dragHandle(
             const slice = new Slice(Fragment.from(newList), 0, 0);
             view.dragging = { slice, move: event.ctrlKey };
           }
+        },
+        mouseleave() {
+          hideDragHandle();
         },
       },
     },
