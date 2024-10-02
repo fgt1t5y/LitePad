@@ -18,7 +18,7 @@ import { schema } from "@/components/editor/schema";
 import { toolbar } from "./toolbar";
 import { placeholder } from "./placeholder";
 import { tools, extraKeymap } from "./tools";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useXScroll } from "@/utils/useXScroll";
 import { bubbleMenu } from "./bubblemenu";
 import { getHTMLFromFragment, createNodeFromContent } from "./helper";
@@ -46,10 +46,6 @@ const dispatchTransaction = (tr: Transaction) => {
   view.updateState(state);
 
   syncHTML();
-};
-
-const focus = () => {
-  if (view) view.focus();
 };
 
 const destroy = () => {
@@ -83,6 +79,7 @@ onMounted(() => {
             dragHandleWidth: 30,
             scrollTreshold: 10,
             excludedTags: [],
+            pluginKey: "2",
           }),
         ],
         doc: createNodeFromContent(html.value, schema),
@@ -95,10 +92,8 @@ onMounted(() => {
 
   syncHTML();
 
-  view.focus();
-
   useXScroll(toolbarRef.value!);
 });
 
-defineExpose({ focus, destroy });
+defineExpose({ destroy });
 </script>
