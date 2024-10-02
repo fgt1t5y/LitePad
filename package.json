@@ -31,7 +31,7 @@
     "dev:nw": "nwbuild --mode=run --glob=false --flavor=sdk --version=\"0.91.0\"",
     "build": "npm run build:app && npm run build:nw",
     "build:app": "run-p type-check \"build-only {@}\" --",
-    "build:nw": "node ./build.js",
+    "build:nw": "node ./scripts/build.js",
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "vite build",
