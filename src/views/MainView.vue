@@ -27,6 +27,7 @@
           group-type="folder"
           label-field="name"
           @node-click="fileTreeNodeClick"
+          @node-move="fileTreeNodeMove"
           @rename="fileTreeNodeRename"
         />
         <template #extra>
@@ -106,6 +107,7 @@ import { useXScroll } from "@/utils/useXScroll";
 import { useConfig } from "@/utils/useConfig";
 import { emptyNotebook, emptyFolder, emptyNote } from "@/constant";
 import { useToast } from "primevue/usetoast";
+import { isFolder } from "@/utils/helpers";
 
 // Components
 import PageTabs from "@/components/PageTabs.vue";
@@ -214,6 +216,26 @@ const fileTreeNodeRename = async (newName: string, origin: string) => {
     tabs.setLabel(id, newName);
   }
   renamingFileTreeNode.value = undefined;
+};
+
+const fileTreeNodeMove = async (from: number, to: number) => {
+  if (!from || !to) return;
+
+  if (isFolder(from)) {
+    await db.folders.update(from, {
+      folder_id: to,
+    });
+    s.updateFolder(from, {
+      folder_id: to,
+    });
+  } else {
+    await db.notes.update(from, {
+      folder_id: to,
+    });
+    s.updateNote(from, {
+      folder_id: to,
+    });
+  }
 };
 
 const createNotebook = async (name: string, description: string) => {

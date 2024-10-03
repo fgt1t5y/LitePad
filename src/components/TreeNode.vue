@@ -7,7 +7,14 @@
     }"
     :title="items.label"
     :data-id="items.id"
+    :data-type="items.type"
+    draggable="true"
     @contextmenu="emits('node-click', items, $event)"
+    @dragstart="onDragStart"
+    @dragenter="onDragEnter"
+    @dragover="onDragOver"
+    @dragend="onDragEnd"
+    @drop="onDrop"
   >
     <Indent />
     <button
@@ -43,14 +50,17 @@
       :prev-path="`${prevPath}/${item.label}`"
       :label-field="labelField"
       @node-click="onNodeClick"
-      @rename="(o, or) => emits('rename', o, or)"
+      @node-drag="onNodeDrag"
+      @rename="onNodeRename"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { TreeItem, IDs } from "@/types";
-import { computed, h, type VNode } from "vue";
+import type { TreeItem, TreeDnDStat, IDs } from "@/types";
+import type { VNode } from "vue";
+
+import { computed, h, inject } from "vue";
 
 defineOptions({
   name: "TreeNode",
@@ -70,6 +80,7 @@ const props = defineProps<{
 
 const emits = defineEmits<{
   (e: "node-click", node: TreeItem, event: MouseEvent): void;
+  (e: "node-drag", from: number, to: number): void;
   (e: "rename", newName: string, origin: string): void;
 }>();
 
@@ -81,11 +92,11 @@ const label = computed(() => {
 });
 
 const expanded = computed(() => {
-  return props.expandedItems[props?.items.id] === true;
+  return props.expandedItems[props.items.id] === true;
 });
 
 const hasChildren = computed(() => {
-  return props.items && props?.items?.children?.length! > 0;
+  return props.items && props.items.children?.length! > 0;
 });
 
 const isGroup = computed(() => {
@@ -110,6 +121,14 @@ const onNodeClick = (node: TreeItem, event: MouseEvent) => {
   emits("node-click", node, event);
 };
 
+const onNodeRename = (newName: string, origin: string) => {
+  emits("rename", newName, origin);
+};
+
+const onNodeDrag = (from: number, to: number) => {
+  emits("node-drag", from, to);
+};
+
 const onRename = (origin: string, event: FocusEvent | KeyboardEvent) => {
   const newName = (event.target as HTMLInputElement).value;
   emits("rename", newName, origin);
@@ -124,4 +143,52 @@ const onRenameInputKeydown = (origin: string, event: KeyboardEvent) => {
     (event.target as HTMLInputElement).blur();
   }
 };
+
+const dndStat = inject<TreeDnDStat>("dnd");
+
+const onDragStart = (event: DragEvent) => {
+  event.dataTransfer!.effectAllowed = "move";
+  const target = event.currentTarget as HTMLElement;
+  const startID = target.getAttribute("data-id");
+  target.classList.add("Dragging");
+  if (startID) {
+    dndStat!.startId = startID;
+    dndStat!.startEl = target;
+  }
+};
+
+const onDragEnter = (event: DragEvent) => {
+  const endID = (event.currentTarget as HTMLElement).getAttribute("data-id");
+  if (endID) {
+    dndStat!.endId = endID;
+  }
+};
+
+const onDragOver = (event: DragEvent) => {
+  event.preventDefault();
+  if (
+    (event.currentTarget as HTMLElement).getAttribute("data-type") ===
+    props.groupType
+  )
+    event.dataTransfer!.dropEffect = "move";
+  else event.dataTransfer!.dropEffect = "none";
+};
+
+const onDragEnd = (event: DragEvent) => {
+  event.preventDefault();
+  if (dndStat!.startEl) {
+    dndStat!.startEl.classList.remove("Dragging");
+  }
+};
+
+const onDrop = (event: DragEvent) => {
+  event.preventDefault();
+
+  if (
+    (event.currentTarget as HTMLElement).getAttribute("data-type") ===
+    props.groupType
+  )
+    emits("node-drag", Number(dndStat!.startId), Number(dndStat!.endId));
+};
+
 </script>

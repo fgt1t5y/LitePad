@@ -13,15 +13,17 @@
       :prev-path="item[labelField]"
       :label-field="labelField"
       @node-click="onNodeClick"
+      @node-drag="onNodeDrag"
       @rename="onRename"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { TreeItem, IDs } from "@/types";
+import type { TreeItem, TreeDnDStat, IDs } from "@/types";
+
 import TreeNode from "./TreeNode.vue";
-import { watch } from "vue";
+import { provide, watch } from "vue";
 
 defineOptions({
   name: "Tree",
@@ -35,8 +37,16 @@ const props = defineProps<{
 
 const emits = defineEmits<{
   (e: "node-click", node: TreeItem, event: MouseEvent): void;
+  (e: "node-move", from: number, to: number): void;
   (e: "rename", newName: string, origin: string): void;
 }>();
+
+provide<TreeDnDStat>("dnd", {
+  startId: undefined,
+  endId: undefined,
+  startEl: undefined,
+  endEl: undefined,
+});
 
 const expandedItems = defineModel<IDs>("expandedItems", {
   default: {},
@@ -54,6 +64,10 @@ const onNodeClick = (node: TreeItem, event: MouseEvent) => {
 
 const onRename = (newName: string, origin: string) => {
   emits("rename", newName, origin);
+};
+
+const onNodeDrag = (from: number, to: number) => {
+  emits("node-move", from, to);
 };
 
 watch(

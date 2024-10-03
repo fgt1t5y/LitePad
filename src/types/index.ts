@@ -57,6 +57,13 @@ export interface IDs {
   [id: number]: any;
 }
 
+export interface TreeDnDStat {
+  startId?: string;
+  endId?: string;
+  startEl?: HTMLElement;
+  endEl?: HTMLElement;
+}
+
 export interface PatchedKeepAlive {
   pruneCacheEntry: (key: any) => void;
 }

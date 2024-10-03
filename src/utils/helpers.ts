@@ -24,3 +24,7 @@ export const setClass = (
     el.classList.remove(classname);
   }
 };
+
+export const isFolder = (id: number) => id > 0 && id < 10001;
+
+export const isNote = (id: number) => id > 10000;
