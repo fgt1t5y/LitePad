@@ -1,5 +1,6 @@
 <template>
   <div
+    role="treeitem"
     :class="{
       TreeLeaf: !isGroup,
       TreeGroup: isGroup,
@@ -8,7 +9,7 @@
     :title="items.label"
     :data-id="items.id"
     :data-type="items.type"
-    draggable="true"
+    :draggable="!isRenaming"
     @contextmenu="emits('node-click', items, $event)"
     @dragstart="onDragStart"
     @dragenter="onDragEnter"
@@ -190,5 +191,4 @@ const onDrop = (event: DragEvent) => {
   )
     emits("node-drag", Number(dndStat!.startId), Number(dndStat!.endId));
 };
-
 </script>
