@@ -74,7 +74,7 @@ function calcNodePos(pos: number, view: EditorView) {
 }
 
 export function dragHandle(
-  options: GlobalDragHandleOptions & { pluginKey: string }
+  options: GlobalDragHandleOptions
 ) {
   let listType = "";
   function handleDragStart(event: DragEvent, view: EditorView) {
@@ -188,7 +188,6 @@ export function dragHandle(
   }
 
   return new Plugin({
-    key: new PluginKey(options.pluginKey),
     view: (view) => {
       dragHandleElement = document.createElement("div");
       dragHandleElement.draggable = true;

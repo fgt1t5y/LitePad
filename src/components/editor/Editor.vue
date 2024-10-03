@@ -78,8 +78,7 @@ onMounted(() => {
           dragHandle({
             dragHandleWidth: 30,
             scrollTreshold: 10,
-            excludedTags: [],
-            pluginKey: "2",
+            excludedTags: ['hr'],
           }),
         ],
         doc: createNodeFromContent(html.value, schema),
