@@ -1,15 +1,16 @@
 // Copy from https://github.com/NiclasDev63/tiptap-extension-global-drag-handle
-import {
-  NodeSelection,
-  Plugin,
-  PluginKey,
-  TextSelection,
-} from "prosemirror-state";
+import { NodeSelection, Plugin, TextSelection } from "prosemirror-state";
 import { Fragment, Slice, Node } from "prosemirror-model";
 // @ts-ignore
 import { __serializeForClipboard, EditorView } from "prosemirror-view";
+import {
+  absoluteRect,
+  calcNodePos,
+  nodeDOMAtCoords,
+  nodePosAtDOM,
+} from "./helper";
 
-export interface GlobalDragHandleOptions {
+export interface DragHandleOptions {
   /**
    * The width of the drag handle
    */
@@ -26,57 +27,9 @@ export interface GlobalDragHandleOptions {
   excludedTags: string[];
 }
 
-function absoluteRect(node: Element) {
-  const data = node.getBoundingClientRect();
-
-  return {
-    top: data.top,
-    left: data.left,
-    width: data.width,
-  };
-}
-
-function nodeDOMAtCoords(coords: { x: number; y: number }) {
-  return document
-    .elementsFromPoint(coords.x, coords.y)
-    .find(
-      (elem: Element) =>
-        elem.parentElement?.matches?.(".ProseMirror") ||
-        elem.matches(
-          [
-            "li",
-            "p:not(:first-child)",
-            "pre",
-            "blockquote",
-            "h1, h2, h3, h4, h5, h6",
-          ].join(", ")
-        )
-    );
-}
-
-function nodePosAtDOM(
-  node: Element,
-  view: EditorView,
-  options: GlobalDragHandleOptions
-) {
-  const boundingRect = node.getBoundingClientRect();
-
-  return view.posAtCoords({
-    left: boundingRect.left + 50 + options.dragHandleWidth,
-    top: boundingRect.top + 1,
-  })?.inside;
-}
-
-function calcNodePos(pos: number, view: EditorView) {
-  const $pos = view.state.doc.resolve(pos);
-  if ($pos.depth > 1) return $pos.before($pos.depth);
-  return pos;
-}
-
-export function dragHandle(
-  options: GlobalDragHandleOptions
-) {
+export function dragHandle(options: DragHandleOptions) {
   let listType = "";
+
   function handleDragStart(event: DragEvent, view: EditorView) {
     view.focus();
 
@@ -87,9 +40,9 @@ export function dragHandle(
       y: event.clientY,
     });
 
-    if (!(node instanceof Element)) return;
+    if (!node) return;
 
-    let draggedNodePos = nodePosAtDOM(node, view, options);
+    let draggedNodePos = nodePosAtDOM(node, view, options.dragHandleWidth);
     if (draggedNodePos == null || draggedNodePos < 0) return;
     draggedNodePos = calcNodePos(draggedNodePos, view);
 
@@ -180,8 +133,7 @@ export function dragHandle(
   function hideHandleOnEditorOut(event: MouseEvent) {
     if (event.target instanceof Element) {
       const isInsideEditor = !!event.target.closest(".ProseMirror");
-      const isHandle =
-        !!event.target.attributes.getNamedItem("data-drag-handle");
+      const isHandle = !!event.target.classList.contains("DragHandle");
       if (isInsideEditor || isHandle) return;
     }
     hideDragHandle();
@@ -192,7 +144,7 @@ export function dragHandle(
       dragHandleElement = document.createElement("div");
       dragHandleElement.draggable = true;
       dragHandleElement.dataset.dragHandle = "";
-      dragHandleElement.classList.add("DragHandle", "i", "i-drag-handle");
+      dragHandleElement.className = "DragHandle i i-drag-handle";
 
       function onDragHandleDragStart(e: DragEvent) {
         handleDragStart(e, view);
@@ -251,16 +203,11 @@ export function dragHandle(
 
           if (!node) return;
 
-          const notDragging = node.closest(".not-draggable");
           const excludedTagList = options.excludedTags
             .concat(["ol", "ul"])
             .join(", ");
 
-          if (
-            !(node instanceof Element) ||
-            node.matches(excludedTagList) ||
-            notDragging
-          ) {
+          if (!(node instanceof Element) || node.matches(excludedTagList)) {
             hideDragHandle();
             return;
           }
