@@ -68,6 +68,7 @@ input {
     width: 2px;
     right: 0px;
     cursor: col-resize;
+    z-index: 5;
 
     &:hover {
       background-color: var(--p-primary-color);
@@ -84,7 +85,8 @@ input {
   justify-content: space-between;
   position: sticky;
   top: 0px;
-  background-color: inherit;
+  background-color: var(--p-content-background);
+  z-index: 4;
 }
 
 #RightPanel {
@@ -243,6 +245,7 @@ input {
 .Panel {
   display: flex;
   flex-direction: column;
+  border-bottom: 1px solid var(--p-content-border-color);
 
   .PanelHeader {
     display: flex;
@@ -251,6 +254,10 @@ input {
     height: 36px;
     padding: 0.5rem 0.75rem;
     user-select: none;
+    position: sticky;
+    top: 36px;
+    background-color: var(--p-content-background);
+    z-index: 3;
 
     .PanelTitle {
       display: flex;

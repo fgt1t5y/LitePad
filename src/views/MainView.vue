@@ -219,7 +219,7 @@ const fileTreeNodeRename = async (newName: string, origin: string) => {
 };
 
 const fileTreeNodeMove = async (from: number, to: number) => {
-  if (!from || !to) return;
+  if (!from || !to || from === to) return;
 
   if (isFolder(from)) {
     await db.folders.update(from, {
