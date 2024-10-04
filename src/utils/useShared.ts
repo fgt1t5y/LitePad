@@ -14,6 +14,10 @@ export const useShared = defineStore("shared", {
     modal: {
       createNotebook: false,
     },
+    panel: {
+      notebookList: true,
+      fileTree: true,
+    },
   }),
   actions: {
     updateFolder(id: number, data: Partial<Folder>) {

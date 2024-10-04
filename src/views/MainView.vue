@@ -9,7 +9,7 @@
           <i class="i i-left-panel-close"></i>
         </button>
       </div>
-      <Panel title="笔记本列表">
+      <Panel v-model="s.panel.notebookList" title="笔记本列表">
         <ListSelect v-model:items="s.notebooks" :active="c.lastNotebook" />
         <template #extra>
           <button title="新建笔记本" @click="s.modal.createNotebook = true">
@@ -17,7 +17,7 @@
           </button>
         </template>
       </Panel>
-      <Panel title="笔记">
+      <Panel v-model="s.panel.fileTree" title="笔记">
         <Tree
           :items="fileTreeNodes"
           v-model:expanded-items="s.tree.expanded"

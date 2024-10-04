@@ -253,7 +253,7 @@ input {
     justify-content: space-between;
     align-items: center;
     height: 36px;
-    padding: 0.5rem 0.75rem;
+    padding: 0px 0.75rem;
     user-select: none;
     position: sticky;
     top: 36px;
@@ -273,10 +273,11 @@ input {
       display: flex;
       align-items: center;
       gap: 8px;
+    }
 
-      button:hover {
-        color: var(--p-primary-color);
-      }
+    button:hover,
+    button:focus {
+      color: var(--p-primary-color);
     }
   }
 }

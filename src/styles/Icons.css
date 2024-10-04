@@ -119,8 +119,16 @@
   content: "\e5c5";
 }
 
+.i-arrow-down2::before {
+  content: "\e313";
+}
+
 .i-arrow-right::before {
   content: "\e5df";
+}
+
+.i-arrow-right2::before {
+  content: "\e5cc";
 }
 
 .i-left-panel-open::before {
