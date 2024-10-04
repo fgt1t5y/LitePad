@@ -18,7 +18,7 @@ import { schema } from "@/components/editor/schema";
 import { toolbar } from "./toolbar";
 import { placeholder } from "./placeholder";
 import { tools, extraKeymap } from "./tools";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import { useXScroll } from "@/utils/useXScroll";
 import { bubbleMenu } from "./bubblemenu";
 import { getHTMLFromFragment, createNodeFromContent } from "./helper";
@@ -92,6 +92,11 @@ onMounted(() => {
   syncHTML();
 
   useXScroll(toolbarRef.value!);
+});
+
+onUnmounted(() => {
+  if (view) view.destroy();
+  view = null;
 });
 
 defineExpose({ destroy });

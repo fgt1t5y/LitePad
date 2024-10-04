@@ -22,7 +22,7 @@ import { db } from "@/db";
 import { usePageTabs } from "@/utils/usePageTabs";
 import { useShared } from "@/utils/useShared";
 import { useToast } from "primevue/usetoast";
-import { ref, onBeforeUnmount } from "vue";
+import { ref } from "vue";
 import { useRoute } from "vue-router";
 
 const editorRef = ref<InstanceType<typeof Editor>>();
@@ -56,8 +56,4 @@ const saveNote = async () => {
 
   toast.add({ severity: "success", summary: "保存成功", life: 1000 });
 };
-
-onBeforeUnmount(() => {
-  editorRef.value?.destroy();
-});
 </script>
