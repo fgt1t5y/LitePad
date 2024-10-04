@@ -1,6 +1,6 @@
 <template>
-  <Editor v-if="noteContent" v-model:html="noteContent" ref="editorRef">
-    <div class="TitlePanle">
+  <div class="Editor">
+    <div class="EditorHeader">
       <input
         v-model="noteTitle"
         class="TitleInput"
@@ -8,16 +8,11 @@
         placeholder="无标题笔记"
       />
     </div>
-  </Editor>
-  <div>
-    <button class="i-hover" title="保存" @click="saveNote">
-      <i class="i i-save i-m"></i>
-    </button>
+    <InputRichText v-model:html="noteContent" />
   </div>
 </template>
 
 <script setup lang="ts">
-import Editor from "@/components/editor/Editor.vue";
 import { db } from "@/db";
 import { usePageTabs } from "@/utils/usePageTabs";
 import { useShared } from "@/utils/useShared";
@@ -25,9 +20,10 @@ import { useToast } from "primevue/usetoast";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 
-const editorRef = ref<InstanceType<typeof Editor>>();
+import InputRichText from "@/components/editor/InputRichText.vue";
+
 const noteTitle = ref<string>();
-const noteContent = ref<string>("");
+const noteContent = ref<string>("<p></p>");
 
 const route = useRoute();
 const toast = useToast();

@@ -359,14 +359,14 @@ input {
   }
 }
 
-.EditArea {
+.Editor {
   max-width: 800px;
   margin: 0px auto;
   display: flex;
   flex-direction: column;
   padding: 8px 0px;
 
-  .TitlePanle {
+  .EditorHeader {
     padding: 0px 30px;
   }
 
@@ -374,10 +374,6 @@ input {
     font-size: 2rem;
     outline: none;
     border: none;
-  }
-
-  .ContentInput {
-    padding: 0px 30px;
   }
 }
 
@@ -423,6 +419,7 @@ input {
   font-variant-ligatures: no-common-ligatures;
   outline: none;
   font-size: 1rem;
+  padding: 0px 30px;
 }
 
 .ProseMirror pre {
@@ -450,6 +447,10 @@ input {
 
 .ProseMirror-selectednode {
   outline: 2px solid var(--p-primary-color);
+}
+
+.prosemirror-dropcursor-block {
+  background-color: var(--p-primary-color) !important;
 }
 
 /* Make sure li selections wrap around markers */

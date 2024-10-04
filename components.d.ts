@@ -12,6 +12,7 @@ declare module 'vue' {
     CreateNotebook: typeof import('./src/components/modal/CreateNotebook.vue')['default']
     Dialog: typeof import('primevue/dialog')['default']
     Editor: typeof import('./src/components/editor/Editor.vue')['default']
+    InputRichText: typeof import('./src/components/editor/InputRichText.vue')['default']
     InputText: typeof import('primevue/inputtext')['default']
     ListSelect: typeof import('./src/components/ListSelect.vue')['default']
     PageTabs: typeof import('./src/components/PageTabs.vue')['default']
