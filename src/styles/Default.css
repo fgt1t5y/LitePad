@@ -52,7 +52,7 @@ input {
   width: 100vw;
 }
 
-#LeftPanel {
+#AsidePanel {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -279,6 +279,10 @@ input {
     button:focus {
       color: var(--p-primary-color);
     }
+  }
+
+  .PanelBody {
+    padding-bottom: 0.125rem;
   }
 }
 

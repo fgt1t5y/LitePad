@@ -2,11 +2,11 @@
   <div class="ListSelect">
     <button
       :class="{ ListSelectItem: true, Active: item.id === active }"
-      :title="item.name"
+      :title="item[labelField || 'name']"
       v-for="item in items"
     >
-      <i class="pi pi-book"></i>
-      <span>{{ item.name }}</span>
+      <i v-show="icon" :class="icon"></i>
+      <span>{{ item[labelField || "name"] }}</span>
     </button>
   </div>
 </template>
@@ -17,7 +17,9 @@ defineOptions({
 });
 
 const props = defineProps<{
-  active?: number | string;
+  icon?: string;
+  active?: number;
+  labelField?: string;
 }>();
 
 const [items] = defineModel<any[] | undefined>("items");

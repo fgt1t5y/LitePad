@@ -1,6 +1,6 @@
 <template>
   <div id="Root">
-    <aside v-show="c.showAsidePanel" ref="leftPanelRef" id="LeftPanel">
+    <aside v-show="c.showAsidePanel" ref="leftPanelRef" id="AsidePanel">
       <div id="MainMenu">
         <button title="主菜单" @click="mainMenuRef!.show">
           <i class="i i-menu"></i>
@@ -10,7 +10,11 @@
         </button>
       </div>
       <Panel v-model="s.panel.notebookList" title="笔记本列表">
-        <ListSelect v-model:items="s.notebooks" :active="c.lastNotebook" />
+        <ListSelect
+          v-model:items="s.notebooks"
+          icon="pi pi-book"
+          :active="c.lastNotebook"
+        />
         <template #extra>
           <button title="新建笔记本" @click="s.modal.createNotebook = true">
             <i class="i i-add"></i>
@@ -46,7 +50,12 @@
       ></div>
     </aside>
     <main id="RightPanel">
-      <PageTabs id="PageTab" v-model:tabs="tabs.tabs" ref="pageTabsRef">
+      <PageTabs
+        v-if="!c.verticalTabbar"
+        id="PageTab"
+        v-model:tabs="tabs.tabs"
+        ref="pageTabsRef"
+      >
         <template #header>
           <button
             v-show="!c.showAsidePanel"
