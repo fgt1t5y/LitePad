@@ -7,6 +7,7 @@ export const useConfig = defineStore("config", {
   state: () => ({
     lastNotebook: 1,
     showAsidePanel: false,
+    asidePanelWidth: 300,
   }),
   actions: {
     load() {

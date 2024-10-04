@@ -1,6 +1,7 @@
 interface UseElementResizeOptions {
   min: number;
   max: number;
+  onResized?: (width: number) => void;
   onLessThanMin?: () => void;
   onGreaterThanMin?: () => void;
 }
@@ -8,6 +9,7 @@ interface UseElementResizeOptions {
 const defaultOption: UseElementResizeOptions = {
   min: 250,
   max: 700,
+  onResized: undefined,
   onLessThanMin: undefined,
   onGreaterThanMin: undefined,
 };
@@ -19,14 +21,15 @@ export const useElementResize = (
 ) => {
   const realOption = option || defaultOption;
 
-  const { min, max, onLessThanMin, onGreaterThanMin } = realOption;
+  const { min, max, onResized, onLessThanMin, onGreaterThanMin } = realOption;
   let startX: number;
   let startWidth: number;
   let isPassedMin: boolean = false;
+  let lastWidth: number;
 
   const mousedown = (event: MouseEvent) => {
     startX = event.clientX;
-    startWidth = parseInt(getComputedStyle(target).width);
+    lastWidth = startWidth = parseInt(getComputedStyle(target).width);
     document.body.classList.add("Resizing");
 
     document.documentElement.addEventListener("mousemove", mousemove);
@@ -46,6 +49,7 @@ export const useElementResize = (
       return;
     }
     target.style.setProperty("width", `${newWidth}px`);
+    lastWidth = newWidth;
   };
 
   const mouseup = () => {
@@ -53,6 +57,8 @@ export const useElementResize = (
 
     document.documentElement.removeEventListener("mousemove", mousemove);
     document.documentElement.removeEventListener("mouseup", mouseup);
+
+    onResized && onResized(lastWidth);
   };
 
   handle.addEventListener("mousedown", mousedown);

@@ -56,7 +56,7 @@ input {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  width: 300px;
+  min-width: 250px;
   border-right: 1px solid var(--p-content-border-color);
   position: relative;
   background-color: var(--p-content-background);

@@ -1,6 +1,11 @@
 <template>
   <div id="Root">
-    <aside v-show="c.showAsidePanel" ref="leftPanelRef" id="AsidePanel">
+    <aside
+      v-show="c.showAsidePanel"
+      ref="leftPanelRef"
+      id="AsidePanel"
+      :style="{ width: `${c.asidePanelWidth}px` }"
+    >
       <div id="MainMenu">
         <button title="主菜单" @click="mainMenuRef!.show">
           <i class="i i-menu"></i>
@@ -50,12 +55,7 @@
       ></div>
     </aside>
     <main id="RightPanel">
-      <PageTabs
-        v-if="!c.verticalTabbar"
-        id="PageTab"
-        v-model:tabs="tabs.tabs"
-        ref="pageTabsRef"
-      >
+      <PageTabs id="PageTab" v-model:tabs="tabs.tabs" ref="pageTabsRef">
         <template #header>
           <button
             v-show="!c.showAsidePanel"
@@ -421,6 +421,9 @@ onMounted(() => {
   useElementResize(resizeHandleRef.value!, leftPanelRef.value!, {
     min: 250,
     max: 700,
+    onResized: (width) => {
+      c.asidePanelWidth = width;
+    },
     onLessThanMin: () => (c.showAsidePanel = false),
     onGreaterThanMin: () => (c.showAsidePanel = true),
   });
