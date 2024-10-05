@@ -21,7 +21,7 @@ import { keymap } from "prosemirror-keymap";
 import { baseKeymap, setBlockType, toggleMark } from "prosemirror-commands";
 import { history, undo, redo } from "prosemirror-history";
 import { dropCursor } from "prosemirror-dropcursor";
-import { extraKeymap } from "./tools";
+import { extraKeymap } from "./keymap";
 
 interface EventArgument {
   update: { editor: Editor; tr: Transaction };
