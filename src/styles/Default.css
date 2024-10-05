@@ -319,43 +319,26 @@ input {
 }
 
 /* Editor style */
-.Toolbar {
+.EditorTools {
   background-color: var(--p-content-background);
   border-bottom: 1px solid var(--p-content-border-color);
+  padding: 0px 0.5rem;
   display: flex;
   position: sticky;
   top: 0px;
   z-index: 2;
   overflow: hidden;
 
-  .ToolGroup {
-    display: flex;
-    gap: 1rem;
-    padding: 0px 0.75rem;
-    border-right: 1px solid var(--p-content-border-color);
+  .Tool {
+    width: 36px;
+
+    &.ToolActive {
+      color: var(--p-primary-color);
+    }
   }
 
   button:disabled {
     color: var(--p-text-muted-color);
-  }
-}
-
-.ToolActive {
-  color: var(--p-primary-color);
-}
-
-.BubbleMenu {
-  background-color: var(--p-content-background);
-  position: absolute;
-  padding: 0px 0.75rem;
-  border: 1px solid var(--p-content-border-color);
-  gap: 1rem;
-  border-radius: var(--p-border-radius-xs);
-  display: none;
-  z-index: 3;
-
-  &.Visible {
-    display: flex;
   }
 }
 
@@ -401,15 +384,6 @@ input {
     opacity: 0;
     pointer-events: none;
   }
-}
-
-.isEmpty::after {
-  content: "点击此处输入正文...";
-  position: absolute;
-  top: 1rem;
-  left: 30px;
-  color: var(--p-text-muted-color);
-  cursor: text;
 }
 
 .ProseMirror {

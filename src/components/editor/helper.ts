@@ -1,5 +1,6 @@
-import type { EditorState } from "prosemirror-state";
+import type { EditorState, NodeSelection } from "prosemirror-state";
 import type { EditorView } from "prosemirror-view";
+import type { Node, NodeType } from "prosemirror-model";
 
 import {
   DOMSerializer,
@@ -11,36 +12,20 @@ import {
 
 export const isMarkActive = (state: EditorState, type: MarkType): boolean => {
   const { from, $from, to, empty } = state.selection;
+
   if (empty) return !!type.isInSet(state.storedMarks || $from.marks());
   else return state.doc.rangeHasMark(from, to, type);
 };
 
-export const setDisabled = (el: HTMLElement, on: boolean) => {
-  if (on) {
-    el.setAttribute("disabled", "");
-  } else {
-    el.removeAttribute("disabled");
-  }
-};
+export const isNodeActive = (
+  state: EditorState,
+  type: NodeType,
+  attributes = {}
+) => {
+  const { $from, to, node } = state.selection as NodeSelection;
 
-export const setActive = (el: HTMLElement, on: boolean) => {
-  if (on) {
-    el.classList.add("ToolActive");
-  } else {
-    el.classList.remove("ToolActive");
-  }
-};
-
-export const hasMarkActive = (view: EditorView) => {
-  const node = view.state.selection.$from.node(1);
-
-  if (!node) return false;
-
-  // 如果node的mark属性为空字符串，即不能插入mark
-  // 则直接返回false
-  if (node.type.spec.marks === "") return false;
-
-  return node.hasMarkup(node.type);
+  if (node) return node.hasMarkup(type, attributes);
+  else return to <= $from.end() && $from.parent.hasMarkup(type, attributes);
 };
 
 const removeWhitespaces = (node: HTMLElement) => {
@@ -73,7 +58,7 @@ export const elementFromString = (value: string) => {
   ).body;
 
   return removeWhitespaces(html);
-}
+};
 
 export function getHTMLFromFragment(
   fragment: Fragment,
@@ -89,6 +74,10 @@ export function getHTMLFromFragment(
 
   return container.innerHTML;
 }
+
+export const createDocument = (content: string, schema: Schema): Node => {
+  return createNodeFromContent(content, schema) as Node;
+};
 
 export function createNodeFromContent(content: string, schema: Schema) {
   const parser = DOMParser.fromSchema(schema);

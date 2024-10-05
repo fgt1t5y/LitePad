@@ -1,27 +1,27 @@
 <template>
+  <EditorTools v-if="editor" :editor="editor" />
   <div class="Editor">
     <div class="EditorHeader">
-      <input
-        v-model="noteTitle"
-        class="TitleInput"
-        type="text"
-        placeholder="无标题笔记"
-      />
+      <input v-model="noteTitle" class="TitleInput" placeholder="无标题笔记" />
     </div>
-    <InputRichText v-model:html="noteContent" />
+    <div ref="editorRef"></div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { LitePadEditor } from "@/components/editor";
 import { db } from "@/db";
 import { usePageTabs } from "@/utils/usePageTabs";
 import { useShared } from "@/utils/useShared";
 import { useToast } from "primevue/usetoast";
-import { ref } from "vue";
+import { onUnmounted, ref, shallowRef } from "vue";
 import { useRoute } from "vue-router";
+import { schema } from "@/components/editor/schema";
 
-import InputRichText from "@/components/editor/InputRichText.vue";
+import EditorTools from "@/components/editor/EditorTools.vue";
 
+const editor = shallowRef<LitePadEditor | null>();
+const editorRef = ref<HTMLElement>();
 const noteTitle = ref<string>();
 const noteContent = ref<string>("<p></p>");
 
@@ -36,7 +36,22 @@ db.notes.get(noteId).then((note) => {
 
   noteTitle.value = note.name;
   noteContent.value = note.content;
+
+  setupEditor();
 });
+
+const setupEditor = () => {
+  if (!editorRef.value) return;
+
+  editor.value = new LitePadEditor({
+    mount: editorRef.value,
+    content: noteContent.value,
+    schema,
+    onUpdate({ editor }) {
+      noteContent.value = editor.getHTML();
+    },
+  });
+};
 
 const saveNote = async () => {
   await db.notes.update(noteId, {
@@ -52,4 +67,9 @@ const saveNote = async () => {
 
   toast.add({ severity: "success", summary: "保存成功", life: 1000 });
 };
+
+onUnmounted(() => {
+  editor.value?.destroy();
+  editor.value = null;
+});
 </script>
