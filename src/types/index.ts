@@ -71,3 +71,10 @@ export interface PatchedKeepAlive {
 export interface Keymap {
   [key: string]: Command;
 }
+
+export interface EditorTool {
+  icon: string;
+  command: () => void;
+  active: () => boolean;
+  enable: () => boolean;
+}

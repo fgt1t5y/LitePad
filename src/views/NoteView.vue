@@ -1,5 +1,5 @@
 <template>
-  <EditorTools v-if="editor" :editor="editor" />
+  <EditorTools v-if="editor" :tools="editorTools" />
   <div class="Editor">
     <div class="EditorHeader">
       <input v-model="noteTitle" class="TitleInput" placeholder="无标题笔记" />
@@ -9,12 +9,14 @@
 </template>
 
 <script setup lang="ts">
+import type { EditorTool } from "@/types";
+
 import { LitePadEditor } from "@/components/editor";
 import { db } from "@/db";
 import { usePageTabs } from "@/utils/usePageTabs";
 import { useShared } from "@/utils/useShared";
 import { useToast } from "primevue/usetoast";
-import { onUnmounted, ref, shallowRef } from "vue";
+import { onUnmounted, ref, shallowRef, watch } from "vue";
 import { useRoute } from "vue-router";
 import { schema } from "@/components/editor/schema";
 
@@ -24,6 +26,8 @@ const editor = shallowRef<LitePadEditor | null>();
 const editorRef = ref<HTMLElement>();
 const noteTitle = ref<string>();
 const noteContent = ref<string>("<p></p>");
+const titleChanged = ref<boolean>(false);
+const contentChanged = ref<boolean>(false);
 
 const route = useRoute();
 const toast = useToast();
@@ -40,6 +44,76 @@ db.notes.get(noteId).then((note) => {
   setupEditor();
 });
 
+const heading = (level: number): EditorTool => ({
+  icon: `i i-m i-h${level}`,
+  command: () => editor.value!.setNode("heading", { level }),
+  active: () => editor.value!.isNodeActive("heading", { level }),
+  enable: () => true,
+});
+
+const editorTools = [
+  {
+    icon: "i i-m i-save",
+    command: () => saveNote(),
+    active: () => false,
+    enable: () => titleChanged.value || contentChanged.value,
+  },
+  {
+    icon: "i i-m i-undo",
+    command: () => editor.value!.undo(),
+    active: () => false,
+    enable: () => editor.value!.canUndo(),
+  },
+  {
+    icon: "i i-m i-redo",
+    command: () => editor.value!.redo(),
+    active: () => false,
+    enable: () => editor.value!.canRedo(),
+  },
+  heading(1),
+  heading(2),
+  heading(3),
+  heading(4),
+  heading(5),
+  heading(6),
+  {
+    icon: "i i-m i-paragraph",
+    command: () => editor.value!.setNode("paragraph"),
+    active: () => editor.value!.isNodeActive("paragraph"),
+    enable: () => true,
+  },
+  {
+    icon: "i i-m i-quote",
+    command: () => editor.value!.setNode("blockquote"),
+    active: () => editor.value!.isNodeActive("blockquote"),
+    enable: () => true,
+  },
+  {
+    icon: "i i-m i-bold",
+    command: () => editor.value!.toggleMark("bold"),
+    active: () => editor.value!.isMarkActive("bold"),
+    enable: () => true,
+  },
+  {
+    icon: "i i-m i-italic",
+    command: () => editor.value!.toggleMark("italic"),
+    active: () => editor.value!.isMarkActive("italic"),
+    enable: () => true,
+  },
+  {
+    icon: "i i-m i-strikethrough",
+    command: () => editor.value!.toggleMark("del"),
+    active: () => editor.value!.isMarkActive("del"),
+    enable: () => true,
+  },
+  {
+    icon: "i i-m i-code",
+    command: () => editor.value!.toggleMark("code"),
+    active: () => editor.value!.isMarkActive("code"),
+    enable: () => true,
+  },
+] as EditorTool[];
+
 const setupEditor = () => {
   if (!editorRef.value) return;
 
@@ -47,13 +121,20 @@ const setupEditor = () => {
     mount: editorRef.value,
     content: noteContent.value,
     schema,
+    autoFocus: true,
     onUpdate({ editor }) {
       noteContent.value = editor.getHTML();
+      contentChanged.value = true;
     },
   });
 };
 
 const saveNote = async () => {
+  if (!noteTitle.value) {
+    toast.add({ severity: "error", summary: "缺少笔记标题", life: 1000 });
+    return;
+  }
+
   await db.notes.update(noteId, {
     name: noteTitle.value,
     content: noteContent.value,
@@ -65,8 +146,19 @@ const saveNote = async () => {
 
   tabs.setLabel(noteId, noteTitle.value!);
 
+  titleChanged.value = false;
+  contentChanged.value = false;
+
   toast.add({ severity: "success", summary: "保存成功", life: 1000 });
 };
+
+watch(
+  () => noteTitle.value,
+  (_, lastTitle) => {
+    if (!lastTitle) return;
+    titleChanged.value = true;
+  }
+);
 
 onUnmounted(() => {
   editor.value?.destroy();

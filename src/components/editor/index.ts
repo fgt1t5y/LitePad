@@ -1,14 +1,9 @@
 import type { EditorProps } from "prosemirror-view";
 import type { Schema, Node } from "prosemirror-model";
-import type {
-  AppContext,
-  ComponentInternalInstance,
-  ComponentPublicInstance,
-  Ref,
-} from "vue";
+import type { Ref } from "vue";
 
 import { EditorView } from "prosemirror-view";
-import { EditorState, TextSelection, Transaction } from "prosemirror-state";
+import { EditorState, Transaction } from "prosemirror-state";
 import {
   isMarkActive,
   isNodeActive,
@@ -22,6 +17,7 @@ import { baseKeymap, setBlockType, toggleMark } from "prosemirror-commands";
 import { history, undo, redo } from "prosemirror-history";
 import { dropCursor } from "prosemirror-dropcursor";
 import { extraKeymap } from "./keymap";
+import { dragHandle } from "./draghandle";
 
 interface EventArgument {
   update: { editor: Editor; tr: Transaction };
@@ -74,15 +70,8 @@ export class Editor {
 
   private setupView({ mount, content, props, autoFocus }: EditorOptions) {
     let doc: Node | null;
-    let selection: TextSelection | undefined;
 
     doc = createDocument(content, this.schema);
-
-    if (autoFocus) {
-      selection = TextSelection.create(doc, 0, 0);
-    } else {
-      selection = undefined;
-    }
 
     this.view = new EditorView(
       { mount },
@@ -90,17 +79,23 @@ export class Editor {
         ...props,
         state: EditorState.create({
           doc,
-          selection,
           plugins: [
             keymap(baseKeymap),
             keymap(extraKeymap),
             history(),
             dropCursor(),
+            dragHandle({
+              dragHandleWidth: 30,
+              scrollTreshold: 20,
+              excludedTags: ["hr"],
+            }),
           ],
         }),
         dispatchTransaction: this.dispatchTransaction.bind(this),
       }
     );
+
+    if (autoFocus) this.view!.focus();
   }
 
   private dispatchTransaction(tr: Transaction) {
@@ -244,14 +239,8 @@ function useDebouncedRef<T>(value: T) {
   });
 }
 
-export type ContentComponent = ComponentInternalInstance & {
-  ctx: ComponentPublicInstance;
-};
-
 export class LitePadEditor extends Editor {
   private reactiveState: Ref<EditorState>;
-  public contentComponent: ContentComponent | null = null;
-  public appContext: AppContext | null = null;
 
   constructor(options: EditorOptions) {
     super(options);
