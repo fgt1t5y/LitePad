@@ -344,6 +344,7 @@ input {
 
 .Editor {
   max-width: 900px;
+  min-height: 100vh;
   margin: 0px auto;
   display: flex;
   flex-direction: column;
@@ -360,6 +361,21 @@ input {
     outline: none;
     border: none;
   }
+}
+
+.EditorStatus {
+  user-select: none;
+  background-color: var(--p-content-background);
+  border-top: 1px solid var(--p-content-border-color);
+  padding: 0px 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 36px;
+  position: sticky;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
 }
 
 .DragHandle {

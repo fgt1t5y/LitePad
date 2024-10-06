@@ -6,6 +6,8 @@
     </div>
     <div ref="editorRef"></div>
   </div>
+  <EditorStatus v-if="editor" :editor="editor" />
+  <div v-else class="EditorStatus"></div>
 </template>
 
 <script setup lang="ts">
@@ -22,6 +24,7 @@ import { schema } from "@/components/editor/schema";
 import { extraKeymap } from "@/components/editor/keymap";
 
 import EditorTools from "@/components/editor/EditorTools.vue";
+import EditorStatus from "@/components/editor/EditorStatus.vue";
 
 const editor = shallowRef<LitePadEditor | null>();
 const editorRef = ref<HTMLElement>();

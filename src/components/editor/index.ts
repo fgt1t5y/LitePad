@@ -66,6 +66,10 @@ interface EditorOptions {
    */
   autoFocus?: boolean;
   /**
+   * Editor editable.
+   */
+  editable?: boolean;
+  /**
    * When content changed, will invoke it.
    * @param props Handle's arguments.
    * @returns void
@@ -91,13 +95,20 @@ export class Editor {
     }
   }
 
-  private setupView({ mount, content, props, autoFocus }: EditorOptions) {
+  private setupView({
+    mount,
+    content,
+    props,
+    autoFocus,
+    editable,
+  }: EditorOptions) {
     const doc = createDocument(content, this.schema);
 
     this.view = new EditorView(
       { mount },
       {
         ...props,
+        editable: () => editable || true,
         state: EditorState.create({
           doc,
           plugins: [
@@ -149,6 +160,10 @@ export class Editor {
     if (fns.length) {
       fns.forEach((fn) => fn(argv));
     }
+  }
+
+  public setEditable(editable: boolean) {
+    this.view!.setProps({ editable: () => editable });
   }
 
   public canUndo() {
@@ -224,8 +239,17 @@ export class Editor {
     this.focus();
   }
 
+  public get textCount() {
+    const { doc } = this.state;
+    return doc.textBetween(0, doc.content.size, undefined, " ").length;
+  }
+
   public get state(): EditorState {
     return this.view!.state;
+  }
+
+  public get isEditable() {
+    return this.view!.editable;
   }
 
   public get isDestroyed() {

@@ -8,9 +8,11 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('primevue/button')['default']
+    Checkbox: typeof import('primevue/checkbox')['default']
     ContextMenu: typeof import('primevue/contextmenu')['default']
     CreateNotebook: typeof import('./src/components/modal/CreateNotebook.vue')['default']
     Dialog: typeof import('primevue/dialog')['default']
+    EditorStatus: typeof import('./src/components/editor/EditorStatus.vue')['default']
     EditorTools: typeof import('./src/components/editor/EditorTools.vue')['default']
     InputText: typeof import('primevue/inputtext')['default']
     ListSelect: typeof import('./src/components/ListSelect.vue')['default']
