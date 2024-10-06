@@ -5,6 +5,15 @@ export const schema = new Schema({
     doc: {
       content: "block+",
     },
+    hard_break: {
+      inline: true,
+      group: "inline",
+      selectable: false,
+      parseDOM: [{ tag: "br" }],
+      toDOM() {
+        return ["br"];
+      },
+    },
     paragraph: {
       content: "inline*",
       group: "block",

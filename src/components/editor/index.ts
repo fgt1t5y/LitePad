@@ -1,6 +1,7 @@
 import type { EditorProps } from "prosemirror-view";
-import type { Schema, Node } from "prosemirror-model";
+import type { Schema } from "prosemirror-model";
 import type { Ref } from "vue";
+import type { Keymap } from "@/types";
 
 import { EditorView } from "prosemirror-view";
 import { EditorState, Transaction } from "prosemirror-state";
@@ -16,8 +17,6 @@ import { keymap } from "prosemirror-keymap";
 import { baseKeymap, setBlockType, toggleMark } from "prosemirror-commands";
 import { history, undo, redo } from "prosemirror-history";
 import { dropCursor } from "prosemirror-dropcursor";
-import { extraKeymap } from "./keymap";
-import { dragHandle } from "./draghandle";
 
 interface EventArgument {
   update: { editor: Editor; tr: Transaction };
@@ -42,23 +41,47 @@ type CallbackFunction<
 > = (props: CallbackType<T, EventName>) => any;
 
 interface EditorOptions {
+  /**
+   * A element as root to place editor.
+   */
   mount: HTMLElement;
+  /**
+   * Initial HTML content.
+   */
   content: string;
+  /**
+   * Editor scheme.
+   */
   schema: Schema;
+  /**
+   * Shortcut scheme.
+   */
+  keymap: Keymap;
+  /**
+   * EditorView's prop.
+   */
   props?: EditorProps;
+  /**
+   * Auto focus the editor when editor loaded.
+   */
   autoFocus?: boolean;
+  /**
+   * When content changed, will invoke it.
+   * @param props Handle's arguments.
+   * @returns void
+   */
   onUpdate?: (props: EventArgument["update"]) => void;
 }
 
 export class Editor {
   public view!: EditorView | null;
   public schema: Schema;
-  public options: EditorOptions;
+  public keymap: Keymap;
   private callbacks: EventCallbacks;
 
   constructor(options: EditorOptions) {
     this.schema = options.schema;
-    this.options = options;
+    this.keymap = options.keymap;
     this.callbacks = { update: [], beforeTransaction: [] };
 
     this.setupView(options);
@@ -69,9 +92,7 @@ export class Editor {
   }
 
   private setupView({ mount, content, props, autoFocus }: EditorOptions) {
-    let doc: Node | null;
-
-    doc = createDocument(content, this.schema);
+    const doc = createDocument(content, this.schema);
 
     this.view = new EditorView(
       { mount },
@@ -81,14 +102,9 @@ export class Editor {
           doc,
           plugins: [
             keymap(baseKeymap),
-            keymap(extraKeymap),
+            keymap(this.keymap),
             history(),
             dropCursor(),
-            dragHandle({
-              dragHandleWidth: 30,
-              scrollTreshold: 20,
-              excludedTags: ["hr"],
-            }),
           ],
         }),
         dispatchTransaction: this.dispatchTransaction.bind(this),

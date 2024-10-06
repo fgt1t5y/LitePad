@@ -343,7 +343,7 @@ input {
 }
 
 .Editor {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0px auto;
   display: flex;
   flex-direction: column;
@@ -370,11 +370,9 @@ input {
   height: 1.5rem;
   z-index: 0;
   cursor: grab;
-  background-color: var(--p-content-background);
 
   &:hover {
     background-color: var(--p-content-background);
-    transition: background-color 0.2s;
   }
 
   &:active {
@@ -395,7 +393,7 @@ input {
   font-variant-ligatures: no-common-ligatures;
   outline: none;
   font-size: 1rem;
-  padding: 0px 30px;
+  padding: 0px 30px 200px 30px;
 }
 
 .ProseMirror pre {

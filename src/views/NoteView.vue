@@ -19,6 +19,7 @@ import { useToast } from "primevue/usetoast";
 import { onUnmounted, ref, shallowRef, watch } from "vue";
 import { useRoute } from "vue-router";
 import { schema } from "@/components/editor/schema";
+import { extraKeymap } from "@/components/editor/keymap";
 
 import EditorTools from "@/components/editor/EditorTools.vue";
 
@@ -121,6 +122,7 @@ const setupEditor = () => {
     mount: editorRef.value,
     content: noteContent.value,
     schema,
+    keymap: extraKeymap,
     autoFocus: true,
     onUpdate({ editor }) {
       noteContent.value = editor.getHTML();
