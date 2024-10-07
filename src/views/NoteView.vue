@@ -1,5 +1,10 @@
 <template>
   <EditorTools v-if="editor" :tools="editorTools" />
+  <EditorFindAndReplace
+    v-if="editor && showSearchReplacePanel"
+    v-model="showSearchReplacePanel"
+    :editor="editor"
+  />
   <div class="Editor">
     <div class="EditorHeader">
       <input v-model="noteTitle" class="TitleInput" placeholder="无标题笔记" />
@@ -7,7 +12,6 @@
     <div ref="editorRef"></div>
   </div>
   <EditorStatus v-if="editor" :editor="editor" />
-  <div v-else class="EditorStatus"></div>
 </template>
 
 <script setup lang="ts">
@@ -23,6 +27,7 @@ import { useRoute } from "vue-router";
 import { schema } from "@/components/editor/schema";
 import { extraKeymap } from "@/components/editor/keymap";
 
+import EditorFindAndReplace from "@/components/editor/EditorFindAndReplace.vue";
 import EditorTools from "@/components/editor/EditorTools.vue";
 import EditorStatus from "@/components/editor/EditorStatus.vue";
 
@@ -32,6 +37,7 @@ const noteTitle = ref<string>();
 const noteContent = ref<string>("<p></p>");
 const titleChanged = ref<boolean>(false);
 const contentChanged = ref<boolean>(false);
+const showSearchReplacePanel = ref<boolean>(false);
 
 const route = useRoute();
 const toast = useToast();
@@ -61,6 +67,14 @@ const editorTools = [
     command: () => saveNote(),
     active: () => false,
     enable: () => titleChanged.value || contentChanged.value,
+  },
+  {
+    icon: "i i-m i-search",
+    command: () => {
+      showSearchReplacePanel.value = !showSearchReplacePanel.value;
+    },
+    active: () => showSearchReplacePanel.value,
+    enable: () => true,
   },
   {
     icon: "i i-m i-undo",

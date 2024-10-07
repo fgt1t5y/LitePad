@@ -17,6 +17,15 @@ import { keymap } from "prosemirror-keymap";
 import { baseKeymap, setBlockType, toggleMark } from "prosemirror-commands";
 import { history, undo, redo } from "prosemirror-history";
 import { dropCursor } from "prosemirror-dropcursor";
+import {
+  search,
+  setSearchState,
+  getSearchState,
+  getMatchHighlights,
+  SearchQuery,
+  findNext,
+  findPrev,
+} from "prosemirror-search";
 
 interface EventArgument {
   update: { editor: Editor; tr: Transaction };
@@ -115,6 +124,7 @@ export class Editor {
             keymap(baseKeymap),
             keymap(this.keymap),
             history(),
+            search(),
             dropCursor(),
           ],
         }),
@@ -237,6 +247,57 @@ export class Editor {
     setBlockType(nodeType, attributes)(this.state, this.view!.dispatch);
 
     this.focus();
+  }
+
+  public find(keyword: string) {
+    const query = new SearchQuery({
+      search: keyword,
+    });
+    const tr = this.state.tr;
+
+    this.view!.dispatch(setSearchState(tr, query));
+  }
+
+  public clearFind() {
+    this.find("");
+  }
+
+  public getSearchState() {
+    return getSearchState(this.state);
+  }
+
+  public getMatchCount() {
+    if (!this.getSearchState()) return 0;
+
+    const decos = getMatchHighlights(this.state);
+    let i = 0;
+    let sum = 0;
+
+    // @ts-ignore
+    const decoArray = decos.children as any[];
+
+    for (; i < decoArray.length; i += 1) {
+      if (typeof decoArray[i] === "number") continue;
+      sum += decoArray[i].local.length;
+    }
+
+    return sum;
+  }
+
+  public findPrev() {
+    if (!this.getSearchState()) return;
+
+    this.view!.focus();
+
+    return findPrev(this.state, this.view!.dispatch);
+  }
+
+  public findNext() {
+    if (!this.getSearchState()) return;
+
+    this.view!.focus();
+
+    return findNext(this.state, this.view!.dispatch);
   }
 
   public get textCount() {

@@ -115,12 +115,20 @@
   content: "\f53e";
 }
 
+.i-arrow-up3::before {
+  content: "\e5d8";
+}
+
 .i-arrow-down::before {
   content: "\e5c5";
 }
 
 .i-arrow-down2::before {
   content: "\e313";
+}
+
+.i-arrow-down3::before {
+  content: "\e5db";
 }
 
 .i-arrow-right::before {
@@ -157,4 +165,8 @@
 
 .i-drag-handle::before {
   content: "\e945";
+}
+
+.i-search::before {
+  content: "\e8b6";
 }

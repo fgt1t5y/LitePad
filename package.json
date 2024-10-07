@@ -52,6 +52,7 @@
     "prosemirror-history": "^1.4.1",
     "prosemirror-keymap": "^1.2.2",
     "prosemirror-model": "^1.22.3",
+    "prosemirror-search": "^1.0.0",
     "prosemirror-state": "^1.4.3",
     "prosemirror-transform": "^1.10.0",
     "prosemirror-view": "^1.34.2",

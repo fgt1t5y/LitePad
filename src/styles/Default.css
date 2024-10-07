@@ -36,6 +36,7 @@ button {
 
   &:disabled {
     cursor: not-allowed;
+    color: var(--p-text-muted-color);
   }
 }
 
@@ -129,6 +130,30 @@ input {
 .Resizing {
   cursor: col-resize;
   user-select: none;
+}
+
+.FloatPanel {
+  position: fixed;
+  background-color: var(--p-content-background);
+  border: 1px solid var(--p-content-border-color);
+  border-radius: var(--p-border-radius-xs);
+  z-index: 6;
+
+  .FloatPanelHeader {
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 0.75rem;
+    border-bottom: 1px solid var(--p-content-border-color);
+  }
+
+  .FloatPanelBody {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0.5rem 0.75rem;
+  }
 }
 
 /* Custom components style */
@@ -336,9 +361,21 @@ input {
       color: var(--p-primary-color);
     }
   }
+}
 
-  button:disabled {
-    color: var(--p-text-muted-color);
+.EditorSearch {
+  width: 300px;
+  right: 24px;
+  top: 80px;
+
+  .SearchInfo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    input {
+      flex-grow: 1;
+    }
   }
 }
 
@@ -366,16 +403,16 @@ input {
 .EditorStatus {
   user-select: none;
   background-color: var(--p-content-background);
-  border-top: 1px solid var(--p-content-border-color);
-  padding: 0px 0.5rem;
+  border: 1px solid var(--p-content-border-color);
+  border-radius: var(--p-border-radius-xs);
+  padding: .5rem 0.75rem;
+  width: 300px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 36px;
-  position: sticky;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
 }
 
 .DragHandle {
@@ -409,7 +446,7 @@ input {
   font-variant-ligatures: no-common-ligatures;
   outline: none;
   font-size: 1rem;
-  padding: 0px 30px 200px 30px;
+  padding: 0px 30px;
 }
 
 .ProseMirror pre {
@@ -441,6 +478,14 @@ input {
 
 .prosemirror-dropcursor-block {
   background-color: var(--p-primary-color) !important;
+}
+
+.ProseMirror-search-match {
+  background-color: var(--p-primary-color);
+}
+
+.ProseMirror-active-search-match {
+  background-color: var(--p-primary-color);
 }
 
 /* Make sure li selections wrap around markers */
