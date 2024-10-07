@@ -42,6 +42,7 @@ const modelValue = defineModel<boolean>({
   set(show) {
     if (!show) {
       props.editor.clearFind();
+      props.editor.off("update", updateMatchingCount);
     }
   },
 });
@@ -63,7 +64,15 @@ const findNext = () => {
   props.editor.findNext();
 };
 
+const updateMatchingCount = () => {
+  if (!keyword.value) return;
+
+  matchingCount.value = props.editor.getMatchCount();
+};
+
 const queryString = debounce(_queryString, 500);
+
+props.editor.on("update", updateMatchingCount);
 
 watch(
   () => keyword.value,

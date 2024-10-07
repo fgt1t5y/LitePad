@@ -164,6 +164,19 @@ export class Editor {
     this.callbacks[type].push(callback);
   }
 
+  public off<EventName extends StringKeyOf<EventArgument>>(
+    type: EventName,
+    callback?: CallbackFunction<EventArgument, EventName>
+  ) {
+    const fns = this.callbacks[type];
+
+    if (fns) {
+      this.callbacks[type] = fns.filter((fn) => callback !== fn);
+    } else {
+      this.callbacks[type] = [];
+    }
+  }
+
   public emit(type: EventName, argv: CallbackType<EventArgument, EventName>) {
     const fns = this.callbacks[type];
 
