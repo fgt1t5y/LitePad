@@ -1,4 +1,4 @@
-// Copy from https://github.com/NiclasDev63/tiptap-extension-global-drag-handle
+// Clone from https://github.com/NiclasDev63/tiptap-extension-global-drag-handle
 import { NodeSelection, Plugin, TextSelection } from "prosemirror-state";
 import { Fragment, Slice, Node } from "prosemirror-model";
 // @ts-ignore

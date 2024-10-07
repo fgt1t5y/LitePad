@@ -5,6 +5,11 @@ import type { Keymap } from "@/types";
 
 import { EditorView } from "prosemirror-view";
 import { EditorState, Transaction } from "prosemirror-state";
+import { keymap } from "prosemirror-keymap";
+import { baseKeymap, setBlockType, toggleMark } from "prosemirror-commands";
+import { history, undo, redo } from "prosemirror-history";
+import { dropCursor } from "prosemirror-dropcursor";
+import { customRef, markRaw } from "vue";
 import {
   isMarkActive,
   isNodeActive,
@@ -12,11 +17,6 @@ import {
   createNodeFromContent,
   getHTMLFromFragment,
 } from "./helper";
-import { customRef, markRaw } from "vue";
-import { keymap } from "prosemirror-keymap";
-import { baseKeymap, setBlockType, toggleMark } from "prosemirror-commands";
-import { history, undo, redo } from "prosemirror-history";
-import { dropCursor } from "prosemirror-dropcursor";
 import {
   search,
   setSearchState,
@@ -25,7 +25,7 @@ import {
   SearchQuery,
   findNext,
   findPrev,
-} from "prosemirror-search";
+} from "./search";
 
 interface EventArgument {
   update: { editor: Editor; tr: Transaction };
