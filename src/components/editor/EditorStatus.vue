@@ -3,7 +3,7 @@
     <span>字数：{{ editor.textCount }}</span>
     <div>
       <Checkbox v-model="editorEditable" input-id="editableSwitch" binary />
-      <label for="editableSwitch" style="margin-left: 4px">编辑模式</label>
+      <label for="editableSwitch">编辑模式</label>
     </div>
   </div>
 </template>

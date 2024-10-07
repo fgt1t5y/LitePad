@@ -170,3 +170,11 @@
 .i-search::before {
   content: "\e8b6";
 }
+
+.i-check::before {
+  content: "\e5ca";
+}
+
+.i-check-all::before {
+  content: "\e877";
+}

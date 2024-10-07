@@ -44,6 +44,11 @@ input {
   font-family: inherit;
   font-size: inherit;
   background-color: transparent;
+  border: none;
+}
+
+label {
+  margin-left: 4px;
 }
 
 /* Layout */
@@ -376,6 +381,12 @@ input {
     input {
       flex-grow: 1;
     }
+  }
+
+  .MatchingInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }
 

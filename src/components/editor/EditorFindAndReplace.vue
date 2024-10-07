@@ -2,22 +2,63 @@
   <div class="FloatPanel EditorSearch">
     <div class="FloatPanelHeader">
       <span>搜索与替换</span>
-      <button @click="modelValue = false">
+      <button title="关闭搜索与替换面板" @click="modelValue = false">
         <i class="i i-close"></i>
       </button>
     </div>
     <div class="FloatPanelBody">
+      <div class="MatchingInfo">
+        <span>
+          <Checkbox v-model="enableReplace" input-id="enableReplace" binary />
+          <label for="enableReplace">启用替换</label>
+        </span>
+        <span>匹配数目：{{ matchingCount }}</span>
+      </div>
       <div class="SearchInfo">
-        <InputText v-model="keyword" placeholder="搜索..." size="small" />
-        <button :disabled="!keyword" @click="findPrev">
+        <InputText
+          v-model="keyword"
+          id="keywordInput"
+          placeholder="搜索..."
+          size="small"
+          autocomplete="off"
+        />
+        <button
+          title="上一个"
+          :disabled="!keyword || matchingCount === 0"
+          @click="editor.findPrev()"
+        >
           <i class="i i-arrow-up3"></i>
         </button>
-        <button :disabled="!keyword" @click="findNext">
+        <button
+          title="下一个"
+          :disabled="!keyword || matchingCount === 0"
+          @click="editor.findNext()"
+        >
           <i class="i i-arrow-down3"></i>
         </button>
       </div>
-      <div class="MatchingInfo">
-        <span>匹配到 {{ matchingCount }} 个项目</span>
+      <div v-show="enableReplace" class="SearchInfo">
+        <InputText
+          v-model="replace"
+          id="replaceInput"
+          placeholder="替换为..."
+          size="small"
+          autocomplete="off"
+        />
+        <button
+          title="替换一项匹配"
+          :disabled="!replace || matchingCount === 0"
+          @click="replaceCurrent()"
+        >
+          <i class="i i-check"></i>
+        </button>
+        <button
+          title="替换所有匹配"
+          :disabled="!replace || matchingCount === 0"
+          @click="editor.replaceAll()"
+        >
+          <i class="i i-check-all"></i>
+        </button>
       </div>
     </div>
   </div>
@@ -26,7 +67,7 @@
 <script setup lang="ts">
 import type { LitePadEditor } from ".";
 
-import { ref, watch } from "vue";
+import { onMounted, onUnmounted, ref, watchEffect } from "vue";
 import debounce from "debounce";
 
 defineOptions({
@@ -37,30 +78,25 @@ const props = defineProps<{
   editor: LitePadEditor;
 }>();
 
-const modelValue = defineModel<boolean>({
-  default: false,
-  set(show) {
-    if (!show) {
-      props.editor.clearFind();
-      props.editor.off("update", updateMatchingCount);
-    }
-  },
-});
-
 const keyword = ref<string>("");
+const replace = ref<string>("");
 const matchingCount = ref<number>(0);
+const enableReplace = ref<boolean>(false);
 
-const _queryString = (keyword: string) => {
-  props.editor.find(keyword);
+const modelValue = defineModel<boolean>({ default: false });
+
+const _queryString = (keyword: string, replace?: string) => {
+  if (enableReplace.value && replace) {
+    props.editor.find(keyword, replace);
+  } else {
+    props.editor.find(keyword);
+  }
 
   matchingCount.value = props.editor.getMatchCount();
 };
 
-const findPrev = () => {
-  props.editor.findPrev();
-};
-
-const findNext = () => {
+const replaceCurrent = () => {
+  props.editor.replaceCurrent();
   props.editor.findNext();
 };
 
@@ -72,12 +108,21 @@ const updateMatchingCount = () => {
 
 const queryString = debounce(_queryString, 500);
 
-props.editor.on("update", updateMatchingCount);
+watchEffect(() => {
+  queryString(keyword.value, replace.value);
+});
 
-watch(
-  () => keyword.value,
-  (keyword) => {
-    queryString(keyword);
-  }
-);
+onUnmounted(() => {
+  props.editor.clearFind();
+  props.editor.off("update", updateMatchingCount);
+});
+
+onMounted(() => {
+  props.editor.on("update", updateMatchingCount);
+  const keywordInput = document.getElementById(
+    "keywordInput"
+  ) as HTMLInputElement;
+
+  if (keywordInput) keywordInput.select();
+});
 </script>

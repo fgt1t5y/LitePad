@@ -25,6 +25,8 @@ import {
   SearchQuery,
   findNext,
   findPrev,
+  replaceCurrent,
+  replaceAll,
 } from "./search";
 
 interface EventArgument {
@@ -262,9 +264,10 @@ export class Editor {
     this.focus();
   }
 
-  public find(keyword: string) {
+  public find(keyword: string, replace?: string) {
     const query = new SearchQuery({
       search: keyword,
+      replace: replace || "",
     });
     const tr = this.state.tr;
 
@@ -273,6 +276,8 @@ export class Editor {
 
   public clearFind() {
     this.find("");
+
+    this.view!.focus();
   }
 
   public getSearchState() {
@@ -311,6 +316,14 @@ export class Editor {
     this.view!.focus();
 
     return findNext(this.state, this.view!.dispatch);
+  }
+
+  public replaceCurrent() {
+    return replaceCurrent(this.state, this.view!.dispatch);
+  }
+
+  public replaceAll() {
+    return replaceAll(this.state, this.view!.dispatch);
   }
 
   public get textCount() {

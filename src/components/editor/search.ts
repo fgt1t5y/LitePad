@@ -164,10 +164,12 @@ export class SearchQuery {
         // Replacement text
         frag = frag.addToEnd(state.schema.text(part, marks));
       } else if ((groupSpan = groups[part.group])) {
-        let level = $from.depth;
-        while (level > 0 && $from.node(level).isInline) level--;
-        let from = $from.start(level) + groupSpan[0],
-          to = $from.start(level) + groupSpan[1];
+        // let level = $from.depth;
+        // while (level > 0 && $from.node(level).isInline) level--;
+        // let from = $from.start(level) + groupSpan[0],
+        //   to = $from.start(level) + groupSpan[1];
+        let from = result.matchStart + groupSpan[0],
+          to = result.matchStart + groupSpan[1];
         if (part.copy) {
           // Copied content
           frag = frag.append(state.doc.slice(from, to).content);
@@ -193,6 +195,7 @@ export interface SearchResult {
   from: number;
   to: number;
   match: RegExpMatchArray | null;
+  matchStart: number;
 }
 
 interface QueryImpl {
@@ -234,6 +237,7 @@ class StringQuery implements QueryImpl {
             from: off + index,
             to: off + index + this.string.length,
             match: null,
+            matchStart: start,
           };
     });
   }
@@ -253,6 +257,7 @@ class StringQuery implements QueryImpl {
             from: off + index,
             to: off + index + this.string.length,
             match: null,
+            matchStart: start,
           };
     });
   }
@@ -286,6 +291,7 @@ class RegExpQuery implements QueryImpl {
             from: start + match.index,
             to: start + match.index + match[0].length,
             match,
+            matchStart: start,
           }
         : null;
     });
@@ -310,6 +316,7 @@ class RegExpQuery implements QueryImpl {
             from: start + match.index,
             to: start + match.index + match[0].length,
             match,
+            matchStart: start,
           }
         : null;
     });
@@ -641,7 +648,7 @@ function replaceCommand(wrap: boolean, moveForward: boolean): Command {
       }
       let after =
         moveForward && nextMatch(search, state, wrap, next.from, next.to);
-      if (after)
+      if (after) {
         tr.setSelection(
           TextSelection.create(
             tr.doc,
@@ -649,10 +656,12 @@ function replaceCommand(wrap: boolean, moveForward: boolean): Command {
             tr.mapping.map(after.to, -1)
           )
         );
-      else
+      } else {
         tr.setSelection(
           TextSelection.create(tr.doc, next.from, tr.mapping.map(next.to, 1))
         );
+      }
+
       dispatch(tr.scrollIntoView());
     } else if (!moveForward) {
       return false;
