@@ -9,6 +9,7 @@ import {
   Schema,
   MarkType,
 } from "prosemirror-model";
+import type { Keymap } from "@/types";
 
 export const isMarkActive = (state: EditorState, type: MarkType): boolean => {
   const { from, $from, to, empty } = state.selection;
@@ -131,3 +132,8 @@ export const calcNodePos = (pos: number, view: EditorView) => {
   if ($pos.depth > 1) return $pos.before($pos.depth);
   return pos;
 };
+
+export const concatKeymap = (value1: Keymap, value2: Keymap) => ({
+  ...value1,
+  ...value2,
+});

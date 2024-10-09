@@ -28,3 +28,19 @@ export const setClass = (
 export const isFolder = (id: number) => id > 0 && id < 10001;
 
 export const isNote = (id: number) => id > 10000;
+
+export const isNWJS = typeof window.nw !== "undefined";
+
+export const openURL = (url: string) => {
+  if (isNWJS) {
+    window.nw.Shell.openExternal(url);
+  } else {
+    const a = document.createElement("a");
+    a.href = url;
+    a.target = "_blank";
+    a.style.setProperty("display", "none");
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+};

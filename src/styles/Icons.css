@@ -178,3 +178,7 @@
 .i-check-all::before {
   content: "\e877";
 }
+
+.i-open-in-new::before {
+  content: "\e89e";
+}

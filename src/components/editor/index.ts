@@ -1,5 +1,5 @@
 import type { EditorProps } from "prosemirror-view";
-import type { Schema } from "prosemirror-model";
+import type { Attrs, Mark, Schema } from "prosemirror-model";
 import type { Ref } from "vue";
 import type { Keymap } from "@/types";
 
@@ -31,11 +31,13 @@ import {
 
 interface EventArgument {
   update: { editor: Editor; tr: Transaction };
+  selectionUpdate: { editor: Editor; tr: Transaction };
   beforeTransaction: {
     editor: Editor;
     tr: Transaction;
     nextState: EditorState;
   };
+  transaction: { editor: Editor; tr: Transaction };
 }
 
 type EventName = keyof EventArgument;
@@ -85,7 +87,9 @@ interface EditorOptions {
    * @param props Handle's arguments.
    * @returns void
    */
-  onUpdate?: (props: EventArgument["update"]) => void;
+  onUpdate?: (argv: EventArgument["update"]) => void;
+  onSelectionUpdate?: (argv: EventArgument["selectionUpdate"]) => void;
+  onTransaction?: (argv: EventArgument["transaction"]) => void;
 }
 
 export class Editor {
@@ -97,12 +101,23 @@ export class Editor {
   constructor(options: EditorOptions) {
     this.schema = options.schema;
     this.keymap = options.keymap;
-    this.callbacks = { update: [], beforeTransaction: [] };
+    this.callbacks = {
+      update: [],
+      selectionUpdate: [],
+      beforeTransaction: [],
+      transaction: [],
+    };
 
     this.setupView(options);
 
     if (options.onUpdate) {
       this.on("update", options.onUpdate);
+    }
+    if (options.onSelectionUpdate) {
+      this.on("selectionUpdate", options.onSelectionUpdate);
+    }
+    if (options.onTransaction) {
+      this.on("transaction", options.onTransaction);
     }
   }
 
@@ -142,6 +157,8 @@ export class Editor {
 
     const state = this.state.apply(tr);
 
+    const selectionChanged = !this.state.selection.eq(state.selection);
+
     this.emit("beforeTransaction", {
       editor: this,
       tr,
@@ -149,6 +166,12 @@ export class Editor {
     });
 
     this.view.updateState(state);
+
+    this.emit("transaction", { editor: this, tr });
+
+    if (selectionChanged) {
+      this.emit("selectionUpdate", { editor: this, tr });
+    }
 
     if (tr.docChanged) {
       this.emit("update", { editor: this, tr });
@@ -239,27 +262,71 @@ export class Editor {
     return isMarkActive(this.state, markType);
   }
 
-  public isNodeActive(name: string, attributes = {}) {
+  public isNodeActive(name: string, attr?: Attrs) {
     const nodeType = this.schema.nodes[name];
     if (!nodeType) return false;
 
-    return isNodeActive(this.state, nodeType, attributes);
+    return isNodeActive(this.state, nodeType, attr);
   }
 
-  public toggleMark(name: string) {
+  public getMarkAttributes(name: string): Attrs {
+    const markType = this.schema.marks[name];
+    if (!markType) return {};
+
+    const { from, to, empty } = this.state.selection;
+    const marks: Mark[] = [];
+
+    if (empty) {
+      if (this.state.storedMarks) {
+        marks.push(...this.state.storedMarks);
+      }
+
+      marks.push(...this.state.selection.$head.marks());
+    } else {
+      this.state.doc.nodesBetween(from, to, (node) => {
+        marks.push(...node.marks);
+      });
+    }
+
+    const mark = marks.find((markItem) => markItem.type.name === markType.name);
+
+    if (!mark) return {};
+    else return { ...mark.attrs };
+  }
+
+  public setMarkAttributes(name: string, attr?: Attrs) {
+    const markType = this.schema.marks[name];
+    if (!markType) return {};
+
+    const { $from } = this.state.selection;
+
+    const from = $from.pos - $from.textOffset;
+    const to = from + (this.state.doc.nodeAt(from)?.nodeSize || 0);
+
+    const link = markType.create(attr);
+    const tr = this.state.tr;
+
+    this.view!.dispatch(tr.addMark(from, to, link));
+  }
+
+  public hasSelection() {
+    return !this.state.selection.empty;
+  }
+
+  public toggleMark(name: string, attr?: Attrs) {
     const markType = this.schema.marks[name];
     if (!markType) return;
 
-    toggleMark(markType)(this.state, this.view!.dispatch);
+    toggleMark(markType, attr)(this.state, this.view!.dispatch);
 
     this.focus();
   }
 
-  public setNode(name: string, attributes = {}) {
+  public setBlockType(name: string, attr?: Attrs) {
     const nodeType = this.schema.nodes[name];
     if (!nodeType) return;
 
-    setBlockType(nodeType, attributes)(this.state, this.view!.dispatch);
+    setBlockType(nodeType, attr)(this.state, this.view!.dispatch);
 
     this.focus();
   }
@@ -324,6 +391,19 @@ export class Editor {
 
   public replaceAll() {
     return replaceAll(this.state, this.view!.dispatch);
+  }
+
+  public getCoordPosition(): { left: number; bottom: number } {
+    const { from, to } = this.state.selection;
+
+    const start = this.view!.coordsAtPos(from);
+    const end = this.view!.coordsAtPos(to);
+    const box = this.view!.dom.offsetParent?.getBoundingClientRect();
+
+    return {
+      left: Math.max((start.left + end.left) / 2, start.left + 3),
+      bottom: box!.bottom - start.top,
+    };
   }
 
   public get textCount() {

@@ -426,6 +426,22 @@ label {
   right: 24px;
 }
 
+.EditorFloatMenu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 300px;
+  position: fixed;
+  padding: .5rem 0.75rem;
+  background-color: var(--p-content-background);
+  border: 1px solid var(--p-content-border-color);
+  border-radius: var(--p-border-radius-xs);
+
+  input {
+    flex-grow: 1;
+  }
+}
+
 .DragHandle {
   position: fixed;
   opacity: 1;

@@ -11,6 +11,7 @@
     </div>
     <div ref="editorRef"></div>
   </div>
+  <EditorFloatMenu v-if="editor" :editor="editor" />
   <EditorStatus v-if="editor" :editor="editor" />
 </template>
 
@@ -26,10 +27,12 @@ import { onUnmounted, ref, shallowRef, watch } from "vue";
 import { useRoute } from "vue-router";
 import { schema } from "@/components/editor/schema";
 import { extraKeymap } from "@/components/editor/keymap";
+import { concatKeymap } from "@/components/editor/helper";
 
 import EditorFindAndReplace from "@/components/editor/EditorFindAndReplace.vue";
 import EditorTools from "@/components/editor/EditorTools.vue";
 import EditorStatus from "@/components/editor/EditorStatus.vue";
+import EditorFloatMenu from "@/components/editor/EditorFloatMenu.vue";
 
 const editor = shallowRef<LitePadEditor | null>();
 const editorRef = ref<HTMLElement>();
@@ -56,7 +59,7 @@ db.notes.get(noteId).then((note) => {
 
 const heading = (level: number): EditorTool => ({
   icon: `i i-m i-h${level}`,
-  command: () => editor.value!.setNode("heading", { level }),
+  command: () => editor.value!.setBlockType("heading", { level }),
   active: () => editor.value!.isNodeActive("heading", { level }),
   enable: () => true,
 });
@@ -96,13 +99,13 @@ const editorTools = [
   heading(6),
   {
     icon: "i i-m i-paragraph",
-    command: () => editor.value!.setNode("paragraph"),
+    command: () => editor.value!.setBlockType("paragraph"),
     active: () => editor.value!.isNodeActive("paragraph"),
     enable: () => true,
   },
   {
     icon: "i i-m i-quote",
-    command: () => editor.value!.setNode("blockquote"),
+    command: () => editor.value!.setBlockType("blockquote"),
     active: () => editor.value!.isNodeActive("blockquote"),
     enable: () => true,
   },
@@ -130,6 +133,12 @@ const editorTools = [
     active: () => editor.value!.isMarkActive("code"),
     enable: () => true,
   },
+  {
+    icon: "i i-m i-link",
+    command: () => editor.value!.toggleMark("link", { href: "" }),
+    active: () => false,
+    enable: () => editor.value!.hasSelection(),
+  },
 ] as EditorTool[];
 
 const setupEditor = () => {
@@ -139,7 +148,12 @@ const setupEditor = () => {
     mount: editorRef.value,
     content: noteContent.value,
     schema,
-    keymap: extraKeymap,
+    keymap: concatKeymap(extraKeymap, {
+      "Mod-k": () => {
+        editor.value!.toggleMark("link", { href: "" });
+        return true;
+      },
+    }),
     autoFocus: true,
     onUpdate({ editor }) {
       noteContent.value = editor.getHTML();
