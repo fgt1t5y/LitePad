@@ -509,10 +509,12 @@ label {
 
 .ProseMirror-search-match {
   background-color: var(--p-primary-color);
+  color: white;
 }
 
 .ProseMirror-active-search-match {
-  background-color: var(--p-primary-color);
+  background-color: blue;
+  color: white;
 }
 
 /* Make sure li selections wrap around markers */

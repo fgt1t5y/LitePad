@@ -7,13 +7,6 @@
       </button>
     </div>
     <div class="FloatPanelBody">
-      <div class="MatchingInfo">
-        <span>
-          <Checkbox v-model="enableReplace" input-id="enableReplace" binary />
-          <label for="enableReplace">启用替换</label>
-        </span>
-        <span>匹配数目：{{ matchingCount }}</span>
-      </div>
       <div class="SearchInfo">
         <InputText
           v-model="keyword"
@@ -25,17 +18,27 @@
         <button
           title="上一个"
           :disabled="!keyword || matchingCount === 0"
-          @click="editor.findPrev()"
+          @click="findNextOrPrev(-1)"
         >
           <i class="i i-arrow-up3"></i>
         </button>
         <button
           title="下一个"
           :disabled="!keyword || matchingCount === 0"
-          @click="editor.findNext()"
+          @click="findNextOrPrev(1)"
         >
           <i class="i i-arrow-down3"></i>
         </button>
+      </div>
+      <div class="MatchingInfo">
+        <span>
+          <Checkbox v-model="enableReplace" input-id="enableReplace" binary />
+          <label for="enableReplace">启用替换</label>
+        </span>
+        <div>
+          <span v-show="matchingIndex">第 {{ matchingIndex }} 个，</span>
+          <span>共 {{ matchingCount }} 个</span>
+        </div>
       </div>
       <div v-show="enableReplace" class="SearchInfo">
         <InputText
@@ -80,6 +83,7 @@ const props = defineProps<{
 
 const keyword = ref<string>("");
 const replace = ref<string>("");
+const matchingIndex = ref<number>(0);
 const matchingCount = ref<number>(0);
 const enableReplace = ref<boolean>(false);
 
@@ -92,7 +96,17 @@ const _queryString = (keyword: string, replace?: string) => {
     props.editor.find(keyword);
   }
 
+  matchingIndex.value = props.editor.getCurrentMatchIndex() + 1;
   matchingCount.value = props.editor.getMatchCount();
+};
+
+const findNextOrPrev = (dir: -1 | 1) => {
+  if (dir > 0) props.editor.findNext();
+  else props.editor.findPrev();
+
+  props.editor.focus();
+
+  matchingIndex.value = props.editor.getCurrentMatchIndex() + 1;
 };
 
 const replaceCurrent = () => {
@@ -115,6 +129,7 @@ watchEffect(() => {
 onUnmounted(() => {
   props.editor.clearFind();
   props.editor.off("update", updateMatchingCount);
+  props.editor.focus();
 });
 
 onMounted(() => {

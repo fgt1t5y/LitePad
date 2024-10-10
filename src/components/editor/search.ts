@@ -540,6 +540,29 @@ export function getSearchState(state: EditorState):
   return searchKey.getState(state);
 }
 
+/// Get the ranges of matching texts in the current active search.
+/// Will return `undefined` is the search plugin isn't active.
+export function getSearchMatchingRanges(state: EditorState): { from: number, to: number }[] | undefined {
+  const searchState = searchKey.getState(state)
+  return searchState && searchState.deco.find().map(({ from, to }) => ({ from, to }))
+}
+
+/// Get the number of matching texts in the current active search.
+/// Will return `undefined` is the search plugin isn't active.
+export function getSearchMatchesCount(state: EditorState): number | undefined {
+  return getSearchMatchingRanges(state)?.length
+}
+
+/// Get the index of the match of the current active search
+/// that has the same range of the current selection.
+/// Will return -1 if no matching text matches the selection,
+/// or `undefined` is the search plugin isn't active.
+export function getSearchCurrentMatchIndex(state: EditorState): number | undefined {
+  const ranges = getSearchMatchingRanges(state)
+  const { from: selFrom, to: selTo } = state.selection
+  return ranges && ranges.findIndex(({ from, to }) => from === selFrom && to === selTo)
+}
+
 /// Access the decoration set holding the currently highlighted search
 /// matches in the document.
 export function getMatchHighlights(state: EditorState) {

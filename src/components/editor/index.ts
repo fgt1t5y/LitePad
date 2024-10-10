@@ -23,10 +23,11 @@ import {
   getSearchState,
   getMatchHighlights,
   SearchQuery,
-  findNext,
-  findPrev,
   replaceCurrent,
   replaceAll,
+  findPrevNoWrap,
+  findNextNoWrap,
+  getSearchMatchingRanges,
 } from "./search";
 
 interface EventArgument {
@@ -343,8 +344,6 @@ export class Editor {
 
   public clearFind() {
     this.find("");
-
-    this.view!.focus();
   }
 
   public getSearchState() {
@@ -352,37 +351,30 @@ export class Editor {
   }
 
   public getMatchCount() {
-    if (!this.getSearchState()) return 0;
+    return getSearchMatchingRanges(this.state)?.length || 0;
+  }
 
-    const decos = getMatchHighlights(this.state);
-    let i = 0;
-    let sum = 0;
+  public getCurrentMatchIndex() {
+    const ranges = getSearchMatchingRanges(this.state);
+    const selection = this.state.selection;
 
-    // @ts-ignore
-    const decoArray = decos.children as any[];
+    if (!ranges) return -1;
 
-    for (; i < decoArray.length; i += 1) {
-      if (typeof decoArray[i] === "number") continue;
-      sum += decoArray[i].local.length;
-    }
-
-    return sum;
+    return ranges.findIndex(
+      ({ from, to }) => from === selection.from && to === selection.to
+    );
   }
 
   public findPrev() {
     if (!this.getSearchState()) return;
 
-    this.view!.focus();
-
-    return findPrev(this.state, this.view!.dispatch);
+    return findPrevNoWrap(this.state, this.view!.dispatch);
   }
 
   public findNext() {
     if (!this.getSearchState()) return;
 
-    this.view!.focus();
-
-    return findNext(this.state, this.view!.dispatch);
+    return findNextNoWrap(this.state, this.view!.dispatch);
   }
 
   public replaceCurrent() {
