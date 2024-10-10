@@ -353,11 +353,15 @@ export class Editor {
     return getSearchMatchingRanges(this.state)?.length || 0;
   }
 
+  /// Get the index of the match of the current active search
+  /// that has the same range of the current selection.
+  /// Will return -1 if no matching text matches the selection,
+  /// or `undefined` is the search plugin isn't active.
   public getCurrentMatchIndex() {
     const ranges = getSearchMatchingRanges(this.state);
     const selection = this.state.selection;
 
-    if (!ranges) return -1;
+    if (!ranges) return 0;
 
     return ranges.findIndex(
       ({ from, to }) => from === selection.from && to === selection.to
