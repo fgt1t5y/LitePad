@@ -18,7 +18,6 @@ declare module 'vue' {
     EditorTools: typeof import('./src/components/editor/EditorTools.vue')['default']
     InputText: typeof import('primevue/inputtext')['default']
     ListSelect: typeof import('./src/components/ListSelect.vue')['default']
-    Menubar: typeof import('./src/components/editor/EditorTools.vue')['default']
     PageTabs: typeof import('./src/components/PageTabs.vue')['default']
     Panel: typeof import('./src/components/Panel.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

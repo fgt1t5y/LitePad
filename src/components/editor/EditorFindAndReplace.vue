@@ -96,7 +96,7 @@ const _queryString = (keyword: string, replace?: string) => {
     props.editor.find(keyword);
   }
 
-  matchingIndex.value = props.editor.getCurrentMatchIndex() + 1;
+  matchingIndex.value = props.editor.getCurrentMatchIndex();
   matchingCount.value = props.editor.getMatchCount();
 };
 
@@ -106,7 +106,7 @@ const findNextOrPrev = (dir: -1 | 1) => {
 
   props.editor.focus();
 
-  matchingIndex.value = props.editor.getCurrentMatchIndex() + 1;
+  matchingIndex.value = props.editor.getCurrentMatchIndex();
 };
 
 const replaceCurrent = () => {

@@ -153,6 +153,10 @@ const setupEditor = () => {
         editor.value!.toggleMark("link", { href: "" });
         return true;
       },
+      "Mod-f": () => {
+        showSearchReplacePanel.value = !showSearchReplacePanel.value;
+        return true;
+      },
     }),
     autoFocus: true,
     onUpdate({ editor }) {

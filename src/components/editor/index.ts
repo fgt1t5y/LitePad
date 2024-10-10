@@ -21,12 +21,11 @@ import {
   search,
   setSearchState,
   getSearchState,
-  getMatchHighlights,
   SearchQuery,
   replaceCurrent,
   replaceAll,
-  findPrevNoWrap,
-  findNextNoWrap,
+  findPrev,
+  findNext,
   getSearchMatchingRanges,
 } from "./search";
 
@@ -368,13 +367,13 @@ export class Editor {
   public findPrev() {
     if (!this.getSearchState()) return;
 
-    return findPrevNoWrap(this.state, this.view!.dispatch);
+    return findPrev(this.state, this.view!.dispatch);
   }
 
   public findNext() {
     if (!this.getSearchState()) return;
 
-    return findNextNoWrap(this.state, this.view!.dispatch);
+    return findNext(this.state, this.view!.dispatch);
   }
 
   public replaceCurrent() {
