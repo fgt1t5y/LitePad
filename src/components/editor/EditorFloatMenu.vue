@@ -44,12 +44,19 @@ const onUpdateLinkClick = (href: string) => {
 const updatePosition = (editor: Editor) => {
   const position = editor.getCoordPosition();
 
-  left.value = position.left;
+  console.log(position);
   bottom.value = position.bottom;
+
+  if (position.left + 300 > document.body.clientWidth) {
+    left.value = document.body.clientWidth - 310;
+    return;
+  }
+
+  left.value = position.left;
 };
 
 props.editor.on("transaction", ({ editor }) => {
-    if (!editor.isMarkActive("link")) {
+  if (!editor.isMarkActive("link")) {
     show.value = false;
     return;
   }
