@@ -332,18 +332,27 @@ export class Editor {
     this.focus();
   }
 
-  public find(keyword: string, replace?: string) {
+  public find(
+    search: string,
+    replace: string,
+    caseSensitive: boolean,
+    regexp: boolean
+  ) {
     const query = new SearchQuery({
-      search: keyword,
-      replace: replace || "",
+      search,
+      replace,
+      caseSensitive,
+      regexp,
     });
+    console.log(query);
+
     const tr = this.state.tr;
 
     this.view!.dispatch(setSearchState(tr, query));
   }
 
   public clearFind() {
-    this.find("");
+    this.find("", "", false, false);
   }
 
   public getSearchState() {
@@ -403,9 +412,7 @@ export class Editor {
   }
 
   // 封装导出的内部函数
-  public serializeForClipboard(
-    slice: Slice
-  ): {
+  public serializeForClipboard(slice: Slice): {
     dom: HTMLDivElement;
     text: string;
     slice: Slice;
@@ -414,9 +421,7 @@ export class Editor {
   }
 
   public serializeSelectionForClipboard() {
-    return this.serializeForClipboard(
-      this.state.selection.content()
-    );
+    return this.serializeForClipboard(this.state.selection.content());
   }
 
   public get textCount() {

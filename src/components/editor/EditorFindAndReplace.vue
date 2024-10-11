@@ -63,6 +63,16 @@
           <i class="i i-check-all"></i>
         </button>
       </div>
+      <div class="SearchInfo">
+        <span>
+          <Checkbox v-model="caseSensitive" input-id="caseSensitive" binary />
+          <label for="caseSensitive">区分大小写</label>
+        </span>
+        <span>
+          <Checkbox v-model="regexp" input-id="regexp" binary />
+          <label for="regexp">正则表达式</label>
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -87,14 +97,18 @@ const matchingIndex = ref<number>(0);
 const matchingCount = ref<number>(0);
 const enableReplace = ref<boolean>(false);
 
+const caseSensitive = ref<boolean>(false);
+const regexp = ref<boolean>(false);
+
 const modelValue = defineModel<boolean>({ default: false });
 
-const _queryString = (keyword: string, replace?: string) => {
-  if (enableReplace.value && replace) {
-    props.editor.find(keyword, replace);
-  } else {
-    props.editor.find(keyword);
-  }
+const _queryString = (
+  keyword: string,
+  replace: string,
+  caseSensitive: boolean,
+  regexp: boolean
+) => {
+  props.editor.find(keyword, replace, caseSensitive, regexp);
 
   matchingIndex.value = props.editor.getCurrentMatchIndex() + 1;
   matchingCount.value = props.editor.getMatchCount();
@@ -123,7 +137,7 @@ const updateMatchingCount = () => {
 const queryString = debounce(_queryString, 500);
 
 watchEffect(() => {
-  queryString(keyword.value, replace.value);
+  queryString(keyword.value, replace.value, caseSensitive.value, regexp.value);
 });
 
 onUnmounted(() => {
