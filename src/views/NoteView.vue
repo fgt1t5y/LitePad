@@ -139,6 +139,12 @@ const editorTools = [
     enable: () => true,
   },
   {
+    icon: "i i-m i-format-clear",
+    command: () => editor.value!.clearAllMark(),
+    active: () => false,
+    enable: () => editor.value!.hasSelection(),
+  },
+  {
     icon: "i i-m i-link",
     command: () => editor.value!.toggleMark("link", { href: "" }),
     active: () => false,

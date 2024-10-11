@@ -182,3 +182,7 @@
 .i-open-in-new::before {
   content: "\e89e";
 }
+
+.i-format-clear::before {
+  content: "\e239";
+}

@@ -305,9 +305,8 @@ export class Editor {
     const to = from + (this.state.doc.nodeAt(from)?.nodeSize || 0);
 
     const link = markType.create(attr);
-    const tr = this.state.tr;
 
-    this.view!.dispatch(tr.addMark(from, to, link));
+    this.view!.dispatch(this.state.tr.addMark(from, to, link));
   }
 
   public hasSelection() {
@@ -319,6 +318,14 @@ export class Editor {
     if (!markType) return;
 
     toggleMark(markType, attr)(this.state, this.view!.dispatch);
+
+    this.focus();
+  }
+
+  public clearAllMark() {
+    const { from, to } = this.state.selection;
+
+    this.view!.dispatch(this.state.tr.removeMark(from, to, null));
 
     this.focus();
   }
