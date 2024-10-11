@@ -9,25 +9,29 @@
     <div class="EditorHeader">
       <input v-model="noteTitle" class="TitleInput" placeholder="无标题笔记" />
     </div>
-    <div ref="editorRef"></div>
+    <div ref="editorRef" @contextmenu="editorMenuRef?.show($event)"></div>
   </div>
   <EditorFloatMenu v-if="editor" :editor="editor" />
   <EditorStatus v-if="editor" :editor="editor" />
+  <ContextMenu ref="editorMenuRef" :model="editorMenuItems" />
 </template>
 
 <script setup lang="ts">
 import type { EditorTool } from "@/types";
+import type { ContextMenuMethods } from "primevue/contextmenu";
+import type { MenuItem } from "primevue/menuitem";
 
 import { LitePadEditor } from "@/components/editor";
 import { db } from "@/db";
 import { usePageTabs } from "@/utils/usePageTabs";
 import { useShared } from "@/utils/useShared";
 import { useToast } from "primevue/usetoast";
-import { onUnmounted, ref, shallowRef, watch } from "vue";
+import { computed, onUnmounted, ref, shallowRef, watch } from "vue";
 import { useRoute } from "vue-router";
 import { schema } from "@/components/editor/schema";
 import { extraKeymap } from "@/components/editor/keymap";
 import { concatKeymap } from "@/components/editor/helper";
+import { copyRichText } from "@/utils/helpers";
 
 import EditorFindAndReplace from "@/components/editor/EditorFindAndReplace.vue";
 import EditorTools from "@/components/editor/EditorTools.vue";
@@ -35,6 +39,7 @@ import EditorStatus from "@/components/editor/EditorStatus.vue";
 import EditorFloatMenu from "@/components/editor/EditorFloatMenu.vue";
 
 const editor = shallowRef<LitePadEditor | null>();
+const editorMenuRef = ref<ContextMenuMethods>();
 const editorRef = ref<HTMLElement>();
 const noteTitle = ref<string>();
 const noteContent = ref<string>("<p></p>");
@@ -166,6 +171,11 @@ const setupEditor = () => {
   });
 };
 
+const copySelection = () => {
+  const { dom, text } = editor.value!.serializeSelectionForClipboard();
+  copyRichText(dom.innerHTML, text);
+};
+
 const saveNote = async () => {
   if (!noteTitle.value) {
     toast.add({ severity: "error", summary: "缺少笔记标题", life: 1000 });
@@ -188,6 +198,17 @@ const saveNote = async () => {
 
   toast.add({ severity: "success", summary: "保存成功", life: 1000 });
 };
+
+const editorMenuItems = computed<MenuItem[]>(() => {
+  return [
+    {
+      label: "复制",
+      command() {
+        copySelection();
+      },
+    },
+  ];
+});
 
 watch(
   () => noteTitle.value,

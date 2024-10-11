@@ -1,9 +1,10 @@
 import type { EditorProps } from "prosemirror-view";
-import type { Attrs, Mark, Schema } from "prosemirror-model";
+import type { Attrs, Mark, Schema, Slice } from "prosemirror-model";
 import type { Ref } from "vue";
 import type { Keymap } from "@/types";
 
-import { EditorView } from "prosemirror-view";
+// @ts-ignore
+import { __serializeForClipboard, EditorView } from "prosemirror-view";
 import { EditorState, Transaction } from "prosemirror-state";
 import { keymap } from "prosemirror-keymap";
 import { baseKeymap, setBlockType, toggleMark } from "prosemirror-commands";
@@ -399,6 +400,23 @@ export class Editor {
       left: Math.max((start.left + end.left) / 2, start.left + 3),
       bottom: box!.bottom - start.top,
     };
+  }
+
+  // 封装导出的内部函数
+  public serializeForClipboard(
+    slice: Slice
+  ): {
+    dom: HTMLDivElement;
+    text: string;
+    slice: Slice;
+  } {
+    return __serializeForClipboard(this.view, slice);
+  }
+
+  public serializeSelectionForClipboard() {
+    return this.serializeForClipboard(
+      this.state.selection.content()
+    );
   }
 
   public get textCount() {

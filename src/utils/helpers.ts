@@ -44,3 +44,19 @@ export const openURL = (url: string) => {
     a.remove();
   }
 };
+
+// 必须先设置text类型，不然获取不到html类型的值！
+export const copyRichText = (html: string, text: string) => {
+  if (isNWJS) {
+    const cb = window.nw.Clipboard.get();
+    cb.set(text, "text");
+    cb.set(html, "html");
+  } else {
+    navigator.clipboard.write([
+      new ClipboardItem({
+        "text/plain": new Blob([text], { type: "text/plain" }),
+        "text/html": new Blob([html], { type: "text/html" }),
+      }),
+    ]);
+  }
+};
