@@ -186,3 +186,15 @@
 .i-format-clear::before {
   content: "\e239";
 }
+
+.i-content-copy::before {
+  content: "\e14d";
+}
+
+.i-content-cut::before {
+  content: "\e14e";
+}
+
+.i-content-paste::before {
+  content: "\e14f";
+}

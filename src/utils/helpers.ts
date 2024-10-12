@@ -46,7 +46,7 @@ export const openURL = (url: string) => {
 };
 
 // 必须先设置text类型，不然获取不到html类型的值！
-export const copyRichText = (html: string, text: string) => {
+export const writeRichText = (html: string, text: string) => {
   if (isNWJS) {
     const cb = window.nw.Clipboard.get();
     cb.set(text, "text");
@@ -58,5 +58,25 @@ export const copyRichText = (html: string, text: string) => {
         "text/html": new Blob([html], { type: "text/html" }),
       }),
     ]);
+  }
+};
+
+export const readRichText = async () => {
+  if (isNWJS) {
+    const cb = window.nw.Clipboard.get();
+    return {
+      text: cb.get("text"),
+      html: cb.get("html"),
+    };
+  } else {
+    let data = await navigator.clipboard.read();
+    let text = "",
+      html = "";
+    for (const item of data) {
+      const result = item;
+      text = await (await result.getType("text/plain")).text();
+      html = await (await result.getType("text/html")).text();
+    }
+    return { text, html };
   }
 };

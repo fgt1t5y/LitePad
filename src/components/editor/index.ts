@@ -7,10 +7,14 @@ import type { Keymap } from "@/types";
 import { __serializeForClipboard, EditorView } from "prosemirror-view";
 import { EditorState, Transaction } from "prosemirror-state";
 import { keymap } from "prosemirror-keymap";
-import { baseKeymap, setBlockType, toggleMark } from "prosemirror-commands";
+import {
+  baseKeymap,
+  setBlockType,
+  toggleMark,
+  deleteSelection,
+} from "prosemirror-commands";
 import { history, undo, redo } from "prosemirror-history";
 import { dropCursor } from "prosemirror-dropcursor";
-import { DOMParser } from "prosemirror-model";
 import { customRef, markRaw } from "vue";
 import {
   isMarkActive,
@@ -404,6 +408,12 @@ export class Editor {
     return replaceAll(this.state, this.view!.dispatch);
   }
 
+  public deleteSelection() {
+    return (
+      deleteSelection(this.state, this.view!.dispatch) && this.view!.focus()
+    );
+  }
+
   public getCoordPosition(): { left: number; bottom: number } {
     const { from, to } = this.state.selection;
 
@@ -428,6 +438,12 @@ export class Editor {
 
   public serializeSelectionForClipboard() {
     return this.serializeForClipboard(this.state.selection.content());
+  }
+
+  public paste(html: string) {
+    this.view!.pasteHTML(html);
+
+    this.view!.focus();
   }
 
   public get textCount() {

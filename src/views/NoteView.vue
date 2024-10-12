@@ -31,7 +31,7 @@ import { useRoute } from "vue-router";
 import { schema } from "@/components/editor/schema";
 import { extraKeymap } from "@/components/editor/keymap";
 import { concatKeymap } from "@/components/editor/helper";
-import { copyRichText } from "@/utils/helpers";
+import { writeRichText, readRichText } from "@/utils/helpers";
 
 import EditorFindAndReplace from "@/components/editor/EditorFindAndReplace.vue";
 import EditorTools from "@/components/editor/EditorTools.vue";
@@ -95,6 +95,24 @@ const editorTools = [
     command: () => editor.value!.redo(),
     active: () => false,
     enable: () => editor.value!.canRedo(),
+  },
+  {
+    icon: "i i-m i-content-copy",
+    command: () => copySelection(),
+    active: () => false,
+    enable: () => editor.value!.hasSelection(),
+  },
+  {
+    icon: "i i-m i-content-cut",
+    command: () => copySelection(true),
+    active: () => false,
+    enable: () => editor.value!.hasSelection(),
+  },
+  {
+    icon: "i i-m i-content-paste",
+    command: () => paste(),
+    active: () => false,
+    enable: () => true,
   },
   heading(1),
   heading(2),
@@ -177,9 +195,19 @@ const setupEditor = () => {
   });
 };
 
-const copySelection = () => {
+const copySelection = (cut: boolean = false) => {
   const { dom, text } = editor.value!.serializeSelectionForClipboard();
-  copyRichText(dom.innerHTML, text);
+  if (cut) editor.value!.deleteSelection();
+  writeRichText(dom.innerHTML, text);
+};
+
+const paste = async (textOnly: boolean = false) => {
+  const { text, html } = await readRichText();
+  if (textOnly && text) {
+    editor.value!.paste(text);
+    return;
+  }
+  editor.value!.paste(html);
 };
 
 const saveNote = async () => {
@@ -206,14 +234,43 @@ const saveNote = async () => {
 };
 
 const editorMenuItems = computed<MenuItem[]>(() => {
-  return [
+  if (!editor.value) return [];
+
+  const items: MenuItem[] = [];
+
+  if (editor.value.hasSelection()) {
+    items.push(
+      {
+        label: "复制",
+        command() {
+          copySelection();
+        },
+      },
+      {
+        label: "剪切",
+        command() {
+          copySelection(true);
+        },
+      }
+    );
+  }
+
+  items.push(
     {
-      label: "复制",
+      label: "粘贴",
       command() {
-        copySelection();
+        paste();
       },
     },
-  ];
+    {
+      label: "粘贴纯文本",
+      command() {
+        paste(true);
+      },
+    }
+  );
+
+  return items;
 });
 
 watch(
