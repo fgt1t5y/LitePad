@@ -44,7 +44,6 @@ const onUpdateLinkClick = (href: string) => {
 const updatePosition = (editor: Editor) => {
   const position = editor.getCoordPosition();
 
-  console.log(position);
   bottom.value = position.bottom;
 
   if (position.left + 300 > document.body.clientWidth) {

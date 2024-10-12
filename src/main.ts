@@ -54,10 +54,16 @@ const DefaultPreset = definePreset(Nora, {
         content: {
           background: "{surface.100}",
         },
+        text: {
+          mutedColor: "{surface.400}",
+        },
       },
       dark: {
         content: {
           background: "{surface.900}",
+        },
+        text: {
+          mutedColor: "{surface.500}",
         },
       },
     },

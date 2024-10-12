@@ -235,27 +235,23 @@ const saveNote = async () => {
 
 const editorMenuItems = computed<MenuItem[]>(() => {
   if (!editor.value) return [];
+  const hasSelection = editor.value.hasSelection();
 
-  const items: MenuItem[] = [];
-
-  if (editor.value.hasSelection()) {
-    items.push(
-      {
-        label: "复制",
-        command() {
-          copySelection();
-        },
+  return [
+    {
+      label: "复制",
+      disabled: !hasSelection,
+      command() {
+        copySelection();
       },
-      {
-        label: "剪切",
-        command() {
-          copySelection(true);
-        },
-      }
-    );
-  }
-
-  items.push(
+    },
+    {
+      label: "剪切",
+      disabled: !hasSelection,
+      command() {
+        copySelection(true);
+      },
+    },
     {
       label: "粘贴",
       command() {
@@ -267,10 +263,8 @@ const editorMenuItems = computed<MenuItem[]>(() => {
       command() {
         paste(true);
       },
-    }
-  );
-
-  return items;
+    },
+  ];
 });
 
 watch(
