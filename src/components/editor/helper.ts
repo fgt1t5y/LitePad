@@ -61,10 +61,10 @@ export const elementFromString = (value: string) => {
   return removeWhitespaces(html);
 };
 
-export function getHTMLFromFragment(
+export const getHTMLFromFragment = (
   fragment: Fragment,
   schema: Schema
-): string {
+): string => {
   const documentFragment =
     DOMSerializer.fromSchema(schema).serializeFragment(fragment);
 
@@ -74,17 +74,17 @@ export function getHTMLFromFragment(
   container.appendChild(documentFragment);
 
   return container.innerHTML;
-}
+};
 
 export const createDocument = (content: string, schema: Schema): Node => {
   return createNodeFromContent(content, schema) as Node;
 };
 
-export function createNodeFromContent(content: string, schema: Schema) {
+export const createNodeFromContent = (content: string, schema: Schema) => {
   const parser = DOMParser.fromSchema(schema);
 
   return parser.parse(elementFromString(content));
-}
+};
 
 export const absoluteRect = (node: Element) => {
   const data = node.getBoundingClientRect();

@@ -10,6 +10,7 @@ import { keymap } from "prosemirror-keymap";
 import { baseKeymap, setBlockType, toggleMark } from "prosemirror-commands";
 import { history, undo, redo } from "prosemirror-history";
 import { dropCursor } from "prosemirror-dropcursor";
+import { DOMParser } from "prosemirror-model";
 import { customRef, markRaw } from "vue";
 import {
   isMarkActive,
@@ -351,8 +352,6 @@ export class Editor {
       caseSensitive,
       regexp,
     });
-    console.log(query);
-
     const tr = this.state.tr;
 
     this.view!.dispatch(setSearchState(tr, query));
