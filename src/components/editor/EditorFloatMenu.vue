@@ -11,6 +11,9 @@
     <button @click="onUpdateLinkClick(displayHref)">
       <i class="i i-check"></i>
     </button>
+    <button @click="onUnlinkClick()">
+      <i class="i i-link-off"></i>
+    </button>
   </div>
 </template>
 
@@ -38,7 +41,12 @@ const onUpdateLinkClick = (href: string) => {
   props.editor.setMarkAttributes("link", { href });
 
   show.value = false;
-  props.editor.focus();
+};
+
+const onUnlinkClick = () => {
+  props.editor.clearMark("link");
+
+  show.value = false;
 };
 
 const updatePosition = (editor: Editor) => {

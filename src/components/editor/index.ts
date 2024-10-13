@@ -312,6 +312,8 @@ export class Editor {
     const link = markType.create(attr);
 
     this.view!.dispatch(this.state.tr.addMark(from, to, link));
+
+    this.focus();
   }
 
   public hasSelection() {
@@ -323,6 +325,20 @@ export class Editor {
     if (!markType) return;
 
     toggleMark(markType, attr)(this.state, this.view!.dispatch);
+
+    this.focus();
+  }
+
+  public clearMark(name: string) {
+    const markType = this.schema.marks[name];
+    if (!markType) return {};
+
+    const { $from } = this.state.selection;
+
+    const from = $from.pos - $from.textOffset;
+    const to = from + (this.state.doc.nodeAt(from)?.nodeSize || 0);
+
+    this.view!.dispatch(this.state.tr.removeMark(from, to, markType));
 
     this.focus();
   }

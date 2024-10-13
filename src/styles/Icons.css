@@ -62,6 +62,10 @@
   content: "\e157";
 }
 
+.i-link-off::before {
+  content: "\e16f";
+}
+
 .i-horizontal-rule::before {
   content: "\f108";
 }
