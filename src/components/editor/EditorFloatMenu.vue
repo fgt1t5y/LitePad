@@ -4,14 +4,14 @@
     class="EditorFloatMenu"
     :style="{ left: `${left}px`, bottom: `${bottom}px` }"
   >
-    <button :disabled="!displayHref.length" @click="openURL(displayHref)">
+    <button title="打开链接" :disabled="!displayHref.length" @click="openURL(displayHref)">
       <i class="i i-open-in-new"></i>
     </button>
     <InputText v-model="displayHref" ref="hrefInputRef" size="small" />
-    <button @click="onUpdateLinkClick(displayHref)">
+    <button title="确认修改" @click="onUpdateLinkClick(displayHref)">
       <i class="i i-check"></i>
     </button>
-    <button @click="onUnlinkClick()">
+    <button title="取消超链接" @click="onUnlinkClick()">
       <i class="i i-link-off"></i>
     </button>
   </div>
