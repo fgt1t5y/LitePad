@@ -9,7 +9,7 @@
     :title="items.label"
     :data-id="items.id"
     :data-type="items.type"
-    :draggable="!isRenaming"
+    :draggable="draggable && !isRenaming"
     @contextmenu="emits('node-click', items, $event)"
     @dragstart="onDragStart"
     @dragenter="onDragEnter"
@@ -48,8 +48,9 @@
       :highlighted-item="highlightedItem"
       :renaming-item="renamingItem"
       :group-type="groupType"
-      :prev-path="`${prevPath}/${item.label}`"
+      :prev-path="`${prevPath}/${item[labelField]}`"
       :label-field="labelField"
+      :draggable="draggable"
       @node-click="onNodeClick"
       @node-drag="onNodeDrag"
       @rename="onNodeRename"
@@ -72,11 +73,12 @@ const props = defineProps<{
   level: number;
   expandedItems: IDs;
   selectedItems: IDs;
-  highlightedItem?: number;
-  renamingItem?: number;
   groupType: string;
   prevPath: string;
   labelField: string;
+  highlightedItem?: number;
+  renamingItem?: number;
+  draggable?: boolean;
 }>();
 
 const emits = defineEmits<{

@@ -34,7 +34,7 @@
           v-model:highlighted-item="tabs.current"
           v-model:renaming-item="renamingFileTreeNode"
           group-type="folder"
-          label-field="name"
+          draggable
           @node-click="fileTreeNodeClick"
           @node-move="fileTreeNodeMove"
           @rename="fileTreeNodeRename"

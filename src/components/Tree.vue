@@ -12,6 +12,7 @@
       :group-type="groupType"
       :prev-path="item[labelField]"
       :label-field="labelField"
+      :draggable="draggable"
       @node-click="onNodeClick"
       @node-drag="onNodeDrag"
       @rename="onRename"
@@ -29,11 +30,19 @@ defineOptions({
   name: "Tree",
 });
 
-const props = defineProps<{
-  items: TreeItem[];
-  groupType: string;
-  labelField: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    items: TreeItem[];
+    groupType?: string;
+    labelField?: string;
+    draggable?: boolean;
+  }>(),
+  {
+    groupType: "group",
+    labelField: "name",
+    draggable: false,
+  }
+);
 
 const emits = defineEmits<{
   (e: "node-click", node: TreeItem, event: MouseEvent): void;
