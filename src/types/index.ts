@@ -1,5 +1,4 @@
 import type { Command } from "prosemirror-state";
-import type { EditorView } from "prosemirror-view";
 
 export interface Config {
   lastNotebook?: number;

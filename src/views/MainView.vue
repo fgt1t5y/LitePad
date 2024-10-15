@@ -216,9 +216,13 @@ const fileTreeNodeRename = async (newName: string, origin: string) => {
     await db.folders.update(id, { name: newName });
     s.updateFolder(id, {
       name: newName,
+      updated_at: new Date(),
     });
   } else {
-    await db.notes.update(id, { name: newName });
+    await db.notes.update(id, {
+      name: newName,
+      updated_at: new Date(),
+    });
     s.updateNote(id, {
       name: newName,
     });
