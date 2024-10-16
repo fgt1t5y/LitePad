@@ -13,7 +13,14 @@
   </div>
   <EditorFloatMenu v-if="editor" :editor="editor" />
   <EditorStatus v-if="editor" :editor="editor" />
-  <ContextMenu ref="editorMenuRef" :model="editorMenuItems" />
+  <ContextMenu ref="editorMenuRef" :model="editorMenuItems">
+    <template #item="{ item, props }">
+      <a v-ripple v-bind="props.action">
+        <span class="p-contextmenu-item-label">{{ item.label }}</span>
+        <span class="MenuShortcut">{{ item.shortcut }}</span>
+      </a>
+    </template>
+  </ContextMenu>
 </template>
 
 <script setup lang="ts">
@@ -241,6 +248,7 @@ const editorMenuItems = computed<MenuItem[]>(() => {
     {
       label: "复制",
       disabled: !hasSelection,
+      shortcut: "Ctrl+C",
       command() {
         copySelection();
       },
@@ -248,18 +256,21 @@ const editorMenuItems = computed<MenuItem[]>(() => {
     {
       label: "剪切",
       disabled: !hasSelection,
+      shortcut: "Ctrl+X",
       command() {
         copySelection(true);
       },
     },
     {
       label: "粘贴",
+      shortcut: "Ctrl+V",
       command() {
         paste();
       },
     },
     {
       label: "粘贴纯文本",
+      shortcut: "Ctrl+Shift+V",
       command() {
         paste(true);
       },

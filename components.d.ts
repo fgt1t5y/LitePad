@@ -31,4 +31,7 @@ declare module 'vue' {
     Tree: typeof import('./src/components/Tree.vue')['default']
     TreeNode: typeof import('./src/components/TreeNode.vue')['default']
   }
+  export interface ComponentCustomProperties {
+    Ripple: typeof import('primevue/ripple')['default']
+  }
 }

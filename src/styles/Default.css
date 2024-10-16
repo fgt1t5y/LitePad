@@ -137,6 +137,12 @@ label {
   user-select: none;
 }
 
+.MenuShortcut {
+  flex-grow: 1;
+  text-align: end;
+  font-size: .8rem;
+}
+
 .FloatPanel {
   position: fixed;
   background-color: var(--p-content-background);
