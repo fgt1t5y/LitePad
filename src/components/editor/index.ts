@@ -34,6 +34,7 @@ import {
   findNext,
   getSearchMatchingRanges,
 } from "./search";
+import { dragHandle } from "./draghandle";
 
 interface EventArgument {
   update: { editor: Editor; tr: Transaction };
@@ -149,6 +150,11 @@ export class Editor {
             history(),
             search(),
             dropCursor(),
+            dragHandle({
+              dragHandleWidth: 30,
+              scrollTreshold: 50,
+              excludedTags: ["hr"],
+            }),
           ],
         }),
         dispatchTransaction: this.dispatchTransaction.bind(this),
