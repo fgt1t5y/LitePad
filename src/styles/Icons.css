@@ -46,6 +46,10 @@
   content: "\e23f";
 }
 
+.i-underline::before {
+  content: "\e249";
+}
+
 .i-strikethrough::before {
   content: "\e257";
 }

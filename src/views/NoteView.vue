@@ -152,6 +152,12 @@ const editorTools = [
     enable: () => true,
   },
   {
+    icon: "i i-m i-underline",
+    command: () => editor.value!.toggleMark("underline"),
+    active: () => editor.value!.isMarkActive("underline"),
+    enable: () => true,
+  },
+  {
     icon: "i i-m i-strikethrough",
     command: () => editor.value!.toggleMark("del"),
     active: () => editor.value!.isMarkActive("del"),

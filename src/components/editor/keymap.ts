@@ -28,6 +28,7 @@ export const extraKeymap = {
   "Mod-y": redo,
   "Mod-b": toggleMark(schema.marks.bold),
   "Mod-i": toggleMark(schema.marks.italic),
+  "Mod-u": toggleMark(schema.marks.underline),
   "Mod-`": toggleMark(schema.marks.code),
   "Mod-1": setBlockType(schema.nodes.heading, { level: 1 }),
   "Mod-2": setBlockType(schema.nodes.heading, { level: 2 }),

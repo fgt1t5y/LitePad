@@ -104,6 +104,12 @@ export const schema = new Schema({
         return ["i", 0];
       },
     },
+    underline: {
+      parseDOM: [{ tag: "u" }],
+      toDOM() {
+        return ["u", 0];
+      },
+    },
     del: {
       parseDOM: [{ tag: "del" }],
       toDOM() {
