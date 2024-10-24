@@ -281,6 +281,13 @@ const editorMenuItems = computed<MenuItem[]>(() => {
         paste(true);
       },
     },
+    {
+      label: "全选",
+      shortcut: "Ctrl+A",
+      command() {
+        editor.value!.selectAll();
+      },
+    },
   ];
 });
 

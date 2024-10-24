@@ -12,9 +12,11 @@ import {
   setBlockType,
   toggleMark,
   deleteSelection,
+  selectAll,
 } from "prosemirror-commands";
 import { history, undo, redo } from "prosemirror-history";
 import { dropCursor } from "prosemirror-dropcursor";
+import { gapCursor } from "prosemirror-gapcursor";
 import { customRef, markRaw } from "vue";
 import {
   isMarkActive,
@@ -150,6 +152,7 @@ export class Editor {
             history(),
             search(),
             dropCursor(),
+            gapCursor(),
             dragHandle({
               dragHandleWidth: 30,
               scrollTreshold: 50,
@@ -323,7 +326,9 @@ export class Editor {
   }
 
   public hasSelection() {
-    return !this.state.selection.empty;
+    const { empty } = this.state.selection;
+
+    return !empty;
   }
 
   public toggleMark(name: string, attr?: Attrs) {
@@ -431,9 +436,9 @@ export class Editor {
   }
 
   public deleteSelection() {
-    return (
-      deleteSelection(this.state, this.view!.dispatch) && this.view!.focus()
-    );
+    deleteSelection(this.state, this.view!.dispatch);
+
+    this.focus();
   }
 
   public getCoordPosition(): { left: number; bottom: number } {
@@ -466,6 +471,12 @@ export class Editor {
     this.view!.pasteHTML(html);
 
     this.view!.focus();
+  }
+
+  public selectAll() {
+    selectAll(this.state, this.view!.dispatch, this.view!);
+
+    this.focus();
   }
 
   public get textCount() {

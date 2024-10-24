@@ -146,9 +146,9 @@ c.$subscribe(() => {
 
 const tabs = usePageTabs();
 tabs.init();
-tabs.onTabClose((tab: PageTabsItem) => {
-  keepAliveRef.value!.pruneCacheEntry(tab.path);
-});
+// tabs.onTabClose((tab: PageTabsItem) => {
+//   keepAliveRef.value!.pruneCacheEntry(tab.path);
+// });
 
 const { mode: themeMode, switchTo } = useTheme();
 
