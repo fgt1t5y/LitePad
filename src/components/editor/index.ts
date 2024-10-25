@@ -37,6 +37,7 @@ import {
   getSearchMatchingRanges,
 } from "./search";
 import { dragHandle } from "./draghandle";
+import { cursor } from "./cursor";
 
 interface EventArgument {
   update: { editor: Editor; tr: Transaction };
@@ -157,6 +158,9 @@ export class Editor {
               dragHandleWidth: 30,
               scrollTreshold: 50,
               excludedTags: ["hr"],
+            }),
+            cursor({
+              skipWarning: ["link"],
             }),
           ],
         }),

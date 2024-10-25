@@ -43,16 +43,14 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from) => {
+  if (!has("LP_OOBE_PASSED") && to.name !== "oobe") {
+    return { name: "oobe" };
+  }
+
   const pageWrapper = document.getElementById("PageWrapper");
   if (!pageWrapper) return;
 
   scrollPositionMap.set(from.fullPath, pageWrapper.scrollTop);
-});
-
-router.beforeEach((to) => {
-  if (!has("LP_OOBE_PASSED") && to.name !== "oobe") {
-    return { name: "oobe" };
-  }
 
   return true;
 });
