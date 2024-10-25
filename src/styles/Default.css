@@ -197,9 +197,16 @@ label {
       width: 1px;
       height: 100%;
       position: absolute;
-      background-color: var(--p-content-border-color);
+      background-color: transparent;
       left: 100%;
       top: 0px;
+      transition: background-color 0.2s;
+    }
+  }
+
+  &:hover .Indent {
+    div::before {
+      background-color: var(--p-content-border-color);
     }
   }
 }
