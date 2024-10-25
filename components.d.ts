@@ -16,6 +16,7 @@ declare module 'vue' {
     EditorFloatMenu: typeof import('./src/components/editor/EditorFloatMenu.vue')['default']
     EditorStatus: typeof import('./src/components/editor/EditorStatus.vue')['default']
     EditorTools: typeof import('./src/components/editor/EditorTools.vue')['default']
+    FloatPanel: typeof import('./src/components/FloatPanel.vue')['default']
     InputText: typeof import('primevue/inputtext')['default']
     ListSelect: typeof import('./src/components/ListSelect.vue')['default']
     PageTabs: typeof import('./src/components/PageTabs.vue')['default']

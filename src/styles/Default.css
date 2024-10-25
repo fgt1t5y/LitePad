@@ -143,30 +143,6 @@ label {
   font-size: 0.8rem;
 }
 
-.FloatPanel {
-  position: fixed;
-  background-color: var(--p-content-background);
-  border: 1px solid var(--p-content-border-color);
-  border-radius: var(--p-border-radius-xs);
-  z-index: 6;
-
-  .FloatPanelHeader {
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px 0.75rem;
-    border-bottom: 1px solid var(--p-content-border-color);
-  }
-
-  .FloatPanelBody {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 0.5rem 0.75rem;
-  }
-}
-
 /* Custom components style */
 .Tree {
   user-select: none;
@@ -339,6 +315,33 @@ label {
       outline: none;
       background-color: var(--p-content-hover-background);
     }
+  }
+}
+
+.FloatPanel {
+  position: fixed;
+  background-color: var(--p-content-background);
+  border: 1px solid var(--p-content-border-color);
+  border-radius: var(--p-border-radius-xs);
+  z-index: 6;
+  min-width: 200px;
+
+  .FloatPanelHeader {
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 0.75rem;
+    border-bottom: 1px solid var(--p-content-border-color);
+    cursor: move;
+    user-select: none;
+  }
+
+  .FloatPanelBody {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0.5rem 0.75rem;
   }
 }
 
