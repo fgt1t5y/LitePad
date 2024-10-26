@@ -77,3 +77,7 @@ export interface EditorTool {
   active: () => boolean;
   enable: () => boolean;
 }
+
+export type EditorToolType = "headerExtra" | "action" | "node" | "mark";
+
+export type EditorToolSet = Record<EditorToolType, EditorTool[]>;

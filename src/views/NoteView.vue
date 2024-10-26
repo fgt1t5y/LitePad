@@ -1,8 +1,12 @@
 <template>
-  <EditorTools v-if="editor" :tools="editorTools" />
+  <EditorTools
+    v-if="editor"
+    :tools="editorTools"
+    :editable="editor.isEditable"
+  />
   <EditorFindAndReplace
-    v-if="editor && showSearchReplacePanel"
-    v-model="showSearchReplacePanel"
+    v-if="editor && showFindReplacePanel"
+    v-model="showFindReplacePanel"
     :editor="editor"
   />
   <div class="Editor">
@@ -24,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import type { EditorTool } from "@/types";
+import type { EditorTool, EditorToolSet } from "@/types";
 import type { ContextMenuMethods } from "primevue/contextmenu";
 import type { MenuItem } from "primevue/menuitem";
 
@@ -52,7 +56,8 @@ const noteTitle = ref<string>();
 const noteContent = ref<string>("<p></p>");
 const titleChanged = ref<boolean>(false);
 const contentChanged = ref<boolean>(false);
-const showSearchReplacePanel = ref<boolean>(false);
+const showFindReplacePanel = ref<boolean>(false);
+const editorEditable = ref<boolean>(true);
 
 const route = useRoute();
 const toast = useToast();
@@ -76,112 +81,120 @@ const heading = (level: number): EditorTool => ({
   enable: () => true,
 });
 
-const editorTools = [
-  {
-    icon: "i i-m i-save",
-    command: () => saveNote(),
-    active: () => false,
-    enable: () => titleChanged.value || contentChanged.value,
-  },
-  {
-    icon: "i i-m i-search",
-    command: () => {
-      showSearchReplacePanel.value = !showSearchReplacePanel.value;
+const editorTools: EditorToolSet = {
+  headerExtra: [
+    {
+      icon: "i i-m i-save",
+      command: () => saveNote(),
+      active: () => false,
+      enable: () => titleChanged.value || contentChanged.value,
     },
-    active: () => showSearchReplacePanel.value,
-    enable: () => true,
-  },
-  {
-    icon: "i i-m i-undo",
-    command: () => editor.value!.undo(),
-    active: () => false,
-    enable: () => editor.value!.canUndo(),
-  },
-  {
-    icon: "i i-m i-redo",
-    command: () => editor.value!.redo(),
-    active: () => false,
-    enable: () => editor.value!.canRedo(),
-  },
-  {
-    icon: "i i-m i-content-copy",
-    command: () => copySelection(),
-    active: () => false,
-    enable: () => editor.value!.hasSelection(),
-  },
-  {
-    icon: "i i-m i-content-cut",
-    command: () => copySelection(true),
-    active: () => false,
-    enable: () => editor.value!.hasSelection(),
-  },
-  {
-    icon: "i i-m i-content-paste",
-    command: () => paste(),
-    active: () => false,
-    enable: () => true,
-  },
-  heading(1),
-  heading(2),
-  heading(3),
-  heading(4),
-  heading(5),
-  heading(6),
-  {
-    icon: "i i-m i-paragraph",
-    command: () => editor.value!.setBlockType("paragraph"),
-    active: () => editor.value!.isNodeActive("paragraph"),
-    enable: () => true,
-  },
-  {
-    icon: "i i-m i-quote",
-    command: () => editor.value!.setBlockType("blockquote"),
-    active: () => editor.value!.isNodeActive("blockquote"),
-    enable: () => true,
-  },
-  {
-    icon: "i i-m i-bold",
-    command: () => editor.value!.toggleMark("bold"),
-    active: () => editor.value!.isMarkActive("bold"),
-    enable: () => true,
-  },
-  {
-    icon: "i i-m i-italic",
-    command: () => editor.value!.toggleMark("italic"),
-    active: () => editor.value!.isMarkActive("italic"),
-    enable: () => true,
-  },
-  {
-    icon: "i i-m i-underline",
-    command: () => editor.value!.toggleMark("underline"),
-    active: () => editor.value!.isMarkActive("underline"),
-    enable: () => true,
-  },
-  {
-    icon: "i i-m i-strikethrough",
-    command: () => editor.value!.toggleMark("del"),
-    active: () => editor.value!.isMarkActive("del"),
-    enable: () => true,
-  },
-  {
-    icon: "i i-m i-code",
-    command: () => editor.value!.toggleMark("code"),
-    active: () => editor.value!.isMarkActive("code"),
-    enable: () => true,
-  },
-  {
-    icon: "i i-m i-format-clear",
-    command: () => editor.value!.clearAllMark(),
-    active: () => false,
-    enable: () => editor.value!.hasSelection(),
-  },
-  {
-    icon: "i i-m i-link",
-    command: () => editor.value!.toggleMark("link", { href: "" }),
-    active: () => false,
-    enable: () => editor.value!.hasSelection(),
-  },
-] as EditorTool[];
+    {
+      icon: "i i-m i-search",
+      command: () => {
+        showFindReplacePanel.value = !showFindReplacePanel.value;
+      },
+      active: () => showFindReplacePanel.value,
+      enable: () => true,
+    },
+  ],
+  action: [
+    {
+      icon: "i i-m i-undo",
+      command: () => editor.value!.undo(),
+      active: () => false,
+      enable: () => editor.value!.canUndo(),
+    },
+    {
+      icon: "i i-m i-redo",
+      command: () => editor.value!.redo(),
+      active: () => false,
+      enable: () => editor.value!.canRedo(),
+    },
+    {
+      icon: "i i-m i-content-copy",
+      command: () => copySelection(),
+      active: () => false,
+      enable: () => editor.value!.hasSelection(),
+    },
+    {
+      icon: "i i-m i-content-cut",
+      command: () => copySelection(true),
+      active: () => false,
+      enable: () => editor.value!.hasSelection(),
+    },
+    {
+      icon: "i i-m i-content-paste",
+      command: () => paste(),
+      active: () => false,
+      enable: () => true,
+    },
+  ],
+  node: [
+    heading(1),
+    heading(2),
+    heading(3),
+    heading(4),
+    heading(5),
+    heading(6),
+    {
+      icon: "i i-m i-paragraph",
+      command: () => editor.value!.setBlockType("paragraph"),
+      active: () => editor.value!.isNodeActive("paragraph"),
+      enable: () => true,
+    },
+    {
+      icon: "i i-m i-quote",
+      command: () => editor.value!.setBlockType("blockquote"),
+      active: () => editor.value!.isNodeActive("blockquote"),
+      enable: () => true,
+    },
+  ],
+  mark: [
+    {
+      icon: "i i-m i-bold",
+      command: () => editor.value!.toggleMark("bold"),
+      active: () => editor.value!.isMarkActive("bold"),
+      enable: () => true,
+    },
+    {
+      icon: "i i-m i-italic",
+      command: () => editor.value!.toggleMark("italic"),
+      active: () => editor.value!.isMarkActive("italic"),
+      enable: () => true,
+    },
+    {
+      icon: "i i-m i-underline",
+      command: () => editor.value!.toggleMark("underline"),
+      active: () => editor.value!.isMarkActive("underline"),
+      enable: () => true,
+    },
+    {
+      icon: "i i-m i-strikethrough",
+      command: () => editor.value!.toggleMark("del"),
+      active: () => editor.value!.isMarkActive("del"),
+      enable: () => true,
+    },
+    {
+      icon: "i i-m i-code",
+      command: () => editor.value!.toggleMark("code"),
+      active: () => editor.value!.isMarkActive("code"),
+      enable: () => true,
+    },
+    {
+      icon: "i i-m i-format-clear",
+      command: () => editor.value!.clearAllMark(),
+      active: () => false,
+      enable: () => editor.value!.hasSelection(),
+    },
+    {
+      icon: "i i-m i-link",
+      command: () => editor.value!.toggleMark("link", { href: "" }),
+      active: () => false,
+      enable: () => editor.value!.hasSelection(),
+    },
+  ],
+};
 
 const setupEditor = () => {
   if (!editorRef.value) return;
@@ -196,7 +209,7 @@ const setupEditor = () => {
         return true;
       },
       "Mod-f": () => {
-        showSearchReplacePanel.value = !showSearchReplacePanel.value;
+        showFindReplacePanel.value = !showFindReplacePanel.value;
         return true;
       },
     }),

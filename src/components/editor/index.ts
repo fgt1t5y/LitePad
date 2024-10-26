@@ -231,6 +231,8 @@ export class Editor {
 
   public setEditable(editable: boolean) {
     this.view!.setProps({ editable: () => editable });
+    // 更新editable后派发一个事务以更新视图
+    this.view!.dispatch(this.state.tr.setMeta("editableChangeTo", editable));
   }
 
   public canUndo() {

@@ -375,6 +375,10 @@ label {
   z-index: 2;
   overflow: hidden;
 
+  .Group {
+    border-right: 1px solid var(--p-content-border-color);
+  }
+
   .Tool {
     width: 36px;
 
