@@ -22,6 +22,10 @@ const build = () => {
         icon: "./appicon.png",
       },
     },
+    app: {
+      name: "LitePad",
+    },
+    zip: "zip",
   });
 };
 

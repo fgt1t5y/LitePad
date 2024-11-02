@@ -28,7 +28,7 @@
   "scripts": {
     "dev": "concurrently \"npm run dev:app\" \"npm run dev:nw\"",
     "dev:app": "vite",
-    "dev:nw": "nwbuild --mode=run --glob=false --flavor=sdk --version=\"0.91.0\"",
+    "dev:nw": ".\\cache\\nwjs-sdk-v0.91.0-win-x64\\nw.exe .",
     "build": "npm run build:app && npm run build:nw",
     "build:app": "run-p type-check \"build-only {@}\" --",
     "build:nw": "node ./scripts/build.js",
