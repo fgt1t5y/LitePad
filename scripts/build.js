@@ -8,6 +8,7 @@ const build = () => {
     srcDir: "./dist",
     glob: false,
     flavor: "normal",
+    platform: "win",
     managedManifest: {
       name: "litepad",
       main: "index.html",
@@ -23,9 +24,15 @@ const build = () => {
       },
     },
     app: {
-      name: "LitePad",
+      name: "litepad",
+      icon: "public/appicon.ico",
+      company: "LitePad",
+      fileVersion: "0.0.1",
+      fileDescription: "LitePad",
+      productName: "LitePad",
+      productVersion: "0.0.1",
+      languageCode: 2052,
     },
-    zip: "zip",
   });
 };
 
