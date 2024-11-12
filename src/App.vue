@@ -7,9 +7,12 @@
 import { RouterView } from "vue-router";
 import { useTheme } from "./utils/useTheme";
 import { useToast } from "primevue/usetoast";
+import router from "./router";
 
 useTheme().init();
 const toast = useToast();
+
+router.replace({ name: "main" });
 
 const errorToast = (message: string) => {
   toast.add({
