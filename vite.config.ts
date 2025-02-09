@@ -6,6 +6,7 @@ import Components from "unplugin-vue-components/vite";
 import { PrimeVueResolver } from "@primevue/auto-import-resolver";
 import { browserslistToTargets } from "lightningcss";
 import browserslist from "browserslist";
+import electron from "vite-plugin-electron/simple";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -18,7 +19,19 @@ export default defineConfig({
       targets: browserslistToTargets(browserslist(">= 0.25%")),
     },
   },
-  plugins: [vue(), Components({ resolvers: [PrimeVueResolver()] })],
+  plugins: [
+    vue(),
+    Components({ resolvers: [PrimeVueResolver()] }),
+    electron({
+      main: {
+        entry: "electron/main.ts",
+      },
+      preload: {
+        input: "electron/preload.ts",
+      },
+      renderer: {},
+    }),
+  ],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),

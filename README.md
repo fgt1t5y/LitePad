@@ -6,7 +6,7 @@ LitePad 是一个跨平台、简单、纯本地、富文本的笔记软件。
 
 ## 技术点
 
-**跨平台**：使用 [NWJS](https://nwjs.io) 来实现跨平台。
+**跨平台**：使用 [Electron](https://www.electronjs.org) 来实现跨平台。
 
 **本地持久化**：使用 [Dexie](https://dexie.org/) 来操作本地 IndexedDB 数据库以存储笔记等数据。
 
@@ -44,15 +44,11 @@ pnpm run <命令>
 
 命令列表：
 
-| 命令      | 说明                                                   |
-| --------- | ------------------------------------------------------ |
-| dev       | 启动开发服务器和 SDK 模式的 NWJS                       |
-| dev:app   | 仅启动开发服务器                                       |
-| dev:nw    | 仅启动 SDK 模式的 NWJS（首次执行需要下载 NWJS 的 SDK） |
-| build     | 构建 App 并打包 NWJS                                   |
-| build:app | 仅构建 App（首次执行需要下载 NWJS 运行时）             |
-| build:nw  | 仅打包 NWJS                                            |
-| preview   | 启动预览服务器（需要先构建 App）                       |
+| 命令    | 说明                             |
+| ------- | -------------------------------- |
+| dev     | 启动开发服务器并启动 Electron    |
+| build   | 构建 App 并打包 Electron         |
+| preview | 启动预览服务器（需要先构建 App） |
 
 ## 软件截图
 
