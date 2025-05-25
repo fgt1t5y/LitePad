@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 .DS_Store
 dist
+dist-electron
 out
 dist-ssr
 coverage
@@ -30,4 +31,3 @@ coverage
 
 *.tsbuildinfo
 
-dist-electron
