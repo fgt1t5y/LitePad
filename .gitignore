@@ -30,5 +30,4 @@ coverage
 
 *.tsbuildinfo
 
-# nw-builder cache
-cache/*
+dist-electron

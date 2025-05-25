@@ -19,19 +19,7 @@ export default defineConfig({
       targets: browserslistToTargets(browserslist(">= 0.25%")),
     },
   },
-  plugins: [
-    vue(),
-    Components({ resolvers: [PrimeVueResolver()] }),
-    electron({
-      main: {
-        entry: "electron/main.ts",
-      },
-      preload: {
-        input: "electron/preload.ts",
-      },
-      renderer: {},
-    }),
-  ],
+  plugins: [vue(), Components({ resolvers: [PrimeVueResolver()] })],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
