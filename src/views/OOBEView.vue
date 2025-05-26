@@ -84,7 +84,7 @@
               icon="pi pi-arrow-right"
               icon-pos="right"
               label="开始使用"
-              @click="$router.replace({ name: 'oobe' })"
+              @click="$router.replace({ name: 'welcome' })"
             ></Button>
           </div>
         </StepPanel>
