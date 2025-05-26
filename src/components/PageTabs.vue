@@ -25,18 +25,17 @@
     </template>
     <template #footer>
       <slot name="footer" />
-      <ContextMenu ref="tabMenuRef" :model="tabContextMenuItems" />
+      <ContextMenu ref="tabMenu" :model="tabContextMenuItems" />
     </template>
   </draggable>
 </template>
 
 <script setup lang="ts">
 import type { PageTabsItem } from "@/types";
-import type { ContextMenuMethods } from "primevue/contextmenu";
 import type { MenuItem } from "primevue/menuitem";
 
 import { usePageTabs } from "@/utils/usePageTabs";
-import { computed, ref } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 import draggable from "vuedraggable";
 
 defineOptions({
@@ -47,8 +46,9 @@ const emits = defineEmits<{
   (e: "tab-click", tab: PageTabsItem): void;
 }>();
 
-const [tabs] = defineModel<PageTabsItem[]>("tabs");
-const tabMenuRef = ref<ContextMenuMethods>();
+const tabs = defineModel<PageTabsItem[]>("tabs");
+
+const tabMenu = useTemplateRef("tabMenu");
 const selectedTab = ref<PageTabsItem>();
 
 const pageTabs = usePageTabs();
@@ -62,7 +62,7 @@ const tabClick = (tab: PageTabsItem, event?: MouseEvent) => {
   }
 
   if (event && event.button === 2) {
-    tabMenuRef.value!.show(event);
+    tabMenu.value!.show(event);
     return;
   }
 
@@ -71,6 +71,8 @@ const tabClick = (tab: PageTabsItem, event?: MouseEvent) => {
 };
 
 const tabContextMenuItems = computed<MenuItem[]>(() => {
+  const onlyOneTab = tabs.value!.length === 1;
+
   return [
     {
       label: "转到",
@@ -89,18 +91,21 @@ const tabContextMenuItems = computed<MenuItem[]>(() => {
     },
     {
       label: "关闭左侧标签页",
+      disabled: onlyOneTab,
       command() {
         pageTabs.closeBefore(selectedTab.value!);
       },
     },
     {
       label: "关闭右侧标签页",
+      disabled: onlyOneTab,
       command() {
         pageTabs.closeAfter(selectedTab.value!);
       },
     },
     {
       label: "关闭其他标签页",
+      disabled: onlyOneTab,
       command() {
         pageTabs.closeOther(selectedTab.value!);
       },

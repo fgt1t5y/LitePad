@@ -55,7 +55,7 @@
       ></div>
     </aside>
     <main id="RightPanel">
-      <PageTabs id="PageTab" v-model:tabs="tabs.tabs" ref="pageTabsRef">
+      <PageTabs v-model:tabs="tabs.tabs" id="PageTab">
         <template #header>
           <button
             v-show="!c.showAsidePanel"
@@ -104,7 +104,6 @@ import type { TreeItem, PageTabsItem } from "@/types";
 
 // Functions, methods, or vars
 import { computed, onMounted, ref, useTemplateRef } from "vue";
-import { useEventBus } from "@vueuse/core";
 import { useToast } from "primevue/usetoast";
 import { arrayToTree } from "performant-array-to-tree";
 import { RouterView } from "vue-router";
