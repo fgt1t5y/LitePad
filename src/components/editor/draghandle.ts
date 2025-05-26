@@ -1,8 +1,7 @@
 // Clone from https://github.com/NiclasDev63/tiptap-extension-global-drag-handle
 import { NodeSelection, Plugin, TextSelection } from "prosemirror-state";
 import { Fragment, Slice, Node } from "prosemirror-model";
-// @ts-ignore
-import { __serializeForClipboard, EditorView } from "prosemirror-view";
+import { EditorView } from "prosemirror-view";
 import {
   absoluteRect,
   calcNodePos,
@@ -104,7 +103,7 @@ export function dragHandle(options: DragHandleOptions) {
     }
 
     const slice = view.state.selection.content();
-    const { dom, text } = __serializeForClipboard(view, slice);
+    const { dom, text } = view.serializeForClipboard(slice);
 
     event.dataTransfer.clearData();
     event.dataTransfer.setData("text/html", dom.innerHTML);

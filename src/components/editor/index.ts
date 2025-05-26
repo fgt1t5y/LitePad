@@ -3,8 +3,7 @@ import type { Attrs, Mark, Schema, Slice } from "prosemirror-model";
 import type { Ref } from "vue";
 import type { Keymap } from "@/types";
 
-// @ts-ignore
-import { __serializeForClipboard, EditorView } from "prosemirror-view";
+import { EditorView } from "prosemirror-view";
 import { EditorState, Transaction } from "prosemirror-state";
 import { keymap } from "prosemirror-keymap";
 import {
@@ -462,11 +461,11 @@ export class Editor {
 
   // 封装导出的内部函数
   public serializeForClipboard(slice: Slice): {
-    dom: HTMLDivElement;
+    dom: HTMLElement;
     text: string;
     slice: Slice;
   } {
-    return __serializeForClipboard(this.view, slice);
+    return this.view!.serializeForClipboard(slice);
   }
 
   public serializeSelectionForClipboard() {
