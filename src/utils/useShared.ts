@@ -1,6 +1,7 @@
 import type { Notebook, Folder, Note, IDs } from "@/types";
 
 import { defineStore, acceptHMRUpdate } from "pinia";
+import { useEventBus } from "@vueuse/core";
 
 export const useShared = defineStore("shared", {
   state: () => ({
@@ -17,6 +18,9 @@ export const useShared = defineStore("shared", {
     panel: {
       notebookList: true,
       fileTree: true,
+    },
+    bus: {
+      createNote: useEventBus<number | undefined>("CreateNote"),
     },
   }),
   actions: {

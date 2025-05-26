@@ -2,12 +2,12 @@
   <div id="Root">
     <aside
       v-show="c.showAsidePanel"
-      ref="leftPanelRef"
+      ref="asidePanelElement"
       id="AsidePanel"
       :style="{ width: `${c.asidePanelWidth}px` }"
     >
       <div id="MainMenu">
-        <button title="主菜单" @click="mainMenuRef!.show">
+        <button title="主菜单" @click="mainMenu!.show($event)">
           <i class="i i-menu"></i>
         </button>
         <button title="隐藏侧栏" @click="c.showAsidePanel = false">
@@ -50,7 +50,7 @@
       </Panel>
       <div
         class="ResizeHandle"
-        ref="resizeHandleRef"
+        ref="asidePanelResizeHandlerElement"
         title="按住左键以调整侧栏宽度"
       ></div>
     </aside>
@@ -61,7 +61,7 @@
             v-show="!c.showAsidePanel"
             class="Tab AutoWidth"
             title="主菜单"
-            @click="mainMenuRef!.show"
+            @click="mainMenu!.show($event)"
           >
             <i class="i i-menu"></i>
           </button>
@@ -82,7 +82,7 @@
       </PageTabs>
       <div id="PageWrapper">
         <RouterView #default="{ Component, route }">
-          <KeepAlive ref="keepAliveRef">
+          <KeepAlive>
             <component :key="route.fullPath" :is="Component" />
           </KeepAlive>
         </RouterView>
@@ -93,29 +93,29 @@
     v-model="s.modal.createNotebook"
     @submit="onCreateNotebookSubmit"
   />
-  <ContextMenu ref="fileTreeMenuRef" :model="fileTreeContextMenuItems" />
-  <ContextMenu ref="mainMenuRef" :model="mainMenuItems" />
+  <ContextMenu ref="fileTreeMenu" :model="fileTreeContextMenuItems" />
+  <ContextMenu ref="mainMenu" :model="mainMenuItems" />
 </template>
 
 <script setup lang="ts">
 // Types
 import type { MenuItem } from "primevue/menuitem";
-import type { TreeItem, PageTabsItem, PatchedKeepAlive } from "@/types";
-import type { ContextMenuMethods } from "primevue/contextmenu";
+import type { TreeItem, PageTabsItem } from "@/types";
 
 // Functions, methods, or vars
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, useTemplateRef } from "vue";
+import { useEventBus } from "@vueuse/core";
+import { useToast } from "primevue/usetoast";
+import { arrayToTree } from "performant-array-to-tree";
+import { RouterView } from "vue-router";
 import { db } from "@/db";
 import { usePageTabs } from "@/utils/usePageTabs";
 import { useElementResize } from "@/utils/useElementResize";
-import { arrayToTree } from "performant-array-to-tree";
-import { RouterView } from "vue-router";
 import { useShared } from "@/utils/useShared";
 import { useTheme } from "@/utils/useTheme";
 import { useXScroll } from "@/utils/useXScroll";
 import { useConfig } from "@/utils/useConfig";
 import { emptyNotebook, emptyFolder, emptyNote } from "@/constant";
-import { useToast } from "primevue/usetoast";
 import { isFolder } from "@/utils/helpers";
 
 // Components
@@ -125,11 +125,12 @@ import Panel from "@/components/Panel.vue";
 import ListSelect from "@/components/ListSelect.vue";
 import CreateNotebookModal from "@/components/modal/CreateNotebook.vue";
 
-const fileTreeMenuRef = ref<ContextMenuMethods>();
-const leftPanelRef = ref<HTMLElement>();
-const resizeHandleRef = ref<HTMLDivElement>();
-const keepAliveRef = ref<PatchedKeepAlive>();
-const mainMenuRef = ref<ContextMenuMethods>();
+const asidePanelElement = useTemplateRef("asidePanelElement");
+const asidePanelResizeHandlerElement = useTemplateRef(
+  "asidePanelResizeHandlerElement"
+);
+const fileTreeMenu = useTemplateRef("fileTreeMenu");
+const mainMenu = useTemplateRef("mainMenu");
 
 const selectedFileTreeNode = ref<TreeItem>();
 const renamingFileTreeNode = ref<number>();
@@ -146,9 +147,6 @@ c.$subscribe(() => {
 
 const tabs = usePageTabs();
 tabs.init();
-// tabs.onTabClose((tab: PageTabsItem) => {
-//   keepAliveRef.value!.pruneCacheEntry(tab.path);
-// });
 
 const { mode: themeMode, switchTo } = useTheme();
 
@@ -191,7 +189,7 @@ const fileTreeNodeClick = (node: TreeItem, event: MouseEvent) => {
   selectedFileTreeNode.value = node;
 
   if (event.button === 2) {
-    fileTreeMenuRef.value!.show(event);
+    fileTreeMenu.value!.show(event);
     return;
   }
 
@@ -422,17 +420,23 @@ onMounted(() => {
   loadNotebookList();
   loadNotebook(c.lastNotebook);
 
-  useElementResize(resizeHandleRef.value!, leftPanelRef.value!, {
-    min: 250,
-    max: 700,
-    onResized: (width) => {
-      c.asidePanelWidth = width;
-    },
-    onLessThanMin: () => (c.showAsidePanel = false),
-    onGreaterThanMin: () => (c.showAsidePanel = true),
-  });
+  useElementResize(
+    asidePanelResizeHandlerElement.value!,
+    asidePanelElement.value!,
+    {
+      min: 250,
+      max: 700,
+      onResized: (width) => {
+        c.asidePanelWidth = width;
+      },
+      onLessThanMin: () => (c.showAsidePanel = false),
+      onGreaterThanMin: () => (c.showAsidePanel = true),
+    }
+  );
 
   // 标签页多到溢出时可用鼠标滚轮滚动X轴
   useXScroll(document.getElementById("PageTab")!);
+
+  s.bus.createNote.on(createNote);
 });
 </script>
